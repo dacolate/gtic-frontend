@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,6 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 import api from "@/lib/axios";
 import { teacherValidator } from "@/lib/validation";
 import { ClassAssignmentForm } from "./TeacherClassAssignmentForm";
+import { useRouter } from "@/i18n/routing";
 
 interface TeacherInfo {
   name: string;
@@ -85,7 +85,7 @@ export function NewTeacherForm() {
       ) {
         const apiErrors = error.response.data.data;
         const fieldErrors: { [key: string]: string } = {};
-        apiErrors.forEach((err: any) => {
+        apiErrors.forEach((err) => {
           if (err.field) {
             fieldErrors[err.field] = err.message;
           }

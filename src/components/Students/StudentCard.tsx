@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -20,6 +19,7 @@ import { Student } from "@/lib/types";
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "../ui/button";
+import { Link } from "@/i18n/routing";
 
 interface StudentCardProps {
   student: Student;

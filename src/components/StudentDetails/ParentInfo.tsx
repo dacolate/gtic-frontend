@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export function ParentInfo({ studentId }: { studentId: string }) {
+  console.log(studentId);
   const parent = {
     name: "Jane Doe",
     relation: "Mother",

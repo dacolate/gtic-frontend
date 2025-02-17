@@ -8,6 +8,7 @@ import StatCard from "./StatCard";
 
 export default function Dashboard() {
   // const { userInfo } = useAuth();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [stats, setStats] = useState({
     totalStudents: 0,
     coursesOffered: 0,

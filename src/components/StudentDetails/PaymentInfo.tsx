@@ -10,6 +10,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 
 export function PaymentInfo({ studentId }: { studentId: string }) {
+  console.log(studentId);
   const payments = [
     { id: 1, date: "2023-01-15", amount: 500, status: "Paid" },
     { id: 2, date: "2023-02-15", amount: 500, status: "Paid" },

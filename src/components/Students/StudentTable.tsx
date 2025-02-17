@@ -169,7 +169,7 @@ const columns: ColumnDef<Student>[] = [
 
       // Show only the first class by default
       const firstClass = classes[0];
-      const remainingClasses = classes.slice(1);
+      // const remainingClasses = classes.slice(1);
 
       return (
         <div>

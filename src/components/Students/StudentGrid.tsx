@@ -18,7 +18,7 @@ import api from "@/lib/axios";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import autoTable from "jspdf-autotable";
-import { StudentTable } from "./StudentTable";
+// import { StudentTable } from "./StudentTable";
 
 interface StudentGridProps {
   data: Student[];

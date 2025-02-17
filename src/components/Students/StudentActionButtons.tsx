@@ -1,8 +1,8 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { Link } from "@/i18n/routing";
 import { Trash2, Feather, History } from "lucide-react";
-import Link from "next/link";
 
 export function StudentActionButtons() {
   const handleDeleteTeacher = () => {

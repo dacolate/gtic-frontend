@@ -41,8 +41,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { redirect } from "next/navigation";
 import { data2 } from "@/lib/utils";
+import { useRouter } from "@/i18n/routing";
 // import { data2 } from "@/lib/utils";
 
 // const data: Payment[] = [
@@ -94,14 +94,14 @@ export type Student = {
   paiement_status: "up to date" | "late";
 };
 
-const newStud: Student = {
-  id: "S00X",
-  names: "Alain Johnson",
-  phone: "777-0101",
-  classes: ["Geography", "History"],
-  attendance: "42%",
-  paiement_status: "up to date",
-};
+// const newStud: Student = {
+//   id: "S00X",
+//   names: "Alain Johnson",
+//   phone: "777-0101",
+//   classes: ["Geography", "History"],
+//   attendance: "42%",
+//   paiement_status: "up to date",
+// };
 
 export const columns: ColumnDef<Student>[] = [
   {
@@ -134,8 +134,9 @@ export const columns: ColumnDef<Student>[] = [
         className="uppercase cursor-pointer"
         onClick={() => {
           const id = row.original.id;
+          const router = useRouter();
 
-          redirect("/students/" + id);
+          router.push("/students/" + id);
         }}
       >
         {row.getValue("id")}

@@ -10,6 +10,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 
 export function CourseInfo({ studentId }: { studentId: string }) {
+  console.log(studentId);
   const courses = [
     {
       id: 1,

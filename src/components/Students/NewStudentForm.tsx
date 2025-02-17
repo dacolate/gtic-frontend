@@ -117,7 +117,7 @@ export function NewStudentForm() {
           variant: "destructive",
         });
       }
-    } catch (error: any) {
+    } catch (error) {
       // Check for API validation errors in the expected format
       if (
         error.response &&
@@ -126,7 +126,7 @@ export function NewStudentForm() {
       ) {
         const apiErrors = error.response.data.data;
         const fieldErrors: { [key: string]: string } = {};
-        apiErrors.forEach((err: any) => {
+        apiErrors.forEach((err) => {
           if (err.field) {
             fieldErrors[err.field] = err.message;
           }

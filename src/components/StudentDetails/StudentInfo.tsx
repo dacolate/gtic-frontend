@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export function StudentInfo({ studentId }: { studentId: string }) {
+  console.log(studentId);
   const student = {
     name: "John Doe",
     email: "john.doe@example.com",

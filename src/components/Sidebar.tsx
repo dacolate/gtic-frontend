@@ -1,10 +1,9 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { LogOut, Settings, User } from "lucide-react";
 import { Icons } from "./icons";
 import { useAuth } from "@/hooks/useAuth";
+import { Link, usePathname } from "@/i18n/routing";
 
 const menuItems = [
   {

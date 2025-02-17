@@ -1,7 +1,7 @@
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { NewTeacherForm } from "@/components/Teachers/NewTeacherForm";
+import { Link } from "@/i18n/routing";
 
 export default function NewTeacherPage() {
   return (

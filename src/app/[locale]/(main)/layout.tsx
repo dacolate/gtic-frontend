@@ -1,8 +1,8 @@
 // import Menu from "@/components/Menu";
 import Menu from "@/components/Menu";
 import Navbar from "@/components/NavBar";
+import { Link } from "@/i18n/routing";
 import Image from "next/image";
-import Link from "next/link";
 
 export default async function DashboardLayout({
   children,

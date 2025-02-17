@@ -3,7 +3,6 @@
 import AttendanceChartContainer from "@/components/AttendanceChartContainer";
 import CountChartContainer from "@/components/CountChartContainer";
 import Dashboard from "@/components/Dashboard";
-import { useTranslations } from "next-intl";
 
 function Home() {
   return (
