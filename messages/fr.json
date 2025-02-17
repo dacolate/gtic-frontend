@@ -1,0 +1,9 @@
+{
+  "HomePage": {
+    "title": "Salut monde!"
+  },
+  "LocaleSwitcher": {
+    "locale": "{}",
+    "label": "Français"
+  }
+}
