@@ -10,6 +10,7 @@ import { StudentGridSkeleton } from "@/components/Students/StudentGridSkeleton";
 // import { LayoutGrid, List } from "lucide-react";
 // import Link from "next/link";
 import { StudentTable } from "@/components/Students/StudentTable";
+import { AxiosError } from "axios";
 
 export default function TeachersPage() {
   const [students, setStudents] = useState<Student[]>([]);
@@ -34,8 +35,13 @@ export default function TeachersPage() {
           return null;
         }
       } catch (err) {
-        console.error("Error fetching students:", err);
-        setError(err.response?.data.message || "An error occurred");
+        if (err instanceof AxiosError) {
+          setError(err.response?.data?.message || "An error occurred");
+        } else if (err instanceof Error) {
+          setError(err.message || "An error occurred");
+        } else {
+          setError("An error occurred");
+        }
       } finally {
         setLoading(false);
       }
@@ -56,7 +62,13 @@ export default function TeachersPage() {
           return null;
         }
       } catch (err) {
-        console.error("Error fetching courses:", err);
+        if (err instanceof AxiosError) {
+          setError(err.response?.data?.message || "An error occurred");
+        } else if (err instanceof Error) {
+          setError(err.message || "An error occurred");
+        } else {
+          setError("An error occurred");
+        }
       }
     }
 

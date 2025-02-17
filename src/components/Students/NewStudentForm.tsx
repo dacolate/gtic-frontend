@@ -10,6 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 import api from "@/lib/axios";
 import { parentValidator, studentValidator } from "@/lib/validation";
 import { useRouter } from "@/i18n/routing";
+import { AxiosError } from "axios";
 
 interface StudentInfo {
   name: string;
@@ -120,17 +121,20 @@ export function NewStudentForm() {
     } catch (error) {
       // Check for API validation errors in the expected format
       if (
+        error instanceof AxiosError &&
         error.response &&
         error.response.data &&
         Array.isArray(error.response.data.data)
       ) {
         const apiErrors = error.response.data.data;
         const fieldErrors: { [key: string]: string } = {};
-        apiErrors.forEach((err) => {
-          if (err.field) {
-            fieldErrors[err.field] = err.message;
+        apiErrors.forEach(
+          (err: { field: string | number; message: string }) => {
+            if (err.field) {
+              fieldErrors[err.field] = err.message;
+            }
           }
-        });
+        );
         setErrors(fieldErrors);
       } else {
         toast({

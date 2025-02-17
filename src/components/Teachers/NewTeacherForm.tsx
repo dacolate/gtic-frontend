@@ -12,6 +12,7 @@ import api from "@/lib/axios";
 import { teacherValidator } from "@/lib/validation";
 import { ClassAssignmentForm } from "./TeacherClassAssignmentForm";
 import { useRouter } from "@/i18n/routing";
+import { AxiosError } from "axios";
 
 interface TeacherInfo {
   name: string;
@@ -79,17 +80,20 @@ export function NewTeacherForm() {
     } catch (error) {
       // Check if the API returned a validation error response
       if (
+        error instanceof AxiosError &&
         error.response &&
         error.response.data &&
         Array.isArray(error.response.data.data)
       ) {
         const apiErrors = error.response.data.data;
         const fieldErrors: { [key: string]: string } = {};
-        apiErrors.forEach((err) => {
-          if (err.field) {
-            fieldErrors[err.field] = err.message;
+        apiErrors.forEach(
+          (err: { field: string | number; message: string }) => {
+            if (err.field) {
+              fieldErrors[err.field] = err.message;
+            }
           }
-        });
+        );
         setErrors(fieldErrors);
       } else {
         toast({

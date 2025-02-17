@@ -1,6 +1,6 @@
 "use client";
 
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useState, useEffect } from "react";
 
 interface UserInfo {
@@ -55,7 +55,7 @@ export function useAuth() {
       }
     } catch (error) {
       console.log("Login error:", error);
-      if (error.response?.data.message) {
+      if (error instanceof AxiosError && error.response?.data.message) {
         return { success: false, message: error.response?.data.message };
       }
       return { success: false, message: "Unknown error" };
