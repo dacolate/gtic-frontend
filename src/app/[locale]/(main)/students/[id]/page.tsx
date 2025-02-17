@@ -4,12 +4,12 @@ import { ParentInfo } from "@/components/StudentDetails/ParentInfo";
 import { PaymentInfo } from "@/components/StudentDetails/PaymentInfo";
 import { StudentInfo } from "@/components/StudentDetails/StudentInfo";
 
-export default async function StudentDetailsPage({
+export default function StudentDetailsPage({
   params,
 }: {
   params: { id: string };
 }) {
-  const student = await params;
+  const student = params;
 
   const studentId = student.id;
 
