@@ -4,14 +4,15 @@ import { ParentInfo } from "@/components/StudentDetails/ParentInfo";
 import { PaymentInfo } from "@/components/StudentDetails/PaymentInfo";
 import { StudentInfo } from "@/components/StudentDetails/StudentInfo";
 
-export default function StudentDetailsPage({
-  params,
-}: {
-  params: { id: string };
-}) {
-  const student = params;
+export default function StudentDetailsPage() {
+  //   {
+  //   params,
+  // }: {
+  //   params: { id: string };
+  // }
+  // const student = params;
 
-  const studentId = student.id;
+  const studentId = "id";
 
   return (
     <div className="container mx-auto py-10 px-4">
