@@ -32,6 +32,7 @@ export function useAuth() {
     password: string
   ): Promise<LoginResponse> => {
     try {
+      console.log(`${process.env.API_BASE_URL}`);
       const response = await axios.post(
         `${process.env.API_BASE_URL}/auth/login`,
         {
