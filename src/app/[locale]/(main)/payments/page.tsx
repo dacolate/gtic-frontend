@@ -5,6 +5,7 @@ import api from "@/lib/axios"; // Adjust the import path as needed
 import { TeacherActionButtons } from "@/components/Teachers/TeacherActionButtons";
 import { Teacher } from "@/lib/types";
 import { TeacherGrid } from "@/components/Teachers/TeacherGrid";
+import { AxiosError } from "axios";
 
 export interface TeachersResponse {
   success: boolean;
@@ -33,8 +34,13 @@ export default function TeachersPage() {
           return null;
         }
       } catch (err) {
-        console.error("Error fetching teachers:", err);
-        setError(err.response?.data.message || "An error occurred");
+        if (err instanceof AxiosError) {
+          setError(err.response?.data?.message || "An error occurred");
+        } else if (err instanceof Error) {
+          setError(err.message || "An error occurred");
+        } else {
+          setError("An error occurred");
+        }
       } finally {
         setLoading(false);
       }
