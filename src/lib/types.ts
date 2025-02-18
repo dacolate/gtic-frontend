@@ -1,19 +1,24 @@
-export class RequestResponse {
-  static success<T>(data?: T, message?: string) {
-    return {
-      success: true,
-      data,
-      message,
-    };
-  }
-  static failure<T>(data?: T, message?: string) {
-    return {
-      success: false,
-      data,
-      message,
-    };
-  }
-}
+// export class RequestResponse {
+//   static success<T>(data?: T, message?: string) {
+//     return {
+//       success: true,
+//       data,
+//       message,
+//     };
+//   }
+//   static failure<T>(data?: T, message?: string) {
+//     return {
+//       success: false,
+//       data,
+//       message,
+//     };
+//   }
+// }
+export type RequestResponse<T> = {
+  success: boolean;
+  data: T;
+  message: string;
+};
 
 export interface Course {
   id: number;
