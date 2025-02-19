@@ -44,6 +44,7 @@ export interface Class {
   updatedAt: string;
   course: Course | null;
   grade: Grade | null;
+  teacher: Teacher;
 }
 
 export interface Grade {

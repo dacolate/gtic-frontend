@@ -8,36 +8,18 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { Student } from "@/lib/types";
+import { formatReadableDate } from "@/lib/utils";
 
-export function CourseInfo({ studentId }: { studentId: string }) {
-  console.log(studentId);
-  const courses = [
-    {
-      id: 1,
-      name: "Mathematics",
-      duration: "From January 2024 to February 2024",
-      attendance: "80%",
-    },
-    {
-      id: 2,
-      name: "Science",
-      duration: "From February 2024 to March 2024",
-      attendance: "80%",
-    },
-    {
-      id: 3,
-      name: "English",
-      duration: "From March 2024 to May 2024",
-      attendance: "80%",
-    },
-  ];
-
+export function CourseInfo({ student }: { student: Student }) {
+  const classes = student.classes;
+  console.log(classes);
   return (
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
-          Courses Taken
-          <Badge variant="secondary">{courses.length} Courses</Badge>
+          Classes Taken
+          <Badge variant="secondary">{classes?.length ?? 0} Courses</Badge>
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -46,17 +28,17 @@ export function CourseInfo({ studentId }: { studentId: string }) {
             <TableRow>
               <TableHead>Course Name</TableHead>
               <TableHead>Instructor</TableHead>
-              <TableHead>Attendance</TableHead>
+              <TableHead>Started</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {courses.map((course) => (
-              <TableRow key={course.id}>
-                <TableCell className="font-medium">{course.name}</TableCell>
-                <TableCell>{course.duration}</TableCell>
+            {classes?.map((classs) => (
+              <TableRow key={classs.id}>
+                <TableCell className="font-medium">{classs.name}</TableCell>
+                <TableCell>{classs.teacher.name}</TableCell>
                 <TableCell>
                   <div className="font-bold text-center">
-                    {course.attendance}
+                    {formatReadableDate(classs.startDate)}
                   </div>
                 </TableCell>
               </TableRow>

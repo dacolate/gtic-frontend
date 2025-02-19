@@ -52,6 +52,7 @@ import {
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { calculateAge } from "@/lib/utils";
+import { Link } from "@/i18n/routing";
 
 const columns: ColumnDef<Student>[] = [
   {
@@ -60,7 +61,9 @@ const columns: ColumnDef<Student>[] = [
       return (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          onClick={() => {
+            column.toggleSorting(column.getIsSorted() === "asc");
+          }}
           className="text-center"
         >
           Name
@@ -68,7 +71,13 @@ const columns: ColumnDef<Student>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => <div>{row.getValue("name")}</div>,
+    cell: ({ row }) => (
+      <Link href={`/students/${row.original.id}`} passHref>
+        <div className="text-green-500 hover:underline cursor-pointer">
+          {row.getValue("name")}
+        </div>
+      </Link>
+    ),
   },
   {
     accessorKey: "gender",

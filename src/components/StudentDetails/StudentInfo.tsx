@@ -1,32 +1,15 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Student } from "@/lib/types";
+import InitialsAvatar from "../InitialsAvatar";
+import { formatReadableDate } from "@/lib/utils";
 
-export function StudentInfo({ studentId }: { studentId: string }) {
-  console.log(studentId);
-  const student = {
-    name: "John Doe",
-    email: "john.doe@example.com",
-    phone: "698756354",
-    dateOfBirth: "2000-01-01",
-    address: "New Deido",
-    firstRegister: "2024-12-01",
-  };
-
+export function StudentInfo({ student }: { student: Student }) {
+  console.log(student);
   return (
     <Card className="overflow-hidden">
       <CardHeader className="bg-gradient-to-r from-green-500 to-purple-500 text-white">
         <div className="flex items-center space-x-4">
-          <Avatar className="h-20 w-20 border-4 border-white">
-            <AvatarImage
-              src={`https://api.dicebear.com/6.x/initials/svg?seed=${student.name}`}
-            />
-            <AvatarFallback>
-              {student.name
-                .split(" ")
-                .map((n) => n[0])
-                .join("")}
-            </AvatarFallback>
-          </Avatar>
+          <InitialsAvatar name={student.name} />
           <div>
             <CardTitle className="text-2xl">{student.name}</CardTitle>
             <p className="text-blue-100">{student.phone}</p>
@@ -37,7 +20,7 @@ export function StudentInfo({ studentId }: { studentId: string }) {
         <dl className="grid grid-cols-2 gap-4">
           <div>
             <dt className="font-medium text-gray-500">Date of Birth</dt>
-            <dd>{student.dateOfBirth}</dd>
+            <dd>{formatReadableDate(student.birthday)}</dd>
           </div>
           <div>
             <dt className="font-medium text-gray-500">Email</dt>
@@ -49,7 +32,7 @@ export function StudentInfo({ studentId }: { studentId: string }) {
           </div>
           <div>
             <dt className="font-medium text-gray-500">First registered on</dt>
-            <dd>{student.firstRegister}</dd>
+            <dd>{formatReadableDate(student.createdAt)}</dd>
           </div>
         </dl>
       </CardContent>

@@ -7,27 +7,35 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Payment, Student } from "@/lib/types";
+import { formatReadableDate } from "@/lib/utils";
 
-export function PaymentInfo({ studentId }: { studentId: string }) {
-  console.log(studentId);
-  const payments = [
-    { id: 1, date: "2023-01-15", amount: 500, status: "Paid" },
-    { id: 2, date: "2023-02-15", amount: 500, status: "Paid" },
-    { id: 3, date: "2023-03-15", amount: 500, status: "Pending" },
-  ];
+export function PaymentInfo({ student }: { student: Student }) {
+  const payments = student.payments;
 
-  const totalPaid = payments.reduce(
-    (sum, payment) => (payment.status === "Paid" ? sum + payment.amount : sum),
-    0
-  );
+  const handleDownload = (payment: Payment) => {
+    const receiptContent = `Receipt\n\nDate: ${formatReadableDate(
+      payment.createdAt
+    )}\nAmount: ${payment.amount} FCFA\nPayment Method: ${
+      payment.paymentMethod || "N/A"
+    }\nDetails: ${payment.details || "No details provided"}`;
+    const blob = new Blob([receiptContent], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `receipt_${payment.id}.txt`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
 
   return (
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
           Payment Information
-          <Badge variant="secondary">Total Paid: ${totalPaid}</Badge>
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -36,22 +44,18 @@ export function PaymentInfo({ studentId }: { studentId: string }) {
             <TableRow>
               <TableHead>Date</TableHead>
               <TableHead>Amount</TableHead>
-              <TableHead>Status</TableHead>
+              <TableHead>Download</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {payments.map((payment) => (
+            {payments?.map((payment) => (
               <TableRow key={payment.id}>
-                <TableCell>{payment.date}</TableCell>
-                <TableCell>${payment.amount}</TableCell>
+                <TableCell>{formatReadableDate(payment.createdAt)}</TableCell>
+                <TableCell>{payment.amount} FCFA</TableCell>
                 <TableCell>
-                  <Badge
-                    variant={
-                      payment.status === "Paid" ? "default" : "destructive"
-                    }
-                  >
-                    {payment.status}
-                  </Badge>
+                  <Button onClick={() => handleDownload(payment)}>
+                    Download
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}

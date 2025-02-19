@@ -71,3 +71,12 @@ export const calculateAge = (birthday: string): number => {
 
   return age;
 };
+
+export function formatReadableDate(dateString: string): string {
+  const date = new Date(dateString);
+  return date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+}
