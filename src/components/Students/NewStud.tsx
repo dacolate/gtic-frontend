@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -38,6 +38,8 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 import api from "@/lib/axios";
 import { AxiosError } from "axios";
+import { Course, Student } from "@/lib/types";
+import LoadingButton from "../LoadingButton";
 
 const formSchema = z.object({
   // Student Info
@@ -91,7 +93,11 @@ const formSchema = z.object({
 export function NewStud() {
   const [showClassPricing, setShowClassPricing] = useState(false);
   const [apiErrors, setApiErrors] = useState<{ [key: string]: string }>({});
+  const [existingStudent, setExistingStudent] = useState<[Student, string]>();
   const [showExceptionalPricing, setShowExceptionalPricing] = useState(false);
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -112,20 +118,49 @@ export function NewStud() {
       class: 1,
       paymentAmount: 0,
       paymentMethod: "Cash",
-      registrationFee: 100,
-      firstInstalmentFee: 500,
+      registrationFee: 0,
+      firstInstalmentFee: 0,
       firstInstalmentDeadline: new Date("2023-09-01"),
-      secondInstalmentFee: 500,
+      secondInstalmentFee: 0,
       secondInstalmentDeadline: new Date("2023-12-01"),
     },
     mode: "onChange",
   });
 
+  useEffect(() => {
+    async function fetchCourses() {
+      try {
+        // Use the custom axios instance to get the teachers.
+        const response = await api.get("/courses");
+        // If your API returns the data directly or in a nested property,
+        // adjust accordingly. For example, if it returns { teachers: [...] }:
+        // setTeachers(response.data.teachers);
+
+        if (response.data.success) {
+          setCourses(response.data.data);
+        } else {
+          console.log("Fetch failed:", response);
+          return null;
+        }
+      } catch (err) {
+        if (err instanceof AxiosError) {
+          setError(err.response?.data?.message || "An error occurred");
+        } else if (err instanceof Error) {
+          setError(err.message || "An error occurred");
+        } else {
+          setError("An error occurred");
+        }
+      }
+    }
+
+    fetchCourses();
+  }, []);
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const response = await api.post("/newstudent", values);
-      console.log(response);
-      if (response.status === 201) {
+      setIsLoading(true);
+      const response = await api.post("/newstudent", values).then(() => {
+        setIsLoading(false);
         toast({
           title: "Student registered successfully",
           description: "The new student has been added to the system.",
@@ -134,11 +169,31 @@ export function NewStud() {
         setShowClassPricing(false);
         setShowExceptionalPricing(false);
         setApiErrors({});
-      }
+      });
+      console.log(response);
+      // if (response.status === 201) {
+      //   toast({
+      //     title: "Student registered successfully",
+      //     description: "The new student has been added to the system.",
+      //   });
+      //   form.reset();
+      //   setShowClassPricing(false);
+      //   setShowExceptionalPricing(false);
+      //   setApiErrors({});
+      // }
     } catch (error) {
       console.log(error);
       if (error instanceof AxiosError) {
         const errorData = error.response?.data;
+        console.log(errorData);
+        if (errorData.message) {
+          const message = errorData.message as string;
+          console.log(message);
+          if (message.startsWith("Existing")) {
+            setExistingStudent([errorData.data, message]);
+          }
+        }
+        console.log(existingStudent);
         const errors: { [key: string]: string } = {};
         if (Array.isArray(errorData.data)) {
           console.log(error);
@@ -151,9 +206,12 @@ export function NewStud() {
           errors["no field"] = errorData.data;
         }
         setApiErrors(errors);
+        console.log(apiErrors);
       } else {
         console.error("Non-Axios error:", error);
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -394,7 +452,11 @@ export function NewStud() {
                   <FormItem>
                     <FormLabel>Course</FormLabel>
                     <Select
-                      onValueChange={field.onChange}
+                      onValueChange={(value) => {
+                        field.onChange(value); // Update the course field
+                        form.setValue("grade", ""); // Reset the grade field
+                        form.setValue("class", 0); // Reset the class field
+                      }}
                       defaultValue={field.value}
                     >
                       <FormControl>
@@ -403,67 +465,127 @@ export function NewStud() {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="mathematics">Mathematics</SelectItem>
-                        <SelectItem value="science">Science</SelectItem>
-                        <SelectItem value="english">English</SelectItem>
+                        {courses.map((course) => (
+                          <SelectItem key={course.id} value={course.name}>
+                            {course.name}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                     <FormMessage />
                   </FormItem>
                 )}
               />
+
               <FormField
                 control={form.control}
                 name="grade"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Grade</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select grade" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="grade1">Grade 1</SelectItem>
-                        <SelectItem value="grade2">Grade 2</SelectItem>
-                        <SelectItem value="grade3">Grade 3</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                render={({ field }) => {
+                  const selectedCourse = form.watch("course"); // Get the selected course
+                  const filteredGrades = selectedCourse
+                    ? courses.find((course) => course.name === selectedCourse)
+                        ?.grades || []
+                    : []; // Filter grades based on the selected course
+
+                  return (
+                    <FormItem>
+                      <FormLabel>Grade</FormLabel>
+                      <Select
+                        onValueChange={(value) => {
+                          field.onChange(value); // Update the grade field
+                          form.setValue("class", 0); // Reset the class field
+                        }}
+                        defaultValue={field.value}
+                        disabled={!selectedCourse} // Disable if no course is selected
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select grade" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {filteredGrades.map((grade) => (
+                            <SelectItem key={grade.id} value={grade.name}>
+                              {grade.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  );
+                }}
               />
               <FormField
                 control={form.control}
                 name="class"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Class</FormLabel>
-                    <Select
-                      onValueChange={(value) => {
-                        field.onChange(parseInt(value));
-                        setShowClassPricing(true);
-                      }}
-                      defaultValue={field.value ? field.value.toString() : ""}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select class" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="1">Class A</SelectItem>
-                        <SelectItem value="2">Class B</SelectItem>
-                        <SelectItem value="3">Class C</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                render={({ field }) => {
+                  const selectedGrade = form.watch("grade"); // Get the selected grade
+                  const selectedCourse = form.watch("course"); // Get the selected course
+                  const filteredClasses = selectedGrade
+                    ? courses
+                        .find((course) => course.name === selectedCourse)
+                        ?.grades?.find((grade) => grade.name === selectedGrade)
+                        ?.classes || []
+                    : []; // Filter classes based on the selected grade
+                  const filteredGrades = selectedCourse
+                    ? courses.find((course) => course.name === selectedCourse)
+                        ?.grades || []
+                    : [];
+                  const pricing = selectedGrade
+                    ? filteredGrades.find(
+                        (grade) => grade.name === selectedGrade
+                      )?.pricing
+                    : undefined;
+
+                  return (
+                    <FormItem>
+                      <FormLabel>Class</FormLabel>
+                      <Select
+                        onValueChange={(value) => {
+                          field.onChange(parseInt(value));
+                          form.setValue(
+                            "registrationFee",
+                            parseInt(pricing?.registerFee ?? "0")
+                          );
+                          form.setValue(
+                            "firstInstalmentFee",
+                            parseInt(pricing?.instalment1Fee ?? "0")
+                          );
+                          form.setValue(
+                            "secondInstalmentFee",
+                            parseInt(pricing?.instalment2Fee ?? "0")
+                          );
+                          form.setValue(
+                            "firstInstalmentDeadline",
+                            new Date(pricing?.instalment1Deadline ?? "0")
+                          );
+                          form.setValue(
+                            "secondInstalmentDeadline",
+                            new Date(pricing?.instalment2Deadline ?? "0")
+                          );
+                          setShowClassPricing(true);
+                        }}
+                        defaultValue={field.value ? field.value.toString() : ""}
+                        disabled={!selectedGrade} // Disable if no grade is selected
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select class" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {filteredClasses.map((cls) => (
+                            <SelectItem key={cls.id} value={cls.id.toString()}>
+                              {cls.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  );
+                }}
               />
             </div>
             <AnimatePresence>
@@ -662,11 +784,14 @@ export function NewStud() {
                       <Input
                         type="number"
                         {...field}
+                        value={field.value ?? ""}
                         onChange={(e) => {
                           const value = e.target.value;
                           const parsedValue =
-                            value === "" ? 0 : Number.parseFloat(value);
-                          field.onChange(isNaN(parsedValue) ? 0 : parsedValue);
+                            value === "" ? null : Number.parseFloat(value);
+                          field.onChange(
+                            isNaN(parsedValue || 1) ? null : parsedValue
+                          );
                         }}
                       />
                     </FormControl>
@@ -704,22 +829,33 @@ export function NewStud() {
             </div>
           </CardContent>
         </Card>
-
-        {Object.keys(apiErrors).length > 0 && (
-          <Alert variant="destructive">
+        {existingStudent ? (
+          <Alert variant="default">
             <AlertCircle className="h-4 w-4" />
-            <AlertTitle>Error</AlertTitle>
+            <AlertTitle>{existingStudent[1]}</AlertTitle>
             <AlertDescription>
-              {Object.values(apiErrors).map((error, index) => (
-                <p key={index}>{error}</p>
-              ))}
+              <p>{existingStudent[0].name}</p>
+              <p>{existingStudent[0].phone}</p>
+              <p>{existingStudent[0].email}</p>
             </AlertDescription>
           </Alert>
+        ) : (
+          Object.keys(apiErrors).length > 0 && (
+            <Alert variant="destructive">
+              <AlertCircle className="h-4 w-4" />
+              <AlertTitle>Error</AlertTitle>
+              <AlertDescription>
+                {Object.values(apiErrors).map((error, index) => (
+                  <p key={index}>{error}</p>
+                ))}
+              </AlertDescription>
+            </Alert>
+          )
         )}
 
-        <Button type="submit" className="w-full">
+        <LoadingButton loading={isLoading} type="submit" className="w-full">
           Submit
-        </Button>
+        </LoadingButton>
       </form>
     </Form>
   );

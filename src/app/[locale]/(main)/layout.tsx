@@ -12,7 +12,7 @@ export default async function DashboardLayout({
   return (
     <div className="h-screen flex">
       {/* LEFT */}
-      <div className="w-[14%] md:w-[8%] lg:w-[16%] xl:w-[14%] p-4 text-center">
+      <div className="w-[14%] md:w-[8%] lg:w-[16%] xl:w-[14%] text-center">
         <Link href="/" className="flex items-center justify-center gap-2 ">
           <Image src="/gtic.png" alt="GTIC" width={48} height={48} />
           {/* <span className="hidden lg:block font-bold">GTIC </span> */}

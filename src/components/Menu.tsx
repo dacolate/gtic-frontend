@@ -1,4 +1,6 @@
-import { Link } from "@/i18n/routing";
+"use client";
+
+import { Link, usePathname } from "@/i18n/routing";
 import Image from "next/image";
 
 const menuItems = [
@@ -75,8 +77,8 @@ const menuItems = [
 ];
 
 const Menu = () => {
-  // const user = await currentUser();
-  // const role = user?.publicMetadata.role as string;
+  const pathname = usePathname(); // Get the current path
+
   return (
     <div className="mt-4 text-sm">
       {menuItems.map((i) => (
@@ -87,14 +89,22 @@ const Menu = () => {
           {i.items.map((item) => {
             // if (item.visible.includes(role)) {
             return (
-              <Link
-                href={item.href}
+              <div
                 key={item.label}
-                className="flex items-center justify-center lg:justify-start gap-4 text-gray-500 py-2 md:px-2 rounded-md hover:bg-lamaSkyLight"
+                className={` w-full  ${
+                  pathname === item.href ? "bg-green-500 text-white" : ""
+                }`}
               >
-                <Image src={item.icon} alt="" width={20} height={20} />
-                <span className="hidden lg:block">{item.label}</span>
-              </Link>
+                <Link
+                  href={item.href}
+                  className={`flex items-center justify-center lg:justify-start gap-4 text-gray-500 px-2 py-2 md:px-2 rounded-md hover:bg-lamaSkyLight ${
+                    pathname === item.href ? "bg-green-500 text-white" : ""
+                  }`}
+                >
+                  <Image src={item.icon} alt="" width={20} height={20} />
+                  <span className="hidden lg:block">{item.label}</span>
+                </Link>
+              </div>
             );
             // }
           })}

@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
-import { NewStudentForm } from "@/components/Students/NewStudentForm";
 import { Link } from "@/i18n/routing";
+import { NewStud } from "@/components/Students/NewStud";
 
 export default function NewTeacherPage() {
   return (
@@ -15,7 +15,7 @@ export default function NewTeacherPage() {
           </Link>
         </Button>
       </div>
-      <NewStudentForm />
+      <NewStud />
     </div>
   );
 }
