@@ -34,8 +34,8 @@ export function useAuth() {
     try {
       console.log(`${process.env.API_BASE_URL}`);
       const response = await axios.post(
-        // "https://gtic-backend.onrender.com/auth/login",
-        "http://127.0.0.1:3333/auth/login",
+        "https://gtic-backend.onrender.com/auth/login",
+        // "http://127.0.0.1:3333/auth/login",
         {
           email: email,
           password: password,
