@@ -218,6 +218,15 @@ export function NewStud() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        {error && (
+          <Alert variant="destructive">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>Error loading courses</AlertTitle>
+            <AlertDescription>
+              <p>{error}</p>
+            </AlertDescription>
+          </Alert>
+        )}
         <Card>
           <CardHeader>
             <CardTitle>Student Information</CardTitle>
