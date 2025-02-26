@@ -45,6 +45,7 @@ export interface Class {
   course: Course | null;
   grade: Grade | null;
   teacher: Teacher;
+  pricing: Pricing;
 }
 
 export interface Grade {
@@ -80,6 +81,7 @@ export interface TeachersResponse {
 export interface Student {
   id: number;
   name: string;
+  firstname: string;
   gender: string;
   nationality: string;
   birthday: string; // ISO 8601 date format
@@ -128,6 +130,7 @@ export interface StudentClass {
   createdAt: string;
   updatedAt: string;
   pricing: Pricing;
+  daysTilDeadline: number;
 }
 
 export interface Pricing {

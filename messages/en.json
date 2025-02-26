@@ -1,9 +1,83 @@
 {
-  "HomePage": {
-    "title": "Hello world!"
+  "Navbar": {
+    "title": "Hello world!",
+    "Search": "Search"
   },
   "LocaleSwitcher": {
     "locale": "Switch to {locale, select, de {German} en {English} fr {Unknown}}",
     "label": "English"
+  },
+  "StatCard": {
+    "student": "student{count, plural, one {} other {s}}",
+    "teacher": "teacher{count, plural, one {} other {s}}",
+    "class": "class{count, plural, one {es} other {es}}",
+    "payment": "payment{count, plural, one {} other {s}} today"
+  },
+  "CountChart": {
+    "title": "Payments",
+    "latePayments": "Late payments",
+    "dueInDays": "Due in {count} day{count, plural, one {} other {s}}"
+  },
+  "AttendanceChart": {
+    "title": "Attendance",
+    "days": {
+      "mon": "Mon",
+      "tue": "Tue",
+      "wed": "Wed",
+      "thu": "Thu",
+      "fri": "Fri"
+    }
+  },
+  "StudentTable": {
+    "Students": "Students",
+    "Name": "Name",
+    "Payment Status": "Payment Status",
+    "Courses": "Courses",
+    "Grade": "Grade",
+    "Class": "Class",
+    "Gender": "Gender",
+    "Age": "Age",
+    "Nationality": "Nationality",
+    "Contact": "Contact",
+    "Created At": "Created At",
+    "Searchstudent": "Search student...",
+    "Columns": "Columns",
+    "Course": "Course",
+    "Select course": "Select course",
+    "All Courses": "All Courses",
+    "Select grade": "Select grade",
+    "All Grades": "All Grades",
+    "Select class": "Select class",
+    "All Classes": "All Classes",
+    "Select payment status": "Select payment status",
+    "All": "All",
+    "Up to date": "Up to date",
+    "Due in 7 days": "Due in 7 days",
+    "Late": "Late",
+    "Download List": "Download List",
+    "No results": "No results.",
+    "row_selected": "{{count}} of {{total}} row(s) selected.",
+    "Previous": "Previous",
+    "Next": "Next",
+    "ans": "ans",
+    "Student Report": "Student Report",
+    "Date": "Date",
+    "New Student": "New Student",
+    "Ancient Students": "Ancient Students",
+    "Delete Student": "Delete Student"
+  },
+  "Menu": {
+    "MENU": "MENU",
+    "OTHER": "OTHER",
+    "Home": "Home",
+    "Students": "Students",
+    "Teachers": "Teachers",
+    "Courses": "Courses",
+    "Classes": "Classes",
+    "Attendance": "Attendance",
+    "Payments": "Payments",
+    "Profile": "Profile",
+    "Settings": "Settings",
+    "Logout": "Logout"
   }
 }

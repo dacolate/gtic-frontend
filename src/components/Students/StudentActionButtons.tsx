@@ -3,8 +3,10 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/routing";
 import { Trash2, Feather, History } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export function StudentActionButtons() {
+  const t = useTranslations("StudentTable");
   const handleDeleteTeacher = () => {
     // Implement delete teacher functionality
     console.log("Delete teacher");
@@ -18,7 +20,7 @@ export function StudentActionButtons() {
       >
         <Link href="/students/new">
           <Feather className="h-4 w-4 font-extrabold" />
-          New Student
+          {t("New Student")}
         </Link>
       </Button>
       <Button
@@ -27,7 +29,7 @@ export function StudentActionButtons() {
       >
         <Link href="/teachers/new">
           <History className="h-4 w-4 font-extrabold" />
-          Ancient Students
+          {t("Ancient Students")}
         </Link>
       </Button>
       {/* <Button
@@ -44,7 +46,7 @@ export function StudentActionButtons() {
         className="flex items-center gap-2 opacity-45"
       >
         <Trash2 className="h-4 w-4" />
-        Delete Student
+        {t("Delete Student")}
       </Button>
     </div>
   );

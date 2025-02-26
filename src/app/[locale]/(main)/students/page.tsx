@@ -11,12 +11,15 @@ import { StudentGridSkeleton } from "@/components/Students/StudentGridSkeleton";
 // import Link from "next/link";
 import { StudentTable } from "@/components/Students/StudentTable";
 import { AxiosError } from "axios";
+import { useTranslations } from "next-intl";
+// import { Loader2 } from "lucide-react";
 
 export default function TeachersPage() {
   const [students, setStudents] = useState<Student[]>([]);
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
+  const t = useTranslations("StudentTable");
   // const [viewMode, setViewMode] = useState<string>("card");
 
   useEffect(() => {
@@ -79,6 +82,11 @@ export default function TeachersPage() {
 
   if (loading) {
     return <StudentGridSkeleton />;
+    // return (
+    //   <div className="w-full h-full flex justify-center items-center">
+    //     <Loader2 size={80} />
+    //   </div>
+    // );
   }
 
   if (error) {
@@ -89,7 +97,7 @@ export default function TeachersPage() {
     <div className="container mx-auto py-10 px-4">
       {/* <h1 className="text-4xl font-bold mb-6 text-gray-800">Our Students</h1> */}
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Students</h1>
+        <h1 className="text-3xl font-bold">{t("Students")}</h1>
         {/* <div className="flex items-center space-x-2">
           <Button
             variant={viewMode === "card" ? "default" : "outline"}

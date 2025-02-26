@@ -1,6 +1,7 @@
 "use client";
 
 import { Link, usePathname } from "@/i18n/routing";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 
 const menuItems = [
@@ -78,13 +79,14 @@ const menuItems = [
 
 const Menu = () => {
   const pathname = usePathname(); // Get the current path
+  const t = useTranslations("Menu");
 
   return (
     <div className="mt-4 text-sm">
       {menuItems.map((i) => (
         <div className="flex flex-col gap-2" key={i.title}>
           <span className="hidden lg:block text-gray-400 font-light my-2">
-            {i.title}
+            {t(i.title)}
           </span>
           {i.items.map((item) => {
             // if (item.visible.includes(role)) {
@@ -102,7 +104,7 @@ const Menu = () => {
                   }`}
                 >
                   <Image src={item.icon} alt="" width={20} height={20} />
-                  <span className="hidden lg:block">{item.label}</span>
+                  <span className="hidden lg:block">{t(item.label)}</span>
                 </Link>
               </div>
             );

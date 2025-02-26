@@ -9,7 +9,7 @@ import LocaleSwitcher from "./LocaleSwitcher";
 
 const Navbar = () => {
   const { userInfo } = useAuth();
-  const t = useTranslations("HomePage");
+  const t = useTranslations("Navbar");
   return (
     <header className="bg-white border-b border-gray-200 h-16 flex items-center px-6 py-8">
       <div className="flex-1 flex items-center">
@@ -21,7 +21,7 @@ const Navbar = () => {
         <div className="max-w-md w-full mr-2">
           <Input
             type="search"
-            placeholder="Search..."
+            placeholder={`${t("Search")}...`}
             className="w-full bg-gray-50"
           />
         </div>

@@ -17,7 +17,7 @@ import {
   ArrowUpDown,
   ChevronDown,
   Download,
-  MoreHorizontal,
+  // MoreHorizontal,
   Search,
 } from "lucide-react";
 
@@ -26,9 +26,9 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
+  // DropdownMenuItem,
+  // DropdownMenuLabel,
+  // DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -39,7 +39,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Course, Student } from "@/lib/types";
+import { Course, Grade, Student } from "@/lib/types";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import {
@@ -53,202 +53,19 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { calculateAge } from "@/lib/utils";
 import { Link } from "@/i18n/routing";
+import { useTranslations } from "next-intl";
 
-const columns: ColumnDef<Student>[] = [
-  {
-    accessorKey: "name",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => {
-            column.toggleSorting(column.getIsSorted() === "asc");
-          }}
-          className="text-center"
-        >
-          Name
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-    cell: ({ row }) => (
-      <Link href={`/students/${row.original.id}`} passHref>
-        <div className="text-green-500 hover:underline cursor-pointer">
-          {row.getValue("name")}
-        </div>
-      </Link>
-    ),
-  },
-  {
-    accessorKey: "gender",
-    header: () => <div className="text-center">Gender</div>,
-    cell: ({ row }) => (
-      <div className="text-center">{row.getValue("gender")}</div>
-    ),
-  },
-  {
-    accessorKey: "birthday",
-    header: () => <div className="text-center">Age</div>,
-    cell: ({ row }) => {
-      const birthday = row.getValue("birthday") as string;
-      const age = calculateAge(birthday);
-
-      return (
-        <div className="text-center">
-          {/* Display the age */}
-          <div>{age + " ans"}</div>
-          {/* Display the birthday (grayed and smaller) */}
-          <div className="text-xs text-gray-500">
-            {new Date(birthday).toLocaleDateString()} {/* Format the date */}
-          </div>
-        </div>
-      );
-    },
-  },
-  {
-    accessorKey: "nationality",
-    header: () => <div className="text-center">Nationality</div>,
-    cell: ({ row }) => (
-      <div className="text-center">{row.getValue("nationality")}</div>
-    ),
-  },
-  {
-    id: "contact",
-    header: () => <div className="text-center">Contact</div>,
-    cell: ({ row }) => {
-      const phone = row.original.phone;
-      const email = row.original.email;
-
-      return (
-        <div className="text-center">
-          {/* Display the phone number */}
-          <div>{phone}</div>
-          {/* Display the email (smaller and grayed out) */}
-          <div className="text-xs text-gray-500">{email}</div>
-        </div>
-      );
-    },
-  },
-  //   {
-  //     accessorKey: "course",
-  //     header: "Course",
-  //     cell: ({ row }) => <div>{row.getValue("course")}</div>,
-  //   },
-  {
-    // This column extracts all course names from the student classes.
-    accessorFn: (student) => {
-      // Make sure student.classes exists, then map to course names if defined
-      return student.classes
-        ? student.classes
-            .map((cls) => cls.course?.name)
-            .filter((courseName): courseName is string => Boolean(courseName))
-            .join(", ")
-        : "";
-    },
-    id: "courses", // unique id for the column
-    header: "Courses",
-  },
-  //   {
-  //     accessorKey: "currentClass",
-  //     header: "Class",
-  //     cell: ({ row }) => <div>{row.getValue("currentClass")}</div>,
-  //   },
-  {
-    accessorFn: (student) => {
-      // Extract class names and grades
-      return student.classes
-        ? student.classes
-            .map((cls) => ({
-              name: cls.name,
-              grade: cls.grade?.name || "No Grade", // Fallback if grade is null
-            }))
-            .filter((cls) => Boolean(cls.name)) // Ensure class name exists
-        : [];
-    },
-    id: "classes",
-    header: () => <div className="text-center">Classes</div>,
-    cell: ({ row }) => {
-      console.log(row.getValue("classes"));
-      const classes = row.getValue("classes") as Array<{
-        name: string;
-        grade: string;
-      }>;
-
-      console.log(classes);
-
-      // Show only the first class by default
-      const firstClass = classes[0];
-      // const remainingClasses = classes.slice(1);
-
-      return (
-        <div>
-          {/* Display the first class and grade */}
-          {firstClass && (
-            <div className="flex flex-col items-center justify-center">
-              <div className="text-sm">{firstClass.name}</div>
-              <div className="text-xs text-gray-500">{firstClass.grade}</div>
-            </div>
-          )}
-
-          {/* Show "x more" link if there are additional classes */}
-          {/* {remainingClasses.length > 0 && (
-            <div className="mt-1">
-              <button
-                className="text-xs text-blue-500 hover:underline"
-                onClick={() => {
-                  // Handle click to show all classes (e.g., in a modal or dropdown)
-                  alert(
-                    `Remaining Classes:\n${remainingClasses
-                      .map((cls) => `${cls.name} (${cls.grade})`)
-                      .join("\n")}`
-                  );
-                }}
-              >
-                {remainingClasses.length} more
-              </button>
-            </div>
-          )} */}
-        </div>
-      );
-    },
-  },
-  {
-    accessorKey: "paymentStatus",
-    header: "Payment Status",
-    cell: ({ row }) => <div>{row.getValue("paymentStatus")}</div>,
-  },
-  {
-    id: "actions",
-    enableHiding: false,
-    cell: ({ row }) => {
-      const student = row.original;
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() =>
-                navigator.clipboard.writeText(student.id.toString())
-              }
-            >
-              Copy student ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View student</DropdownMenuItem>
-            <DropdownMenuItem>Edit student</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
-  },
-];
+function paymentStatusColor(paymentStatus: string, daysTilDeadline: number) {
+  if (paymentStatus === "Not up to date") {
+    return "bg-red-500";
+  } else if (paymentStatus === "Up to date" && daysTilDeadline === 0) {
+    return "bg-green-500";
+  } else if (paymentStatus === "Up to date" && daysTilDeadline < 7) {
+    return "bg-orange-500";
+  } else if (paymentStatus === "Up to date" && daysTilDeadline >= 7) {
+    return "bg-green-500";
+  }
+}
 
 export function StudentTable({
   students,
@@ -257,6 +74,241 @@ export function StudentTable({
   students: Student[];
   courses: Course[];
 }) {
+  const [selectedCourse, setSelectedCourse] = React.useState<Course>();
+  const [selectedGrade, setSelectedGrade] = React.useState<Grade>();
+  const t = useTranslations("StudentTable");
+
+  const columns: ColumnDef<Student>[] = [
+    {
+      accessorKey: "name",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => {
+              column.toggleSorting(column.getIsSorted() === "asc");
+            }}
+            className="text-center"
+          >
+            {t("Name")}
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <Link href={`/students/${row.original.id}`} passHref>
+          <div className="text-green-500 hover:underline cursor-pointer">
+            {row.getValue("name") + " " + row.original.firstname}
+          </div>
+        </Link>
+      ),
+    },
+    {
+      accessorKey: "paymentStatus",
+      header: () => <div className="text-center">{t("Payment Status")}</div>,
+      cell: ({ row }) => {
+        return (
+          <div className="flex justify-center text-center ">
+            <div
+              className={`rounded-full w-3 h-3
+                 ${paymentStatusColor(
+                   row.original.student_classes?.[0]?.paymentStatus || "",
+                   row.original.student_classes?.[0]?.daysTilDeadline || 0
+                 )}
+             `}
+            ></div>
+          </div>
+        );
+      },
+      filterFn: (row, columnId, filterValue) => {
+        const paymentStatus =
+          row.original.student_classes?.[0]?.paymentStatus || "";
+        const daysTilDeadline =
+          row.original.student_classes?.[0]?.daysTilDeadline || 0;
+
+        if (filterValue === "Up to date") {
+          return paymentStatus === "Up to date";
+        } else if (filterValue === "Due in 7 days") {
+          return (
+            paymentStatus === "Up to date" &&
+            !!daysTilDeadline &&
+            daysTilDeadline <= 7
+          );
+        } else if (filterValue === "Late") {
+          return paymentStatus === "Not up to date";
+        } else {
+          return true; // No filter applied
+        }
+      },
+    },
+    {
+      // This column extracts all course names from the student classes.
+      accessorFn: (student) => {
+        // Make sure student.classes exists, then map to course names if defined
+        return student.classes
+          ? student.classes
+              .map((cls) => cls.course?.name)
+              .filter((courseName): courseName is string => Boolean(courseName))
+              .join(", ")
+          : "";
+      },
+      id: "course", // unique id for the column
+      header: t("Courses"),
+    },
+    {
+      accessorFn: (student) => {
+        return student.classes
+          ? student.classes
+              .map((cls) => cls.grade?.name || "No Grade")
+              .filter((grade) => Boolean(grade)) // Ensure grade exists
+          : [];
+      },
+      id: "grade",
+      header: () => <div className="text-center">{t("Grade")}</div>,
+      cell: ({ row }) => {
+        const grades = row.getValue("grade") as Array<string>;
+        const firstGrade = grades[0];
+
+        return (
+          <div>
+            {firstGrade && (
+              <div className="flex flex-col items-center justify-center">
+                <div className="text-sm">{firstGrade}</div>
+              </div>
+            )}
+          </div>
+        );
+      },
+      filterFn: (row, columnId, filterValue) => {
+        const grades = row.getValue(columnId) as Array<string>;
+        return grades.some((grade) =>
+          grade.toLowerCase().includes(filterValue.toLowerCase())
+        );
+      },
+    },
+    {
+      accessorFn: (student) => {
+        return student.classes
+          ? student.classes
+              .map((cls) => cls.name)
+              .filter((name) => Boolean(name)) // Ensure class name exists
+          : [];
+      },
+      id: "class",
+      header: () => <div className="text-center">{t("Class")}</div>,
+      cell: ({ row }) => {
+        const classes = row.getValue("class") as Array<string>;
+        const firstClass = classes[0];
+
+        return (
+          <div>
+            {firstClass && (
+              <div className="flex flex-col items-center justify-center">
+                <div className="text-sm">{firstClass}</div>
+              </div>
+            )}
+          </div>
+        );
+      },
+      filterFn: (row, columnId, filterValue) => {
+        const classes = row.getValue(columnId) as Array<string>;
+        return classes.some((cls) =>
+          cls.toLowerCase().includes(filterValue.toLowerCase())
+        );
+      },
+    },
+    {
+      accessorKey: "gender",
+      header: () => <div className="text-center">{t("Gender")}</div>,
+      cell: ({ row }) => (
+        <div className="text-center">{row.getValue("gender")}</div>
+      ),
+    },
+    {
+      accessorKey: "birthday",
+      header: () => <div className="text-center">{t("Age")}</div>,
+      cell: ({ row }) => {
+        const birthday = row.getValue("birthday") as string;
+        const age = calculateAge(birthday);
+
+        return (
+          <div className="text-center">
+            {/* Display the age */}
+            <div>{age + " ans"}</div>
+            {/* Display the birthday (grayed and smaller) */}
+            <div className="text-xs text-gray-500">
+              {new Date(birthday).toLocaleDateString()} {/* Format the date */}
+            </div>
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: "nationality",
+      header: () => <div className="text-center">{t("Nationality")}</div>,
+      cell: ({ row }) => (
+        <div className="text-center">{row.getValue("nationality")}</div>
+      ),
+    },
+    {
+      id: "contact",
+      header: () => <div className="text-center">{t("Contact")}</div>,
+      cell: ({ row }) => {
+        const phone = row.original.phone;
+        const email = row.original.email;
+
+        return (
+          <div className="text-center">
+            {/* Display the phone number */}
+            <div>{phone}</div>
+            {/* Display the email (smaller and grayed out) */}
+            <div className="text-xs text-gray-500">{email}</div>
+          </div>
+        );
+      },
+    },
+
+    {
+      accessorKey: "createdAt",
+      header: () => <div className="text-center">Created At</div>,
+      cell: ({ row }) => (
+        <div className="text-center">{row.getValue("createdAt")}</div>
+      ),
+      enableHiding: true,
+    },
+    // {
+    //   id: "actions",
+    //   enableHiding: false,
+    //   cell: ({ row }) => {
+    //     const student = row.original;
+
+    //     return (
+    //       <DropdownMenu>
+    //         <DropdownMenuTrigger asChild>
+    //           <Button variant="ghost" className="h-8 w-8 p-0">
+    //             <span className="sr-only">Open menu</span>
+    //             <MoreHorizontal className="h-4 w-4" />
+    //           </Button>
+    //         </DropdownMenuTrigger>
+    //         <DropdownMenuContent align="end">
+    //           <DropdownMenuLabel>Actions</DropdownMenuLabel>
+    //           <DropdownMenuItem
+    //             onClick={() =>
+    //               navigator.clipboard.writeText(student.id.toString())
+    //             }
+    //           >
+    //             Copy student ID
+    //           </DropdownMenuItem>
+    //           <DropdownMenuSeparator />
+    //           <DropdownMenuItem>View student</DropdownMenuItem>
+    //           <DropdownMenuItem>Edit student</DropdownMenuItem>
+    //         </DropdownMenuContent>
+    //       </DropdownMenu>
+    //     );
+    //   },
+    // },
+  ];
+
   function handleDownload() {
     const headers = ["Name", "Email", "Phone", "Class", "Payment Status"];
 
@@ -300,12 +352,19 @@ export function StudentTable({
   }
 
   console.log(students);
-  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [sorting, setSorting] = React.useState<SortingState>([
+    {
+      id: "createdAt",
+      desc: true, // sort by name in descending order by default
+    },
+  ]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
   const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
+    React.useState<VisibilityState>({
+      createdAt: false,
+    });
   const [rowSelection, setRowSelection] = React.useState({});
 
   const table = useReactTable({
@@ -337,7 +396,7 @@ export function StudentTable({
           <div className="relative flex-1 mr-3">
             <Input
               id="search"
-              placeholder="Search student..."
+              placeholder={`${t("Searchstudent")}`}
               value={
                 (table.getColumn("name")?.getFilterValue() as string) ?? ""
               }
@@ -351,7 +410,7 @@ export function StudentTable({
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" className="ml-auto">
-                Columns <ChevronDown className="ml-2 h-4 w-4" />
+                {t("Columns")} <ChevronDown className="ml-2 h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
@@ -378,21 +437,25 @@ export function StudentTable({
 
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
           <div>
-            <Label htmlFor="course">Course</Label>
+            <Label htmlFor="course">{t("Course")}</Label>
             <Select
               value={
-                (table.getColumn("courses")?.getFilterValue() as string) ?? ""
+                (table.getColumn("course")?.getFilterValue() as string) ?? ""
               }
               onValueChange={(event) => {
                 if (event === "all") {
-                  table.getColumn("courses")?.setFilterValue("");
+                  table.getColumn("course")?.setFilterValue("");
+                  setSelectedCourse(undefined);
                 } else {
-                  table.getColumn("courses")?.setFilterValue(event);
+                  table.getColumn("course")?.setFilterValue(event);
+                  setSelectedCourse(
+                    courses.find((c) => c.id.toString() === event)
+                  );
                 }
               }}
             >
               <SelectTrigger id="course">
-                <SelectValue placeholder="Select course" />
+                <SelectValue placeholder={t("Select course")} />
               </SelectTrigger>
               <SelectContent>
                 {courses.map((course) => (
@@ -400,13 +463,104 @@ export function StudentTable({
                     {course.name}
                   </SelectItem>
                 ))}
-                <SelectItem value={"all"}>All Courses</SelectItem>
+                <SelectItem value={"all"}>{t("All Courses")}</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div>
+            <Label htmlFor="grade">{t("Grade")}</Label>
+            <Select
+              value={
+                (table.getColumn("grade")?.getFilterValue() as string) ?? ""
+              }
+              onValueChange={(event) => {
+                if (event === "all") {
+                  table.getColumn("grade")?.setFilterValue("");
+                  setSelectedGrade(undefined);
+                } else {
+                  table.getColumn("grade")?.setFilterValue(event);
+                  setSelectedGrade(
+                    selectedCourse?.grades?.find(
+                      (g) => g.id.toString() === event
+                    )
+                  );
+                }
+              }}
+              disabled={!selectedCourse}
+            >
+              <SelectTrigger id="grade">
+                <SelectValue placeholder={t("Select grade")} />
+              </SelectTrigger>
+              <SelectContent>
+                {selectedCourse?.grades?.map((grade) => (
+                  <SelectItem key={grade.id} value={grade.id.toString()}>
+                    {grade.name}
+                  </SelectItem>
+                ))}
+                <SelectItem value={"all"}>{t("All Grades")}</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div>
+            <Label htmlFor="class">{t("Class")}</Label>
+            <Select
+              value={
+                (table.getColumn("class")?.getFilterValue() as string) ?? ""
+              }
+              onValueChange={(event) => {
+                if (event === "all") {
+                  table.getColumn("class")?.setFilterValue("");
+                } else {
+                  table.getColumn("class")?.setFilterValue(event);
+                }
+              }}
+              disabled={!selectedGrade}
+            >
+              <SelectTrigger id="class">
+                <SelectValue placeholder={t("Select class")} />
+              </SelectTrigger>
+              <SelectContent>
+                {selectedGrade?.classes?.map((classs) => (
+                  <SelectItem key={classs.id} value={classs.id.toString()}>
+                    {classs.name}
+                  </SelectItem>
+                ))}
+                <SelectItem value={"all"}>{t("All Classes")}</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div>
+            <Label htmlFor="paymentStatus">{t("Payment Status")}</Label>
+            <Select
+              value={
+                (table
+                  .getColumn("paymentStatus")
+                  ?.getFilterValue() as string) ?? ""
+              }
+              onValueChange={(value) => {
+                if (value === "all") {
+                  table.getColumn("paymentStatus")?.setFilterValue("");
+                } else {
+                  table.getColumn("paymentStatus")?.setFilterValue(value);
+                }
+              }}
+            >
+              <SelectTrigger id="paymentStatus">
+                <SelectValue placeholder={t("Select payment status")} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">{t("All")}</SelectItem>
+                <SelectItem value="Up to date">{t("Up to date")}</SelectItem>
+                <SelectItem value="Due in 7 days">
+                  {t("Due in 7 days")}
+                </SelectItem>
+                <SelectItem value="Late">{t("Late")}</SelectItem>
               </SelectContent>
             </Select>
           </div>
           <div className="flex items-end">
             <Button className="w-full" onClick={handleDownload}>
-              <Download className="mr-2 h-4 w-4" /> Download List
+              <Download className="mr-2 h-4 w-4" /> {t("Download List")}
             </Button>
           </div>
         </div>

@@ -1,9 +1,84 @@
 {
-  "HomePage": {
-    "title": "Gutten!"
+  "Navbar": {
+    "title": "Gutten!",
+    "Search": "Suche"
   },
   "LocaleSwitcher": {
     "locale": "Zu {locale, select, de {Deutsch} en {Englisch} other {Unbekannt}} wechseln",
     "label": "Deutsch"
+  },
+
+  "StatCard": {
+    "student": "Schüler{count, plural, one {} other {}}",
+    "teacher": "Lehrer{count, plural, one {} other {}}",
+    "class": "Klasse{count, plural, one {} other {n}}",
+    "payment": "Zahlung{count, plural, one {} other {en}} heute"
+  },
+  "CountChart": {
+    "title": "Zahlungen",
+    "latePayments": "Überfällige Zahlungen",
+    "dueInDays": "Fällig in {count} Tag{count, plural, one {} other {en}}"
+  },
+  "AttendanceChart": {
+    "title": "Anwesenheit",
+    "days": {
+      "mon": "Mo",
+      "tue": "Di",
+      "wed": "Mi",
+      "thu": "Do",
+      "fri": "Fr"
+    }
+  },
+  "StudentTable": {
+    "Students": "Studenten",
+    "Name": "Name",
+    "Payment Status": "Zahlungsstatus",
+    "Courses": "Kurse",
+    "Grade": "Note",
+    "Class": "Klasse",
+    "Gender": "Geschlecht",
+    "Age": "Alter",
+    "Nationality": "Nationalität",
+    "Contact": "Kontakt",
+    "Created At": "Erstellt am",
+    "Searchstudent": "Schüler suchen...",
+    "Columns": "Spalten",
+    "Course": "Kurs",
+    "Select course": "Kurs auswählen",
+    "All Courses": "Alle Kurse",
+    "Select grade": "Note auswählen",
+    "All Grades": "Alle Noten",
+    "Select class": "Klasse auswählen",
+    "All Classes": "Alle Klassen",
+    "Select payment status": "Zahlungsstatus auswählen",
+    "All": "Alle",
+    "Up to date": "Aktuell",
+    "Due in 7 days": "Fällig in 7 Tagen",
+    "Late": "Verspätet",
+    "Download List": "Liste herunterladen",
+    "No results": "Keine Ergebnisse.",
+    "row_selected": "{{count}} von {{total}} Reihe(n) ausgewählt.",
+    "Previous": "Vorherige",
+    "Next": "Nächste",
+    "ans": "Jahre",
+    "Student Report": "Schülerbericht",
+    "Date": "Datum",
+    "New Student": "Neuer Student",
+    "Ancient Students": "Alter Studenten",
+    "Delete Student": "Student löschen"
+  },
+  "Menu": {
+    "MENU": "MENÜ",
+    "OTHER": "SONSTIGES",
+    "Home": "Startseite",
+    "Students": "Schüler",
+    "Teachers": "Lehrer",
+    "Courses": "Kurse",
+    "Classes": "Klassen",
+    "Attendance": "Anwesenheit",
+    "Payments": "Zahlungen",
+    "Profile": "Profil",
+    "Settings": "Einstellungen",
+    "Logout": "Abmelden"
   }
 }

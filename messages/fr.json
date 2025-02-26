@@ -1,9 +1,84 @@
 {
-  "HomePage": {
-    "title": "Salut monde!"
+  "Navbar": {
+    "title": "Salut monde!",
+    "Search": "Rechercher"
   },
+  "Homepage": {},
   "LocaleSwitcher": {
     "locale": "{}",
     "label": "Français"
+  },
+  "StatCard": {
+    "student": "élève{count, plural, one {} other {s}}",
+    "teacher": "enseignant{count, plural, one {} other {s}}",
+    "class": "classe{count, plural, one {} other {s}}",
+    "payment": "paiement{count, plural, one {} other {s}} aujourd'hui"
+  },
+  "CountChart": {
+    "title": "Paiements",
+    "latePayments": "Paiements en retard",
+    "dueInDays": "Dû dans {count} jour{count, plural, one {} other {s}}"
+  },
+  "AttendanceChart": {
+    "title": "Présence",
+    "days": {
+      "mon": "Lun",
+      "tue": "Mar",
+      "wed": "Mer",
+      "thu": "Jeu",
+      "fri": "Ven"
+    }
+  },
+  "StudentTable": {
+    "Students": "Etudiants",
+    "Name": "Nom",
+    "Payment Status": "Statut de paiement",
+    "Courses": "Cours",
+    "Grade": "Niveau",
+    "Class": "Classe",
+    "Gender": "Genre",
+    "Age": "Âge",
+    "Nationality": "Nationalité",
+    "Contact": "Contact",
+    "Created At": "Créé le",
+    "Searchstudent": "Rechercher un étudiant...",
+    "Columns": "Colonnes",
+    "Course": "Cours",
+    "Select course": "Sélectionner un cours",
+    "All Courses": "Tous les cours",
+    "Select grade": "Sélectionner un niveau",
+    "All Grades": "Tous les niveaux",
+    "Select class": "Sélectionner une classe",
+    "All Classes": "Toutes les classes",
+    "Select payment status": "Sélectionner un statut de paiement",
+    "All": "Tous",
+    "Up to date": "À jour",
+    "Due in 7 days": "Dû dans 7 jours",
+    "Late": "En retard",
+    "Download List": "Télécharger la liste",
+    "No results": "Aucun résultat.",
+    "row_selected": "{{count}} sur {{total}} ligne(s) sélectionnée(s).",
+    "Previous": "Précédent",
+    "Next": "Suivant",
+    "ans": "ans",
+    "Student Report": "Rapport Étudiant",
+    "Date": "Date",
+    "New Student": "Nouvel étudiant",
+    "Ancient Students": "Anciens étudiants",
+    "Delete Student": "Supprimer étudiant"
+  },
+  "Menu": {
+    "MENU": "MENU",
+    "OTHER": "AUTRE",
+    "Home": "Accueil",
+    "Students": "Étudiants",
+    "Teachers": "Enseignants",
+    "Courses": "Formations",
+    "Classes": "Classes",
+    "Attendance": "Présence",
+    "Payments": "Paiements",
+    "Profile": "Profil",
+    "Settings": "Paramètres",
+    "Logout": "Déconnexion"
   }
 }

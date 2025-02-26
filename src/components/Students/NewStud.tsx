@@ -44,32 +44,44 @@ import LoadingButton from "../LoadingButton";
 const formSchema = z.object({
   // Student Info
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
+  firstname: z
+    .string()
+    .min(2, { message: "First name must be at least 2 characters." }),
   nationality: z.string().min(2, { message: "Nationality is required." }),
   birthday: z.date({ required_error: "Birthday is required." }),
-  cni: z.string().min(1, { message: "CNI is required." }),
+  cni: z.string().min(1, { message: "CNI is required." }).nullable(),
   phone: z
     .string()
     .regex(/^\+?[0-9]{7,15}$/, {
       message: "Phone number between 7 and 15 digits",
     })
     .min(10, { message: "Phone number must be at least 10 digits." }),
-  email: z.string().email({ message: "Invalid email address." }),
+  email: z.string().email({ message: "Invalid email address." }).nullable(),
   address: z
     .string()
-    .min(5, { message: "Address must be at least 5 characters." }),
+    .min(5, { message: "Address must be at least 5 characters." })
+    .nullable(),
   gender: z.enum(["M", "F"]),
 
   // Parent Info
   parentName: z
     .string()
-    .min(2, { message: "Parent name must be at least 2 characters." }),
+    .min(2, { message: "Parent name must be at least 2 characters." })
+    .nullable(),
   parentPhone: z
     .string()
-    .min(10, { message: "Parent phone number must be at least 10 digits." }),
+    .regex(/^\+?[0-9]{7,15}$/, {
+      message: "Phone number between 7 and 15 digits",
+    })
+    .nullable(),
   parentAddress: z
     .string()
-    .min(5, { message: "Parent address must be at least 5 characters." }),
-  parentEmail: z.string().email({ message: "Invalid parent email address." }),
+    .min(5, { message: "Parent address must be at least 5 characters." })
+    .nullable(),
+  parentEmail: z
+    .string()
+    .email({ message: "Invalid parent email address." })
+    .nullable(),
 
   // Class Attribution
   course: z.string().min(1, { message: "Course is required." }),
@@ -81,6 +93,7 @@ const formSchema = z.object({
     .number()
     .min(0, { message: "Payment amount must be a positive number." }),
   paymentMethod: z.enum(["OM", "MOMO", "Cash", "Bank", "Other"]),
+  remainingPayment: z.number().min(0, { message: "Paid too much" }).nullable(),
 
   // Class Pricing
   registrationFee: z.number().min(0),
@@ -103,39 +116,36 @@ export function NewStud() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
+      firstname: "",
       nationality: "Cameroon",
-      cni: "",
+      cni: null, // Set to null for optional fields
       phone: "",
-      email: "",
-      address: "",
+      email: null, // Set to null for optional fields
+      address: null, // Set to null for optional fields
       gender: "M",
-      parentName: "",
-      parentPhone: "",
-      parentAddress: "",
-      parentEmail: "",
+      parentName: null, // Set to null for optional fields
+      parentPhone: null, // Set to null for optional fields
+      parentAddress: null, // Set to null for optional fields
+      parentEmail: null, // Set to null for optional fields
       course: "",
       grade: "",
-      class: 1,
-      paymentAmount: 0,
+      class: undefined,
+      paymentAmount: undefined,
       paymentMethod: "Cash",
+      remainingPayment: null,
       registrationFee: 0,
       firstInstalmentFee: 0,
       firstInstalmentDeadline: new Date("2023-09-01"),
       secondInstalmentFee: 0,
       secondInstalmentDeadline: new Date("2023-12-01"),
     },
-    mode: "onChange",
+    mode: "onSubmit", // Validate only on submit
   });
 
   useEffect(() => {
     async function fetchCourses() {
       try {
-        // Use the custom axios instance to get the teachers.
         const response = await api.get("/courses");
-        // If your API returns the data directly or in a nested property,
-        // adjust accordingly. For example, if it returns { teachers: [...] }:
-        // setTeachers(response.data.teachers);
-
         if (response.data.success) {
           setCourses(response.data.data);
         } else {
@@ -155,12 +165,37 @@ export function NewStud() {
 
     fetchCourses();
   }, []);
+  useEffect(() => {
+    const subscription = form.watch((value, {}) => {
+      const registrationFee = value.registrationFee || 0;
+      const firstInstalmentFee = value.firstInstalmentFee || 0;
+      const secondInstalmentFee = value.secondInstalmentFee || 0;
+      const paymentAmount = value.paymentAmount || 0;
 
+      const newRemainingPayment =
+        registrationFee +
+        firstInstalmentFee +
+        secondInstalmentFee -
+        paymentAmount;
+
+      // Get the current value of remainingPayment
+      const currentRemainingPayment = form.getValues("remainingPayment") || 0;
+
+      // Only update if the value has changed
+      if (newRemainingPayment !== currentRemainingPayment) {
+        form.setValue("remainingPayment", newRemainingPayment, {
+          shouldValidate: true, // Optional: Validate the field after updating
+        });
+      }
+    });
+
+    return () => subscription.unsubscribe(); // Cleanup subscription
+  }, [form]);
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       setIsLoading(true);
-      const response = await api.post("/newstudent", values).then(() => {
-        setIsLoading(false);
+      const response = await api.post("/newstudent", values);
+      if (response.status === 201) {
         toast({
           title: "Student registered successfully",
           description: "The new student has been added to the system.",
@@ -169,34 +204,19 @@ export function NewStud() {
         setShowClassPricing(false);
         setShowExceptionalPricing(false);
         setApiErrors({});
-      });
-      console.log(response);
-      // if (response.status === 201) {
-      //   toast({
-      //     title: "Student registered successfully",
-      //     description: "The new student has been added to the system.",
-      //   });
-      //   form.reset();
-      //   setShowClassPricing(false);
-      //   setShowExceptionalPricing(false);
-      //   setApiErrors({});
-      // }
+        setExistingStudent(undefined);
+      }
     } catch (error) {
-      console.log(error);
       if (error instanceof AxiosError) {
         const errorData = error.response?.data;
-        console.log(errorData);
         if (errorData.message) {
           const message = errorData.message as string;
-          console.log(message);
           if (message.startsWith("Existing")) {
             setExistingStudent([errorData.data, message]);
           }
         }
-        console.log(existingStudent);
         const errors: { [key: string]: string } = {};
         if (Array.isArray(errorData.data)) {
-          console.log(error);
           errorData.data.forEach(
             (error: { field: string; message: string }) => {
               errors[error.field] = error.message;
@@ -206,7 +226,6 @@ export function NewStud() {
           errors["no field"] = errorData.data;
         }
         setApiErrors(errors);
-        console.log(apiErrors);
       } else {
         console.error("Non-Axios error:", error);
       }
@@ -214,9 +233,13 @@ export function NewStud() {
       setIsLoading(false);
     }
   };
-
+  console.log(courses);
   return (
     <Form {...form}>
+      {/* <p className="text-sm text-muted-foreground mb-5">
+        Fields marked with * are mandatory.
+      </p> */}
+
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         {error && (
           <Alert variant="destructive">
@@ -238,9 +261,22 @@ export function NewStud() {
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Name</FormLabel>
+                    <FormLabel>Name *</FormLabel>
                     <FormControl>
-                      <Input placeholder="John Doe" {...field} />
+                      <Input placeholder="Doe" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="firstname"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>First Name *</FormLabel>
+                    <FormControl>
+                      <Input placeholder="John" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -251,7 +287,7 @@ export function NewStud() {
                 name="nationality"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Nationality</FormLabel>
+                    <FormLabel>Nationality *</FormLabel>
                     <FormControl>
                       <Input placeholder="e.g. American" {...field} />
                     </FormControl>
@@ -264,7 +300,7 @@ export function NewStud() {
                 name="birthday"
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
-                    <FormLabel>Birthday</FormLabel>
+                    <FormLabel>Birthday *</FormLabel>
                     <Popover>
                       <PopoverTrigger asChild>
                         <FormControl>
@@ -307,7 +343,11 @@ export function NewStud() {
                   <FormItem>
                     <FormLabel>CNI (National Identity Card) Number</FormLabel>
                     <FormControl>
-                      <Input placeholder="123456789" {...field} />
+                      <Input
+                        placeholder="123456789"
+                        {...field}
+                        value={field.value ?? ""}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -318,9 +358,13 @@ export function NewStud() {
                 name="phone"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Phone Number</FormLabel>
+                    <FormLabel>Phone Number *</FormLabel>
                     <FormControl>
-                      <Input placeholder="+1 234 567 8900" {...field} />
+                      <Input
+                        placeholder="+1 234 567 8900"
+                        {...field}
+                        value={field.value ?? ""}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -333,7 +377,11 @@ export function NewStud() {
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input placeholder="john@example.com" {...field} />
+                      <Input
+                        placeholder="john@example.com"
+                        {...field}
+                        value={field.value ?? ""}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -349,6 +397,7 @@ export function NewStud() {
                       <Textarea
                         placeholder="123 Main St, City, Country"
                         {...field}
+                        value={field.value ?? ""}
                       />
                     </FormControl>
                     <FormMessage />
@@ -396,7 +445,11 @@ export function NewStud() {
                   <FormItem>
                     <FormLabel>Parent Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="Jane Doe" {...field} />
+                      <Input
+                        placeholder="Jane Doe"
+                        {...field}
+                        value={field.value ?? ""}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -409,7 +462,11 @@ export function NewStud() {
                   <FormItem>
                     <FormLabel>Parent Phone</FormLabel>
                     <FormControl>
-                      <Input placeholder="+1 234 567 8900" {...field} />
+                      <Input
+                        placeholder="+1 234 567 8900"
+                        {...field}
+                        value={field.value ?? ""}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -425,6 +482,7 @@ export function NewStud() {
                       <Textarea
                         placeholder="123 Main St, City, Country"
                         {...field}
+                        value={field.value ?? ""}
                       />
                     </FormControl>
                     <FormMessage />
@@ -438,7 +496,11 @@ export function NewStud() {
                   <FormItem>
                     <FormLabel>Parent Email</FormLabel>
                     <FormControl>
-                      <Input placeholder="jane@example.com" {...field} />
+                      <Input
+                        placeholder="jane@example.com"
+                        {...field}
+                        value={field.value ?? ""}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -459,7 +521,7 @@ export function NewStud() {
                 name="course"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Course</FormLabel>
+                    <FormLabel>Course *</FormLabel>
                     <Select
                       onValueChange={(value) => {
                         field.onChange(value); // Update the course field
@@ -498,7 +560,7 @@ export function NewStud() {
 
                   return (
                     <FormItem>
-                      <FormLabel>Grade</FormLabel>
+                      <FormLabel>Grade *</FormLabel>
                       <Select
                         onValueChange={(value) => {
                           field.onChange(value); // Update the grade field
@@ -531,48 +593,64 @@ export function NewStud() {
                 render={({ field }) => {
                   const selectedGrade = form.watch("grade"); // Get the selected grade
                   const selectedCourse = form.watch("course"); // Get the selected course
+                  console.log("course", selectedCourse);
+                  console.log("grade", selectedGrade);
                   const filteredClasses = selectedGrade
                     ? courses
                         .find((course) => course.name === selectedCourse)
                         ?.grades?.find((grade) => grade.name === selectedGrade)
                         ?.classes || []
                     : []; // Filter classes based on the selected grade
-                  const filteredGrades = selectedCourse
-                    ? courses.find((course) => course.name === selectedCourse)
-                        ?.grades || []
-                    : [];
-                  const pricing = selectedGrade
-                    ? filteredGrades.find(
-                        (grade) => grade.name === selectedGrade
-                      )?.pricing
-                    : undefined;
-
+                  console.log("fc", filteredClasses);
                   return (
                     <FormItem>
-                      <FormLabel>Class</FormLabel>
+                      <FormLabel>Class *</FormLabel>
                       <Select
                         onValueChange={(value) => {
+                          const selectedClass = filteredClasses.find(
+                            (cls) => cls.id.toString() === value
+                          );
+                          console.log(selectedClass);
+
+                          // Update the class field
                           field.onChange(parseInt(value));
-                          form.setValue(
-                            "registrationFee",
-                            parseInt(pricing?.registerFee ?? "0")
-                          );
-                          form.setValue(
-                            "firstInstalmentFee",
-                            parseInt(pricing?.instalment1Fee ?? "0")
-                          );
-                          form.setValue(
-                            "secondInstalmentFee",
-                            parseInt(pricing?.instalment2Fee ?? "0")
-                          );
-                          form.setValue(
-                            "firstInstalmentDeadline",
-                            new Date(pricing?.instalment1Deadline ?? "0")
-                          );
-                          form.setValue(
-                            "secondInstalmentDeadline",
-                            new Date(pricing?.instalment2Deadline ?? "0")
-                          );
+
+                          // Update pricing based on the selected class
+                          if (selectedClass) {
+                            form.setValue(
+                              "registrationFee",
+                              parseInt(
+                                selectedClass.pricing?.registerFee ?? "0"
+                              )
+                            );
+                            form.setValue(
+                              "firstInstalmentFee",
+                              parseInt(
+                                selectedClass.pricing?.instalment1Fee ?? "0"
+                              )
+                            );
+                            form.setValue(
+                              "secondInstalmentFee",
+                              parseInt(
+                                selectedClass.pricing?.instalment2Fee ?? "0"
+                              )
+                            );
+                            form.setValue(
+                              "firstInstalmentDeadline",
+                              new Date(
+                                selectedClass.pricing?.instalment1Deadline ??
+                                  "0"
+                              )
+                            );
+                            form.setValue(
+                              "secondInstalmentDeadline",
+                              new Date(
+                                selectedClass.pricing?.instalment2Deadline ??
+                                  "0"
+                              )
+                            );
+                          }
+
                           setShowClassPricing(true);
                         }}
                         defaultValue={field.value ? field.value.toString() : ""}
@@ -621,9 +699,19 @@ export function NewStud() {
                                 <Input
                                   type="number"
                                   {...field}
-                                  onChange={(e) =>
-                                    field.onChange(Number(e.target.value))
-                                  }
+                                  value={field.value ?? ""}
+                                  onChange={(e) => {
+                                    const value = e.target.value;
+                                    const parsedValue =
+                                      value === ""
+                                        ? null
+                                        : Number.parseFloat(value);
+                                    field.onChange(
+                                      isNaN(parsedValue || 1)
+                                        ? null
+                                        : parsedValue
+                                    );
+                                  }}
                                   disabled={!showExceptionalPricing}
                                 />
                               </FormControl>
@@ -641,9 +729,19 @@ export function NewStud() {
                                 <Input
                                   type="number"
                                   {...field}
-                                  onChange={(e) =>
-                                    field.onChange(Number(e.target.value))
-                                  }
+                                  value={field.value ?? ""}
+                                  onChange={(e) => {
+                                    const value = e.target.value;
+                                    const parsedValue =
+                                      value === ""
+                                        ? null
+                                        : Number.parseFloat(value);
+                                    field.onChange(
+                                      isNaN(parsedValue || 1)
+                                        ? null
+                                        : parsedValue
+                                    );
+                                  }}
                                   disabled={!showExceptionalPricing}
                                 />
                               </FormControl>
@@ -704,9 +802,19 @@ export function NewStud() {
                                 <Input
                                   type="number"
                                   {...field}
-                                  onChange={(e) =>
-                                    field.onChange(Number(e.target.value))
-                                  }
+                                  value={field.value ?? ""}
+                                  onChange={(e) => {
+                                    const value = e.target.value;
+                                    const parsedValue =
+                                      value === ""
+                                        ? null
+                                        : Number.parseFloat(value);
+                                    field.onChange(
+                                      isNaN(parsedValue || 1)
+                                        ? null
+                                        : parsedValue
+                                    );
+                                  }}
                                   disabled={!showExceptionalPricing}
                                 />
                               </FormControl>
@@ -788,7 +896,7 @@ export function NewStud() {
                 name="paymentAmount"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Payment Amount</FormLabel>
+                    <FormLabel>Payment Amount *</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
@@ -835,6 +943,32 @@ export function NewStud() {
                   </FormItem>
                 )}
               />
+              <FormField
+                control={form.control}
+                name="remainingPayment"
+                render={({ field }) => (
+                  <FormItem className="col-span-1 md:col-span-2">
+                    <FormLabel>Remaining Payment</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        {...field}
+                        value={field.value ?? ""}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          const parsedValue =
+                            value === "" ? null : Number.parseFloat(value);
+                          field.onChange(
+                            isNaN(parsedValue || 1) ? null : parsedValue
+                          );
+                        }}
+                        disabled // Disable the input field
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
           </CardContent>
         </Card>
@@ -843,7 +977,9 @@ export function NewStud() {
             <AlertCircle className="h-4 w-4" />
             <AlertTitle>{existingStudent[1]}</AlertTitle>
             <AlertDescription>
-              <p>{existingStudent[0].name}</p>
+              <p>
+                {existingStudent[0].name + " " + existingStudent[0].firstname}
+              </p>
               <p>{existingStudent[0].phone}</p>
               <p>{existingStudent[0].email}</p>
             </AlertDescription>
