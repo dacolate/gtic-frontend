@@ -184,7 +184,7 @@ function Calendar({
         IconRight: ({ className, ...props }) => (
           <ChevronRight className={cn("h-4 w-4", className)} {...props} />
         ),
-        Caption: ({ ...props }) => {
+        Caption: ({}) => {
           return (
             <div className="flex items-center justify-between gap-2">
               <Select
