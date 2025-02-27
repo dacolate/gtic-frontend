@@ -67,6 +67,85 @@
     "Ancient Students": "Alter Studenten",
     "Delete Student": "Student löschen"
   },
+
+  "NewStud": {
+    "add new Student": "Neuen Schüler hinzufügen",
+    "backToStudents": "Zurück zu den Schülern",
+    "studentInfo": {
+      "title": "Schülerinformation",
+      "name": "Name *",
+      "firstName": "Vorname *",
+      "nationality": "Nationalität *",
+      "birthday": "Geburtstag *",
+      "cni": "CNI (Nationaler Identitätsausweis) Nummer",
+      "phone": "Telefonnummer *",
+      "email": "E-Mail",
+      "address": "Adresse",
+      "gender": "Geschlecht",
+      "male": "Männlich",
+      "female": "Weiblich",
+      "pickadate": "Datum auswählen"
+    },
+    "parentInfo": {
+      "title": "Elterninformation",
+      "parentName": "Name des Elternteils",
+      "parentPhone": "Telefonnummer des Elternteils",
+      "parentAddress": "Adresse des Elternteils",
+      "parentEmail": "E-Mail des Elternteils"
+    },
+    "classAttribution": {
+      "title": "Klassenzuweisung",
+      "course": "Kurs *",
+      "grade": "Klasse *",
+      "class": "Klasse *",
+      "Select course": "Kurs auswählen",
+      "Select grade": "Klasse auswählen",
+      "Select class": "Klasse auswählen"
+    },
+    "paymentInfo": {
+      "title": "Zahlungsinformation",
+      "paymentAmount": "Zahlungsbetrag *",
+      "paymentMethod": "Zahlungsmethode",
+      "remainingPayment": "Verbleibende Zahlung",
+      "cash": "Bar",
+      "om": "OM",
+      "momo": "MOMO",
+      "bank": "Banküberweisung",
+      "other": "Andere"
+    },
+    "classPricing": {
+      "title": "Klassenpreise",
+      "registrationFee": "Anmeldegebühr",
+      "firstInstalmentFee": "Erste Rate",
+      "firstInstalmentDeadline": "Frist für die erste Rate",
+      "secondInstalmentFee": "Zweite Rate",
+      "secondInstalmentDeadline": "Frist für die zweite Rate",
+      "makeException": "Ausnahme machen",
+      "cancelException": "Ausnahme stornieren"
+    },
+    "errors": {
+      "nameRequired": "Der Name muss mindestens 2 Zeichen enthalten.",
+      "firstNameRequired": "Der Vorname muss mindestens 2 Zeichen enthalten.",
+      "nationalityRequired": "Nationalität ist erforderlich.",
+      "birthdayRequired": "Geburtstag ist erforderlich.",
+      "phoneRequired": "Die Telefonnummer muss zwischen 7 und 15 Ziffern enthalten.",
+      "emailInvalid": "Ungültige E-Mail-Adresse.",
+      "addressRequired": "Die Adresse muss mindestens 5 Zeichen enthalten.",
+      "courseRequired": "Kurs ist erforderlich.",
+      "gradeRequired": "Klasse ist erforderlich.",
+      "classRequired": "Klasse ist erforderlich.",
+      "paymentAmountRequired": "Der Zahlungsbetrag muss eine positive Zahl sein.",
+      "paidTooMuch": "Zu viel bezahlt",
+      "nullpaymentAmount": "Zahl erwartet, null erhalten"
+    },
+    "success": {
+      "studentRegistered": "Schüler erfolgreich registriert",
+      "studentAdded": "Der neue Schüler wurde dem System hinzugefügt."
+    },
+    "buttons": {
+      "submit": "Einreichen"
+    }
+  },
   "Menu": {
     "MENU": "MENÜ",
     "OTHER": "SONSTIGES",

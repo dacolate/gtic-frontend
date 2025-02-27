@@ -144,24 +144,49 @@ export function StudentTable({
     {
       // This column extracts all course names from the student classes.
       accessorFn: (student) => {
-        // Make sure student.classes exists, then map to course names if defined
-        return student.classes
+        const courses = student.classes
           ? student.classes
-              .map((cls) => cls.course?.name)
-              .filter((courseName): courseName is string => Boolean(courseName))
-              .join(", ")
-          : "";
+              .map((cls) => cls.course?.name || "No Course")
+              .filter((course) => Boolean(course)) // Ensure grade exists
+          : [];
+        console.log("Courses:", courses);
+        return courses;
+        // Debugging
       },
       id: "course", // unique id for the column
       header: t("Courses"),
+      cell: ({ row }) => {
+        const courses = row.getValue("course") as Array<string>;
+        const firstCourse = courses[0];
+
+        return (
+          <div>
+            {firstCourse && (
+              <div className="flex flex-col items-center justify-center">
+                <div className="text-sm">{firstCourse}</div>
+              </div>
+            )}
+          </div>
+        );
+      },
+      filterFn: (row, columnId, filterValue) => {
+        const grades = row.getValue(columnId) as Array<string>;
+        console.log("gradesdj", grades);
+        console.log("f", filterValue);
+        return grades.some(
+          (grade) => grade.toLowerCase() === filterValue.toLowerCase()
+        );
+      },
     },
     {
       accessorFn: (student) => {
-        return student.classes
+        const grades = student.classes
           ? student.classes
               .map((cls) => cls.grade?.name || "No Grade")
               .filter((grade) => Boolean(grade)) // Ensure grade exists
           : [];
+        console.log("Grades:", grades); // Debugging
+        return grades;
       },
       id: "grade",
       header: () => <div className="text-center">{t("Grade")}</div>,
@@ -181,8 +206,8 @@ export function StudentTable({
       },
       filterFn: (row, columnId, filterValue) => {
         const grades = row.getValue(columnId) as Array<string>;
-        return grades.some((grade) =>
-          grade.toLowerCase().includes(filterValue.toLowerCase())
+        return grades.some(
+          (grade) => grade.toLowerCase() === filterValue.toLowerCase()
         );
       },
     },
@@ -448,9 +473,7 @@ export function StudentTable({
                   setSelectedCourse(undefined);
                 } else {
                   table.getColumn("course")?.setFilterValue(event);
-                  setSelectedCourse(
-                    courses.find((c) => c.id.toString() === event)
-                  );
+                  setSelectedCourse(courses.find((c) => c.name === event));
                 }
               }}
             >
@@ -459,7 +482,7 @@ export function StudentTable({
               </SelectTrigger>
               <SelectContent>
                 {courses.map((course) => (
-                  <SelectItem key={course.id} value={course.id.toString()}>
+                  <SelectItem key={course.id} value={course.name}>
                     {course.name}
                   </SelectItem>
                 ))}
@@ -480,9 +503,7 @@ export function StudentTable({
                 } else {
                   table.getColumn("grade")?.setFilterValue(event);
                   setSelectedGrade(
-                    selectedCourse?.grades?.find(
-                      (g) => g.id.toString() === event
-                    )
+                    selectedCourse?.grades?.find((g) => g.name === event)
                   );
                 }
               }}
@@ -493,7 +514,7 @@ export function StudentTable({
               </SelectTrigger>
               <SelectContent>
                 {selectedCourse?.grades?.map((grade) => (
-                  <SelectItem key={grade.id} value={grade.id.toString()}>
+                  <SelectItem key={grade.id} value={grade.name}>
                     {grade.name}
                   </SelectItem>
                 ))}

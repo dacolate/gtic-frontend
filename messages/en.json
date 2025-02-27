@@ -66,6 +66,85 @@
     "Ancient Students": "Ancient Students",
     "Delete Student": "Delete Student"
   },
+
+  "NewStud": {
+    "add new Student": "Add new Student",
+    "backToStudents": "Back to Students",
+    "studentInfo": {
+      "title": "Student Information",
+      "name": "Name *",
+      "firstName": "First Name *",
+      "nationality": "Nationality *",
+      "birthday": "Birthday *",
+      "cni": "CNI (National Identity Card) Number",
+      "phone": "Phone Number *",
+      "email": "Email",
+      "address": "Address",
+      "gender": "Gender",
+      "male": "Male",
+      "female": "Female",
+      "pickadate": "Pick a date"
+    },
+    "parentInfo": {
+      "title": "Parent Information",
+      "parentName": "Parent Name",
+      "parentPhone": "Parent Phone",
+      "parentAddress": "Parent Address",
+      "parentEmail": "Parent Email"
+    },
+    "classAttribution": {
+      "title": "Class Attribution",
+      "course": "Course *",
+      "grade": "Grade *",
+      "class": "Class *",
+      "Select course": "Select course",
+      "Select grade": "Select grade",
+      "Select class": "Select class"
+    },
+    "paymentInfo": {
+      "title": "Payment Information",
+      "paymentAmount": "Payment Amount *",
+      "paymentMethod": "Payment Method",
+      "remainingPayment": "Remaining Payment",
+      "cash": "Cash",
+      "om": "OM",
+      "momo": "MOMO",
+      "bank": "Bank Transfer",
+      "other": "Other"
+    },
+    "classPricing": {
+      "title": "Class Pricing",
+      "registrationFee": "Registration Fee",
+      "firstInstalmentFee": "First Instalment",
+      "firstInstalmentDeadline": "First Instalment Deadline",
+      "secondInstalmentFee": "Second Instalment",
+      "secondInstalmentDeadline": "Second Instalment Deadline",
+      "makeException": "Make an Exception",
+      "cancelException": "Cancel Exception"
+    },
+    "errors": {
+      "nameRequired": "Name must contain at least 2 characters.",
+      "firstNameRequired": "First name must contain at least 2 characters.",
+      "nationalityRequired": "Nationality is required.",
+      "birthdayRequired": "Birthday is required.",
+      "phoneRequired": "Phone number must contain between 7 and 15 digits.",
+      "emailInvalid": "Invalid email address.",
+      "addressRequired": "Address must contain at least 5 characters.",
+      "courseRequired": "Course is required.",
+      "gradeRequired": "Grade is required.",
+      "classRequired": "Class is required.",
+      "paymentAmountRequired": "Payment amount must be a positive number.",
+      "paidTooMuch": "Paid too much",
+      "nullpaymentAmount": "Expected number, received null"
+    },
+    "success": {
+      "studentRegistered": "Student registered successfully",
+      "studentAdded": "The new student has been added to the system."
+    },
+    "buttons": {
+      "submit": "Submit"
+    }
+  },
   "Menu": {
     "MENU": "MENU",
     "OTHER": "OTHER",

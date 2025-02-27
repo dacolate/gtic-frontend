@@ -40,70 +40,10 @@ import api from "@/lib/axios";
 import { AxiosError } from "axios";
 import { Course, Student } from "@/lib/types";
 import LoadingButton from "../LoadingButton";
-
-const formSchema = z.object({
-  // Student Info
-  name: z.string().min(2, { message: "Name must be at least 2 characters." }),
-  firstname: z
-    .string()
-    .min(2, { message: "First name must be at least 2 characters." }),
-  nationality: z.string().min(2, { message: "Nationality is required." }),
-  birthday: z.date({ required_error: "Birthday is required." }),
-  cni: z.string().min(1, { message: "CNI is required." }).nullable(),
-  phone: z
-    .string()
-    .regex(/^\+?[0-9]{7,15}$/, {
-      message: "Phone number between 7 and 15 digits",
-    })
-    .min(10, { message: "Phone number must be at least 10 digits." }),
-  email: z.string().email({ message: "Invalid email address." }).nullable(),
-  address: z
-    .string()
-    .min(5, { message: "Address must be at least 5 characters." })
-    .nullable(),
-  gender: z.enum(["M", "F"]),
-
-  // Parent Info
-  parentName: z
-    .string()
-    .min(2, { message: "Parent name must be at least 2 characters." })
-    .nullable(),
-  parentPhone: z
-    .string()
-    .regex(/^\+?[0-9]{7,15}$/, {
-      message: "Phone number between 7 and 15 digits",
-    })
-    .nullable(),
-  parentAddress: z
-    .string()
-    .min(5, { message: "Parent address must be at least 5 characters." })
-    .nullable(),
-  parentEmail: z
-    .string()
-    .email({ message: "Invalid parent email address." })
-    .nullable(),
-
-  // Class Attribution
-  course: z.string().min(1, { message: "Course is required." }),
-  grade: z.string().min(1, { message: "Grade is required." }),
-  class: z.number().min(1, { message: "Class is required." }),
-
-  // Payment
-  paymentAmount: z
-    .number()
-    .min(0, { message: "Payment amount must be a positive number." }),
-  paymentMethod: z.enum(["OM", "MOMO", "Cash", "Bank", "Other"]),
-  remainingPayment: z.number().min(0, { message: "Paid too much" }).nullable(),
-
-  // Class Pricing
-  registrationFee: z.number().min(0),
-  firstInstalmentFee: z.number().min(0),
-  firstInstalmentDeadline: z.date(),
-  secondInstalmentFee: z.number().min(0),
-  secondInstalmentDeadline: z.date(),
-});
+import { useTranslations } from "next-intl";
 
 export function NewStud() {
+  const t = useTranslations("NewStud");
   const [showClassPricing, setShowClassPricing] = useState(false);
   const [apiErrors, setApiErrors] = useState<{ [key: string]: string }>({});
   const [existingStudent, setExistingStudent] = useState<[Student, string]>();
@@ -111,6 +51,71 @@ export function NewStud() {
   const [courses, setCourses] = useState<Course[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
+
+  const formSchema = z.object({
+    // Student Info
+    name: z.string().min(2, { message: t("errors.nameRequired") }),
+    firstname: z.string().min(2, { message: t("errors.firstNameRequired") }),
+    nationality: z
+      .string()
+      .min(2, { message: t("errors.nationalityRequired") }),
+    birthday: z.date({ required_error: t("errors.birthdayRequired") }),
+    cni: z.string().nullable(),
+    phone: z.string().regex(/^\+?[0-9]{7,15}$/, {
+      message: t("errors.phoneRequired"),
+    }),
+    email: z
+      .string()
+      .email({ message: t("errors.emailInvalid") })
+      .nullable(),
+    address: z.string().nullable(),
+    gender: z.enum(["M", "F"]),
+
+    // Parent Info
+    parentName: z
+      .string()
+      .min(2, { message: "Parent name must be at least 2 characters." })
+      .nullable(),
+    parentPhone: z
+      .string()
+      .regex(/^\+?[0-9]{7,15}$/, {
+        message: "Phone number between 7 and 15 digits",
+      })
+      .nullable(),
+    parentAddress: z
+      .string()
+      .min(5, { message: "Parent address must be at least 5 characters." })
+      .nullable(),
+    parentEmail: z
+      .string()
+      .email({ message: "Invalid parent email address." })
+      .nullable(),
+
+    // Class Attribution
+    course: z.string().min(1, { message: t("errors.courseRequired") }),
+    grade: z.string().min(1, { message: t("errors.gradeRequired") }),
+    class: z.number().min(1, { message: t("errors.classRequired") }),
+
+    // Payment
+    paymentAmount: z
+      .number({ required_error: t("errors.paymentAmountRequired") })
+      .min(0, { message: t("errors.paymentAmountRequired") })
+      .refine((value) => value !== null, {
+        message: t("errors.nullpaymentAmount"),
+      }),
+    paymentMethod: z.enum(["OM", "MOMO", "Cash", "Bank", "Other"]),
+    remainingPayment: z
+      .number()
+      .min(0, { message: t("errors.paidTooMuch") })
+      .nullable(),
+
+    // Class Pricing
+    registrationFee: z.number().min(0),
+    firstInstalmentFee: z.number().min(0),
+    firstInstalmentDeadline: z.date(),
+    secondInstalmentFee: z.number().min(0),
+    secondInstalmentDeadline: z.date(),
+  });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -166,26 +171,40 @@ export function NewStud() {
     fetchCourses();
   }, []);
   useEffect(() => {
-    const subscription = form.watch((value, {}) => {
-      const registrationFee = value.registrationFee || 0;
-      const firstInstalmentFee = value.firstInstalmentFee || 0;
-      const secondInstalmentFee = value.secondInstalmentFee || 0;
-      const paymentAmount = value.paymentAmount || 0;
+    const subscription = form.watch((value, { name }) => {
+      // Only run the logic if the changed field is not "remainingPayment"
+      if (name && name !== "remainingPayment") {
+        const registrationFee = value.registrationFee || 0;
+        const firstInstalmentFee = value.firstInstalmentFee || 0;
+        const secondInstalmentFee = value.secondInstalmentFee || 0;
+        const paymentAmount = value.paymentAmount || 0;
 
-      const newRemainingPayment =
-        registrationFee +
-        firstInstalmentFee +
-        secondInstalmentFee -
-        paymentAmount;
+        const newRemainingPayment =
+          registrationFee +
+          firstInstalmentFee +
+          secondInstalmentFee -
+          paymentAmount;
 
-      // Get the current value of remainingPayment
-      const currentRemainingPayment = form.getValues("remainingPayment") || 0;
+        // Get the current value of remainingPayment
+        const currentRemainingPayment = form.getValues("remainingPayment") || 0;
 
-      // Only update if the value has changed
-      if (newRemainingPayment !== currentRemainingPayment) {
-        form.setValue("remainingPayment", newRemainingPayment, {
-          shouldValidate: true, // Optional: Validate the field after updating
-        });
+        // Only update if the value has changed
+        if (newRemainingPayment !== currentRemainingPayment) {
+          if (newRemainingPayment >= 0) {
+            form.clearErrors("paymentAmount");
+            form.setValue("remainingPayment", newRemainingPayment, {
+              shouldValidate: true, // Optional: Validate the field after updating
+            });
+          } else {
+            form.setError("paymentAmount", {
+              type: "manual",
+              message: "Paid too much",
+            });
+            form.setValue("remainingPayment", 0, {
+              shouldValidate: true, // Optional: Validate the field after updating
+            });
+          }
+        }
       }
     });
 
@@ -197,8 +216,8 @@ export function NewStud() {
       const response = await api.post("/newstudent", values);
       if (response.status === 201) {
         toast({
-          title: "Student registered successfully",
-          description: "The new student has been added to the system.",
+          title: t("success.studentRegistered"),
+          description: t("success.studentAdded"),
         });
         form.reset();
         setShowClassPricing(false);
@@ -252,7 +271,7 @@ export function NewStud() {
         )}
         <Card>
           <CardHeader>
-            <CardTitle>Student Information</CardTitle>
+            <CardTitle>{t("studentInfo.title")}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -261,7 +280,7 @@ export function NewStud() {
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Name *</FormLabel>
+                    <FormLabel>{t("studentInfo.name")}</FormLabel>
                     <FormControl>
                       <Input placeholder="Doe" {...field} />
                     </FormControl>
@@ -274,7 +293,7 @@ export function NewStud() {
                 name="firstname"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>First Name *</FormLabel>
+                    <FormLabel>{t("studentInfo.firstName")}</FormLabel>
                     <FormControl>
                       <Input placeholder="John" {...field} />
                     </FormControl>
@@ -287,7 +306,7 @@ export function NewStud() {
                 name="nationality"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Nationality *</FormLabel>
+                    <FormLabel>{t("studentInfo.nationality")}</FormLabel>
                     <FormControl>
                       <Input placeholder="e.g. American" {...field} />
                     </FormControl>
@@ -300,7 +319,7 @@ export function NewStud() {
                 name="birthday"
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
-                    <FormLabel>Birthday *</FormLabel>
+                    <FormLabel>{t("studentInfo.birthday")}</FormLabel>
                     <Popover>
                       <PopoverTrigger asChild>
                         <FormControl>
@@ -314,7 +333,7 @@ export function NewStud() {
                             {field.value ? (
                               format(field.value, "PPP")
                             ) : (
-                              <span>Pick a date</span>
+                              <span>{t("studentInfo.pickadate")}</span>
                             )}
                             <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                           </Button>
@@ -341,7 +360,7 @@ export function NewStud() {
                 name="cni"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>CNI (National Identity Card) Number</FormLabel>
+                    <FormLabel>{t("studentInfo.cni")}</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="123456789"
@@ -358,7 +377,7 @@ export function NewStud() {
                 name="phone"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Phone Number *</FormLabel>
+                    <FormLabel>{t("studentInfo.phone")}</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="+1 234 567 8900"
@@ -375,7 +394,7 @@ export function NewStud() {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel>{t("studentInfo.email")}</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="john@example.com"
@@ -409,7 +428,7 @@ export function NewStud() {
                 name="gender"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Gender</FormLabel>
+                    <FormLabel>{t("studentInfo.gender")}</FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
@@ -420,8 +439,12 @@ export function NewStud() {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="M">Male</SelectItem>
-                        <SelectItem value="F">Female</SelectItem>
+                        <SelectItem value="M">
+                          {t("studentInfo.male")}
+                        </SelectItem>
+                        <SelectItem value="F">
+                          {t("studentInfo.female")}
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -434,7 +457,7 @@ export function NewStud() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Parent Information</CardTitle>
+            <CardTitle>{t("parentInfo.title")}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -443,7 +466,7 @@ export function NewStud() {
                 name="parentName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Parent Name</FormLabel>
+                    <FormLabel>{t("parentInfo.parentName")}</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="Jane Doe"
@@ -460,7 +483,7 @@ export function NewStud() {
                 name="parentPhone"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Parent Phone</FormLabel>
+                    <FormLabel>{t("parentInfo.parentPhone")}</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="+1 234 567 8900"
@@ -477,7 +500,7 @@ export function NewStud() {
                 name="parentAddress"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Parent Address</FormLabel>
+                    <FormLabel>{t("parentInfo.parentAddress")}</FormLabel>
                     <FormControl>
                       <Textarea
                         placeholder="123 Main St, City, Country"
@@ -494,7 +517,7 @@ export function NewStud() {
                 name="parentEmail"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Parent Email</FormLabel>
+                    <FormLabel>{t("parentInfo.parentEmail")}</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="jane@example.com"
@@ -512,7 +535,7 @@ export function NewStud() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Class Attribution</CardTitle>
+            <CardTitle>{t("classAttribution.title")}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -521,7 +544,7 @@ export function NewStud() {
                 name="course"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Course *</FormLabel>
+                    <FormLabel>{t("classAttribution.course")}</FormLabel>
                     <Select
                       onValueChange={(value) => {
                         field.onChange(value); // Update the course field
@@ -532,7 +555,9 @@ export function NewStud() {
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select course" />
+                          <SelectValue
+                            placeholder={t("classAttribution.Select course")}
+                          />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -560,7 +585,7 @@ export function NewStud() {
 
                   return (
                     <FormItem>
-                      <FormLabel>Grade *</FormLabel>
+                      <FormLabel>{t("classAttribution.grade")}</FormLabel>
                       <Select
                         onValueChange={(value) => {
                           field.onChange(value); // Update the grade field
@@ -571,7 +596,9 @@ export function NewStud() {
                       >
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="Select grade" />
+                            <SelectValue
+                              placeholder={t("classAttribution.Select grade")}
+                            />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
@@ -604,7 +631,7 @@ export function NewStud() {
                   console.log("fc", filteredClasses);
                   return (
                     <FormItem>
-                      <FormLabel>Class *</FormLabel>
+                      <FormLabel>{t("classAttribution.class")}</FormLabel>
                       <Select
                         onValueChange={(value) => {
                           const selectedClass = filteredClasses.find(
@@ -658,7 +685,9 @@ export function NewStud() {
                       >
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="Select class" />
+                            <SelectValue
+                              placeholder={t("classAttribution.Select class")}
+                            />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
@@ -685,7 +714,7 @@ export function NewStud() {
                 >
                   <Card className="mt-4">
                     <CardHeader>
-                      <CardTitle>Class Pricing</CardTitle>
+                      <CardTitle>{t("classPricing.title")}</CardTitle>
                     </CardHeader>
                     <CardContent>
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -694,7 +723,9 @@ export function NewStud() {
                           name="registrationFee"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Registration Fee</FormLabel>
+                              <FormLabel>
+                                {t("classPricing.registrationFee")}
+                              </FormLabel>
                               <FormControl>
                                 <Input
                                   type="number"
@@ -724,7 +755,9 @@ export function NewStud() {
                           name="firstInstalmentFee"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>First Instalment Fee</FormLabel>
+                              <FormLabel>
+                                {t("classPricing.firstInstalmentFee")}
+                              </FormLabel>
                               <FormControl>
                                 <Input
                                   type="number"
@@ -754,7 +787,9 @@ export function NewStud() {
                           name="firstInstalmentDeadline"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>First Instalment Deadline</FormLabel>
+                              <FormLabel>
+                                {t("classPricing.firstInstalmentDeadline")}
+                              </FormLabel>
                               <Popover>
                                 <PopoverTrigger asChild>
                                   <FormControl>
@@ -769,7 +804,9 @@ export function NewStud() {
                                       {field.value ? (
                                         format(field.value, "PPP")
                                       ) : (
-                                        <span>Pick a date</span>
+                                        <span>
+                                          {t("studentInfo.pickadate")}
+                                        </span>
                                       )}
                                       <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                                     </Button>
@@ -797,7 +834,9 @@ export function NewStud() {
                           name="secondInstalmentFee"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Second Instalment Fee</FormLabel>
+                              <FormLabel>
+                                {t("classPricing.secondInstalmentFee")}
+                              </FormLabel>
                               <FormControl>
                                 <Input
                                   type="number"
@@ -827,7 +866,9 @@ export function NewStud() {
                           name="secondInstalmentDeadline"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Second Instalment Deadline</FormLabel>
+                              <FormLabel>
+                                {t("classPricing.secondInstalmentDeadline")}
+                              </FormLabel>
                               <Popover>
                                 <PopoverTrigger asChild>
                                   <FormControl>
@@ -842,7 +883,9 @@ export function NewStud() {
                                       {field.value ? (
                                         format(field.value, "PPP")
                                       ) : (
-                                        <span>Pick a date</span>
+                                        <span>
+                                          {t("studentInfo.pickadate")}
+                                        </span>
                                       )}
                                       <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                                     </Button>
@@ -874,8 +917,8 @@ export function NewStud() {
                         className="mt-4"
                       >
                         {showExceptionalPricing
-                          ? "Cancel Exception"
-                          : "Make an Exception"}
+                          ? t("classPricing.cancelException")
+                          : t("classPricing.makeException")}
                       </Button>
                     </CardContent>
                   </Card>
@@ -887,7 +930,7 @@ export function NewStud() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Payment Information</CardTitle>
+            <CardTitle> {t("paymentInfo.title")}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -896,7 +939,7 @@ export function NewStud() {
                 name="paymentAmount"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Payment Amount *</FormLabel>
+                    <FormLabel>{t("paymentInfo.paymentAmount")}</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
@@ -921,7 +964,7 @@ export function NewStud() {
                 name="paymentMethod"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Payment Method</FormLabel>
+                    <FormLabel>{t("paymentInfo.paymentMethod")}</FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
@@ -932,11 +975,17 @@ export function NewStud() {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="Cash">Cash</SelectItem>
+                        <SelectItem value="Cash">
+                          {t("paymentInfo.cash")}
+                        </SelectItem>
                         <SelectItem value="OM">OM</SelectItem>
                         <SelectItem value="MOMO">MOMO</SelectItem>
-                        <SelectItem value="Bank">Bank Transfer</SelectItem>
-                        <SelectItem value="Other">Other</SelectItem>
+                        <SelectItem value="Bank">
+                          {t("paymentInfo.bank")}
+                        </SelectItem>
+                        <SelectItem value="Other">
+                          {t("paymentInfo.other")}
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -948,7 +997,7 @@ export function NewStud() {
                 name="remainingPayment"
                 render={({ field }) => (
                   <FormItem className="col-span-1 md:col-span-2">
-                    <FormLabel>Remaining Payment</FormLabel>
+                    <FormLabel>{t("paymentInfo.remainingPayment")}</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
@@ -999,7 +1048,7 @@ export function NewStud() {
         )}
 
         <LoadingButton loading={isLoading} type="submit" className="w-full">
-          Submit
+          {t("buttons.submit")}
         </LoadingButton>
       </form>
     </Form>

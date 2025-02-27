@@ -25,7 +25,6 @@ const Navbar = () => {
             className="w-full bg-gray-50"
           />
         </div>
-        <p>{t("title")}</p>
       </div>
       <div className="flex items-center gap-4">
         <LocaleSwitcher />
