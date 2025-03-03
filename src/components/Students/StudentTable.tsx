@@ -74,6 +74,7 @@ export function StudentTable({
   students: Student[];
   courses: Course[];
 }) {
+  console.log("dbdb d ", students);
   const [selectedCourse, setSelectedCourse] = React.useState<Course>();
   const [selectedGrade, setSelectedGrade] = React.useState<Grade>();
   const t = useTranslations("StudentTable");

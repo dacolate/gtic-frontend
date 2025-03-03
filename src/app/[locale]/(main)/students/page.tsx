@@ -27,6 +27,7 @@ export default function TeachersPage() {
       try {
         // Use the custom axios instance to get the teachers.
         const response = await api.get("/students");
+        console.log("dzv", response);
         // If your API returns the data directly or in a nested property,
         // adjust accordingly. For example, if it returns { teachers: [...] }:
         // setTeachers(response.data.teachers);
@@ -92,6 +93,7 @@ export default function TeachersPage() {
   if (error) {
     return <div>Error: {error}</div>;
   }
+  console.log("bjd", students);
 
   return (
     <div className="container mx-auto py-10 px-4">
