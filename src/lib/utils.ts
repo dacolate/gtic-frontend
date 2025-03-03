@@ -80,3 +80,20 @@ export function formatReadableDate(dateString: string): string {
     day: "numeric",
   });
 }
+
+export function generatePaymentMatricule(
+  createdAt: string,
+  id: number,
+  studentId: number
+): string {
+  // Extract the date part from createdAt (e.g., "2025-02-28")
+  const datePart = new Date(createdAt)
+    .toISOString()
+    .split("T")[0]
+    .replace(/-/g, "");
+
+  // Combine the date, id, and studentId into a unique string
+  const matricule = `PAY-${datePart}-${id}-${studentId}`;
+
+  return matricule;
+}

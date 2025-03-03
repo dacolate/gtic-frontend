@@ -47,7 +47,7 @@ const menuItems = [
       {
         icon: "/finance.png",
         label: "Payments",
-        href: "/paiement",
+        href: "/payments",
         visible: ["admin", "user"],
       },
     ],

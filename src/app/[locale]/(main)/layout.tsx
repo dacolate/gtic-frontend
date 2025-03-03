@@ -3,6 +3,7 @@ import Menu from "@/components/Menu";
 import Navbar from "@/components/NavBar";
 import { Link } from "@/i18n/routing";
 import Image from "next/image";
+import Providers from "./provider";
 
 export default async function DashboardLayout({
   children,
@@ -22,7 +23,7 @@ export default async function DashboardLayout({
       {/* RIGHT */}
       <div className="w-[86%] md:w-[92%] lg:w-[84%] xl:w-[86%] bg-[#F7F8FA] overflow-scroll flex flex-col">
         <Navbar />
-        {children}
+        <Providers>{children}</Providers>
       </div>
     </div>
   );

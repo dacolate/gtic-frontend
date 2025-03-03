@@ -98,7 +98,7 @@ export function StudentTable({
       cell: ({ row }) => (
         <Link href={`/students/${row.original.id}`} passHref>
           <div className="text-green-500 hover:underline cursor-pointer">
-            {row.getValue("name") + " " + row.original.firstname}
+            {row.original.name + " " + row.original.firstname}
           </div>
         </Link>
       ),

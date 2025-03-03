@@ -58,6 +58,7 @@ export interface Grade {
   createdAt: string;
   updatedAt: string;
   classes: Class[] | null;
+  course: Course;
   pricing: Pricing;
 }
 
@@ -113,24 +114,28 @@ export interface Payment {
   id: number;
   studentId: number;
   classId: number;
+  studentClassId: number;
   amount: string;
   paymentMethod: string | null;
   details: string | null;
   createdAt: string;
   updatedAt: string;
+  student: Student;
+  student_class: StudentClass;
 }
 
 export interface StudentClass {
   id: number;
   classId: number;
   studentId: number;
-  startDate: string;
+  startDate: string | null; // ISO date string (nullable)
   pricingId: number;
-  paymentStatus: string;
-  createdAt: string;
-  updatedAt: string;
-  pricing: Pricing;
-  daysTilDeadline: number;
+  paymentStatus: string; // Enum-like value (e.g., "Not up to date")
+  daysTilDeadline: number | null; // Number of days (nullable)
+  nextdeadline: string | null; // ISO date string (nullable)
+  remainingPayment: string; // Represented as a string to handle decimal values
+  createdAt: string; // ISO date string
+  updatedAt: string; // ISO date string
 }
 
 export interface Pricing {
