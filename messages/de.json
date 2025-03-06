@@ -101,6 +101,7 @@
   },
 
   "ClassTable": {
+    "Classes": "Klassen",
     "Class ID": "Klassen-ID",
     "Class Name": "Klassenname",
     "Teacher": "Lehrer",
@@ -112,8 +113,12 @@
     "Columns": "Spalten",
     "Filter by teacher": "Nach Lehrer filtern",
     "Filter by course": "Nach Kurs filtern",
+    "Filter by grade": "Nach Kurs Klassen",
     "Download List": "Liste herunterladen",
-    "No results": "Keine Ergebnisse."
+    "No results": "Keine Ergebnisse.",
+    "New Class": "New Klasse",
+    "Ancient Classes": "Alte Klassen",
+    "Delete Class": "Klasse Löschen"
   },
   "NewStud": {
     "add new Student": "Neuen Schüler hinzufügen",

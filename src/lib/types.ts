@@ -27,8 +27,8 @@ export interface Course {
   pricingId: number | null;
   createdAt: string;
   updatedAt: string;
-  classes: Class[] | null;
-  grades: Grade[] | null;
+  classes: Class[] | undefined;
+  grades: Grade[] | undefined;
 }
 
 export interface Class {
@@ -52,7 +52,6 @@ export interface Grade {
   id: number;
   name: string;
   description: string | null;
-  gradeId: number | null;
   pricingId: number | null;
   courseId: number;
   createdAt: string;
@@ -158,3 +157,83 @@ export interface Parent {
   createdAt: string;
   updatedAt: string;
 }
+
+export type NewStudResponse = {
+  success: boolean;
+  data: {
+    student: {
+      name: string;
+      firstname: string;
+      phone: string;
+      email: string | undefined;
+      address: string;
+      gender: string;
+      nationality: string;
+      birthday: string;
+      createdAt: string;
+      updatedAt: string;
+      id: number;
+    };
+    chosenClass: {
+      id: number;
+      name: string;
+      description: string | null;
+      teacherId: number;
+      gradeId: number | null;
+      courseId: number;
+      startDate: string;
+      expectedDuration: number;
+      course: {
+        id: number;
+        name: string;
+        description: string;
+        pricingId: number | null;
+        createdAt: string;
+        updatedAt: string;
+      };
+      grade: {
+        id: number;
+        name: string;
+        description: string | null;
+        pricingId: number | null;
+        courseId: number;
+        createdAt: string;
+        updatedAt: string;
+      };
+      teacher: {
+        id: number;
+        name: string;
+        phone: string;
+        email: string;
+        active: boolean;
+        createdAt: string;
+        updatedAt: string;
+      };
+      createdAt: string;
+      updatedAt: string;
+    };
+    parent: Parent | null;
+    payment: {
+      id: number;
+      studentId: number;
+      classId: number;
+      studentClassId: number;
+      amount: number;
+      paymentMethod: string | null;
+      createdAt: string;
+      updatedAt: string;
+    };
+    pricing: Pricing;
+    studclass: {
+      id: number;
+      classId: number;
+      studentId: number;
+      pricingId: number;
+      createdAt: string; // ISO date string
+      updatedAt: string; // ISO date string
+      remainingPayment: number;
+      nextdeadline: string;
+    };
+  };
+  message: string;
+};

@@ -143,39 +143,50 @@ export function StudentTable({
       },
     },
     {
-      // This column extracts all course names from the student classes.
       accessorFn: (student) => {
-        const courses = student.classes
+        return student.classes
           ? student.classes
-              .map((cls) => cls.course?.name || "No Course")
-              .filter((course) => Boolean(course)) // Ensure grade exists
+              .map((cls) => cls.name)
+              .filter((name) => Boolean(name)) // Ensure class name exists
           : [];
-        console.log("Courses:", courses);
-        return courses;
-        // Debugging
       },
-      id: "course", // unique id for the column
-      header: t("Courses"),
+      id: "class",
+      header: () => <div className="text-center">{t("Class")}</div>,
       cell: ({ row }) => {
-        const courses = row.getValue("course") as Array<string>;
-        const firstCourse = courses[0];
+        const classes = row.getValue("class") as Array<string>;
+        const firstClass = classes[0];
 
         return (
           <div>
-            {firstCourse && (
+            {firstClass && (
               <div className="flex flex-col items-center justify-center">
-                <div className="text-sm">{firstCourse}</div>
+                <div className="text-sm">{firstClass}</div>
               </div>
             )}
           </div>
         );
       },
       filterFn: (row, columnId, filterValue) => {
-        const grades = row.getValue(columnId) as Array<string>;
-        console.log("gradesdj", grades);
-        console.log("f", filterValue);
-        return grades.some(
-          (grade) => grade.toLowerCase() === filterValue.toLowerCase()
+        const classes = row.getValue(columnId) as Array<string>;
+        return classes.some((cls) =>
+          cls.toLowerCase().includes(filterValue.toLowerCase())
+        );
+      },
+    },
+    {
+      id: "contact",
+      header: () => <div className="text-center">{t("Contact")}</div>,
+      cell: ({ row }) => {
+        const phone = row.original.phone;
+        const email = row.original.email;
+
+        return (
+          <div className="text-center">
+            {/* Display the phone number */}
+            <div>{phone}</div>
+            {/* Display the email (smaller and grayed out) */}
+            <div className="text-xs text-gray-500">{email}</div>
+          </div>
         );
       },
     },
@@ -213,36 +224,43 @@ export function StudentTable({
       },
     },
     {
+      // This column extracts all course names from the student classes.
       accessorFn: (student) => {
-        return student.classes
+        const courses = student.classes
           ? student.classes
-              .map((cls) => cls.name)
-              .filter((name) => Boolean(name)) // Ensure class name exists
+              .map((cls) => cls.course?.name || "No Course")
+              .filter((course) => Boolean(course)) // Ensure grade exists
           : [];
+        console.log("Courses:", courses);
+        return courses;
+        // Debugging
       },
-      id: "class",
-      header: () => <div className="text-center">{t("Class")}</div>,
+      id: "course", // unique id for the column
+      header: t("Courses"),
       cell: ({ row }) => {
-        const classes = row.getValue("class") as Array<string>;
-        const firstClass = classes[0];
+        const courses = row.getValue("course") as Array<string>;
+        const firstCourse = courses[0];
 
         return (
           <div>
-            {firstClass && (
+            {firstCourse && (
               <div className="flex flex-col items-center justify-center">
-                <div className="text-sm">{firstClass}</div>
+                <div className="text-sm">{firstCourse}</div>
               </div>
             )}
           </div>
         );
       },
       filterFn: (row, columnId, filterValue) => {
-        const classes = row.getValue(columnId) as Array<string>;
-        return classes.some((cls) =>
-          cls.toLowerCase().includes(filterValue.toLowerCase())
+        const grades = row.getValue(columnId) as Array<string>;
+        console.log("gradesdj", grades);
+        console.log("f", filterValue);
+        return grades.some(
+          (grade) => grade.toLowerCase() === filterValue.toLowerCase()
         );
       },
     },
+
     {
       accessorKey: "gender",
       header: () => <div className="text-center">{t("Gender")}</div>,
@@ -275,23 +293,6 @@ export function StudentTable({
       cell: ({ row }) => (
         <div className="text-center">{row.getValue("nationality")}</div>
       ),
-    },
-    {
-      id: "contact",
-      header: () => <div className="text-center">{t("Contact")}</div>,
-      cell: ({ row }) => {
-        const phone = row.original.phone;
-        const email = row.original.email;
-
-        return (
-          <div className="text-center">
-            {/* Display the phone number */}
-            <div>{phone}</div>
-            {/* Display the email (smaller and grayed out) */}
-            <div className="text-xs text-gray-500">{email}</div>
-          </div>
-        );
-      },
     },
 
     {

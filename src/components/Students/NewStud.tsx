@@ -25,8 +25,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { CalendarIcon, Download } from "lucide-react";
+import { cn, generateAndDownloadPdf } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
@@ -38,7 +38,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 import api from "@/lib/axios";
 import { AxiosError } from "axios";
-import { Course, Student } from "@/lib/types";
+import { Course, NewStudResponse, Student } from "@/lib/types";
 import LoadingButton from "../LoadingButton";
 import { useTranslations } from "next-intl";
 
@@ -132,8 +132,8 @@ export function NewStud() {
       parentPhone: null, // Set to null for optional fields
       parentAddress: null, // Set to null for optional fields
       parentEmail: null, // Set to null for optional fields
-      course: "",
-      grade: "",
+      course: undefined,
+      grade: undefined,
       class: undefined,
       paymentAmount: undefined,
       paymentMethod: "Cash",
@@ -212,19 +212,66 @@ export function NewStud() {
   }, [form]);
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
+      const paymentAmountError = form.formState.errors.paymentAmount;
+
+      // Check if the "Paid too much" error is present
+      if (paymentAmountError && paymentAmountError.type === "manual") {
+        console.log("Form submission blocked: Paid too much.");
+        return; // Stop submission
+      }
+      console.log("v", values);
       setIsLoading(true);
       const response = await api.post("/newstudent", values);
-      if (response.status === 201) {
+      console.log("One");
+      console.log(response);
+      if (response.data.success) {
+        console.log("Two");
         toast({
           title: t("success.studentRegistered"),
           description: t("success.studentAdded"),
+          action: (
+            <Button
+              onClick={() =>
+                generateAndDownloadPdf(response.data as NewStudResponse)
+              }
+            >
+              {" "}
+              <Download />
+            </Button>
+          ),
         });
-        form.reset();
+        form.reset({
+          name: "",
+          firstname: "",
+          nationality: "Cameroon",
+          cni: null,
+          phone: "",
+          email: null,
+          address: null,
+          gender: "M",
+          parentName: null,
+          parentPhone: null,
+          parentAddress: null,
+          parentEmail: null,
+          course: "", // Reset course to empty
+          grade: "", // Reset grade to empty
+          class: 0, // Reset class to 0
+          paymentAmount: undefined,
+          paymentMethod: "Cash",
+          remainingPayment: null,
+          registrationFee: 0,
+          firstInstalmentFee: 0,
+          firstInstalmentDeadline: new Date("2023-09-01"),
+          secondInstalmentFee: 0,
+          secondInstalmentDeadline: new Date("2023-12-01"),
+        });
+        form.setValue("course", "alll");
         setShowClassPricing(false);
         setShowExceptionalPricing(false);
         setApiErrors({});
         setExistingStudent(undefined);
       }
+      console.log("resp", response.data);
     } catch (error) {
       if (error instanceof AxiosError) {
         const errorData = error.response?.data;
@@ -547,11 +594,15 @@ export function NewStud() {
                     <FormLabel>{t("classAttribution.course")}</FormLabel>
                     <Select
                       onValueChange={(value) => {
-                        field.onChange(value); // Update the course field
+                        if (value !== "alll") {
+                          field.onChange(value); // Update the course field
+                        } else {
+                          value = "";
+                        }
                         form.setValue("grade", ""); // Reset the grade field
                         form.setValue("class", 0); // Reset the class field
                       }}
-                      defaultValue={field.value}
+                      value={field.value}
                     >
                       <FormControl>
                         <SelectTrigger>
@@ -561,6 +612,7 @@ export function NewStud() {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
+                        <SelectItem value="alll">All</SelectItem>
                         {courses.map((course) => (
                           <SelectItem key={course.id} value={course.name}>
                             {course.name}
@@ -591,7 +643,7 @@ export function NewStud() {
                           field.onChange(value); // Update the grade field
                           form.setValue("class", 0); // Reset the class field
                         }}
-                        defaultValue={field.value}
+                        value={field.value}
                         disabled={!selectedCourse} // Disable if no course is selected
                       >
                         <FormControl>
@@ -677,10 +729,9 @@ export function NewStud() {
                               )
                             );
                           }
-
                           setShowClassPricing(true);
                         }}
-                        defaultValue={field.value ? field.value.toString() : ""}
+                        value={field.value ? field.value.toString() : ""}
                         disabled={!selectedGrade} // Disable if no grade is selected
                       >
                         <FormControl>
@@ -1046,8 +1097,20 @@ export function NewStud() {
             </Alert>
           )
         )}
+        {form.formState.errors.paymentAmount &&
+          form.formState.errors.paymentAmount.type === "manual" && (
+            <Alert variant="destructive">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>{t("errors.paidTooMuch")}</AlertDescription>
+            </Alert>
+          )}
 
-        <LoadingButton loading={isLoading} type="submit" className="w-full">
+        <LoadingButton
+          loading={isLoading}
+          type="submit"
+          className="w-full"
+          disabled={!form.formState.isValid}
+        >
           {t("buttons.submit")}
         </LoadingButton>
       </form>

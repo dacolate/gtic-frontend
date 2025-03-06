@@ -100,6 +100,7 @@
   },
 
   "ClassTable": {
+    "Classes": "Classes",
     "Class ID": "Class ID",
     "Class Name": "Class Name",
     "Teacher": "Teacher",
@@ -111,8 +112,12 @@
     "Columns": "Columns",
     "Filter by teacher": "Filter by teacher",
     "Filter by course": "Filter by course",
+    "Filter by grade": "Filter by grade",
     "Download List": "Download List",
-    "No results": "No results."
+    "No results": "No results.",
+    "New Class": "New Class",
+    "Ancient Classes": "Ancient Classes",
+    "Delete Class": "Delete Class"
   },
   "PaymentDialog": {
     "Student Name": "Student Name",

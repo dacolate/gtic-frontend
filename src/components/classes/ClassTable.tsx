@@ -51,6 +51,7 @@ interface ClassTableProps {
 
 export function ClassTable({ classes }: ClassTableProps) {
   const t = useTranslations("ClassTable");
+  console.log("classes", classes);
 
   const columns: ColumnDef<Class>[] = [
     {
@@ -70,7 +71,7 @@ export function ClassTable({ classes }: ClassTableProps) {
       },
       cell: ({ row }) => (
         <Link href={`/classes/${row.original.id}`} passHref>
-          <div className="text-green-500 hover:underline cursor-pointer">
+          <div className="text-green-500 hover:underline cursor-pointer text-center ">
             {row.original.id}
           </div>
         </Link>
@@ -170,7 +171,7 @@ export function ClassTable({ classes }: ClassTableProps) {
       ),
     },
     {
-      accessorKey: "grade.couse.name",
+      accessorKey: "course.name",
       id: "course.name",
       header: ({ column }) => {
         return (
@@ -189,6 +190,10 @@ export function ClassTable({ classes }: ClassTableProps) {
           {row.original.grade?.course?.name || "N/A"}
         </div>
       ),
+      filterFn: (row, columnId, filterValue) => {
+        const courseName = row.original.grade?.course?.name || "N/A";
+        return courseName.toLowerCase().includes(filterValue.toLowerCase());
+      },
     },
   ];
 
@@ -349,7 +354,7 @@ export function ClassTable({ classes }: ClassTableProps) {
             <Label htmlFor="grade">{t("Grade")}</Label>
             <Input
               id="grade"
-              //   placeholder={t("Filter by grade")}
+              placeholder={t("Filter by grade")}
               value={
                 (table.getColumn("grade.name")?.getFilterValue() as string) ??
                 ""

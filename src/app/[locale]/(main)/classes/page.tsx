@@ -1,15 +1,15 @@
 "use client";
 
 import { ClassTable } from "@/components/classes/ClassTable";
-import { PaymentActionButtons } from "@/components/Payments/PaymentActionButton";
+import { ClassActionButton } from "@/components/classes/ClassActionButton";
 import api from "@/lib/axios";
 import { Class } from "@/lib/types";
 import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
 import React, { useEffect, useState } from "react";
 
-export default function PaymentsPage() {
-  const t = useTranslations("PaymentTable");
+export default function ClassesPage() {
+  const t = useTranslations("ClassTable");
   const [classes, setClasses] = useState<Class[]>([]); // State to store the fetched classes
   const [isLoading, setIsLoading] = useState(true); // State to manage loading status
   const [error, setError] = useState<string | null>(null); // State to handle errors
@@ -55,9 +55,9 @@ export default function PaymentsPage() {
     >
       {/* <h1 className="text-4xl font-bold mb-6 text-gray-800">Our Students</h1> */}
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">{t("Payments")}</h1>
+        <h1 className="text-3xl font-bold">{t("Classes")}</h1>
       </div>
-      <PaymentActionButtons />
+      <ClassActionButton />
 
       <ClassTable classes={classes} />
     </motion.div>

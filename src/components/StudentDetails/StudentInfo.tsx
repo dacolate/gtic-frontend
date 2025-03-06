@@ -11,7 +11,9 @@ export function StudentInfo({ student }: { student: Student }) {
         <div className="flex items-center space-x-4">
           <InitialsAvatar name={student.name} />
           <div>
-            <CardTitle className="text-2xl">{student.name}</CardTitle>
+            <CardTitle className="text-2xl">
+              {student.name + student.firstname}
+            </CardTitle>
             <p className="text-blue-100">{student.phone}</p>
           </div>
         </div>

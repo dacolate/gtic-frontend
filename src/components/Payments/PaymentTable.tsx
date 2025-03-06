@@ -53,6 +53,7 @@ interface PaymentTableProps {
 export function PaymentTable({ payments }: PaymentTableProps) {
   const t = useTranslations("PaymentTable");
 
+  console.log("payments", payments);
   const columns: ColumnDef<Payment>[] = [
     {
       accessorKey: "id",
@@ -189,11 +190,14 @@ export function PaymentTable({ payments }: PaymentTableProps) {
           </Button>
         );
       },
-      cell: ({ row }) => (
-        <div className="text-center">
-          {row.original.student_class.paymentStatus || "none"}
-        </div>
-      ),
+      cell: ({ row }) => {
+        console.log("zdc jdz hzed", row.original);
+        return (
+          <div className="text-center">
+            {row.original.student_class.paymentStatus || "none"}
+          </div>
+        );
+      },
     },
     {
       accessorKey: "student_class.remainingPayment",
