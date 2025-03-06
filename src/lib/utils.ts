@@ -207,7 +207,12 @@ export const generateAndDownloadPdf = (response: NewStudResponse) => {
     head: [["RECU DE PAIEMENT", "Détails"]], // Table Headers
     body: data,
     theme: "grid",
-    styles: { fontSize: 10, cellPadding: 4 },
+    styles: {
+      fontSize: 10,
+      cellPadding: 4,
+      lineWidth: 0.5,
+      lineColor: "black",
+    },
     headStyles: { fillColor: [0, 128, 0], textColor: 255, fontStyle: "bold" },
 
     didParseCell: function (data) {
@@ -374,7 +379,12 @@ export const generateAndDownloadPdf2 = (payment: Payment) => {
     head: [["RECU DE PAIEMENT", "Détails"]], // Table Headers
     body: data,
     theme: "grid",
-    styles: { fontSize: 10, cellPadding: 4 },
+    styles: {
+      fontSize: 10,
+      cellPadding: 4,
+      lineWidth: 0.5,
+      lineColor: "black",
+    },
     headStyles: { fillColor: [0, 128, 0], textColor: 255, fontStyle: "bold" },
 
     didParseCell: function (data) {
