@@ -44,7 +44,7 @@ import autoTable from "jspdf-autotable";
 import { useTranslations } from "next-intl";
 import { Payment } from "@/lib/types";
 import { Link } from "@/i18n/routing";
-import { generatePaymentMatricule } from "@/lib/utils";
+import { generateAndDownloadPdf2, generatePaymentMatricule } from "@/lib/utils";
 
 interface PaymentTableProps {
   payments: Payment[];
@@ -52,6 +52,7 @@ interface PaymentTableProps {
 
 export function PaymentTable({ payments }: PaymentTableProps) {
   const t = useTranslations("PaymentTable");
+  console.log("pay", payments);
 
   console.log("payments", payments);
   const columns: ColumnDef<Payment>[] = [
@@ -78,11 +79,18 @@ export function PaymentTable({ payments }: PaymentTableProps) {
         );
 
         return (
-          <Link href={`/payments/${row.original.id}`} passHref>
-            <div className="text-green-500 hover:underline cursor-pointer">
-              {matricule}
-            </div>
-          </Link>
+          <div className="text-green-500  cursor-pointer flex gap-2">
+            <Button
+              variant="ghost"
+              onClick={() => generateAndDownloadPdf2(row.original)}
+              className="text-center"
+            >
+              <Download />
+            </Button>
+            <Link href={`/payments/${row.original.id}`} passHref>
+              <p className="hover:underline cursor-pointer">{matricule}</p>
+            </Link>
+          </div>
         );
       },
     },
@@ -243,6 +251,20 @@ export function PaymentTable({ payments }: PaymentTableProps) {
         </div>
       ),
     },
+    // {
+    //   accessorKey: "",
+    //   id: "Download",
+    //   header: "",
+    //   cell: ({ row }) => (
+    //     <Button
+    //       variant="ghost"
+    //       onClick={() => generateAndDownloadPdf2(row.original)}
+    //       className="text-center"
+    //     >
+    //       <Download />
+    //     </Button>
+    //   ),
+    // },
   ];
 
   const [sorting, setSorting] = React.useState<SortingState>([

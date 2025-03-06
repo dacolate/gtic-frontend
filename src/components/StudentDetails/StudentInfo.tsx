@@ -12,7 +12,7 @@ export function StudentInfo({ student }: { student: Student }) {
           <InitialsAvatar name={student.name} />
           <div>
             <CardTitle className="text-2xl">
-              {student.name + student.firstname}
+              {student.name + " " + student.firstname}
             </CardTitle>
             <p className="text-blue-100">{student.phone}</p>
           </div>

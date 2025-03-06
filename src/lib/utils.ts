@@ -1,7 +1,7 @@
 import { Student } from "@/components/datatable copy";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { NewStudResponse } from "./types";
+import { NewStudResponse, Payment } from "./types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -99,8 +99,11 @@ export function generatePaymentMatricule(
   return matricule;
 }
 
-function formatDateTime(datetimeString: string, full: boolean) {
+function formatDateTime(datetimeString: string | null, full: boolean) {
   // Parse the datetime string into a Date object
+  if (!datetimeString) {
+    return;
+  }
   const date = new Date(datetimeString);
 
   // Extract day, month, year, hours, and minutes
@@ -286,4 +289,169 @@ export const generateAndDownloadPdf = (response: NewStudResponse) => {
   doc.save(
     `recu_de_${response.data.student.name}_${response.data.payment.createdAt}.pdf`
   );
+};
+
+export function PaymentTOReceiptData(payment: Payment) {
+  const data = payment;
+
+  const receiptMatricule = generatePaymentMatricule(
+    data.createdAt,
+    data.id,
+    data.student.id
+  );
+  const receiptDate = formatDateTime(data.createdAt, true);
+
+  const paymentMethod = data.paymentMethod;
+  const user = "Sonia";
+
+  const courseName = data.class.grade?.course.name;
+  const gradeName = data.class.grade?.name;
+  const className = data.class.name;
+  const teacher = data.class.teacher.name;
+
+  const studentName = data.student.name;
+  const studentFirstName = data.student.firstname;
+  const studentPhone = data.student.phone;
+  const studentEmail = data.student.email || undefined;
+  const studentId = data.student.id.toString();
+
+  const totalFees =
+    parseInt(data.student_class.pricing?.registerFee || "0") +
+    parseInt(data.student_class.pricing?.instalment1Fee || "0") +
+    parseInt(data.student_class.pricing?.instalment2Fee || "0");
+  const amount = data.amount;
+  const remaining = parseInt(data.student_class.remainingPayment) | 0;
+  const nextdeadline = data.student_class.nextdeadline;
+
+  const input = [
+    [
+      `N° Recu: ${receiptMatricule}\n${receiptDate}\nPayé en ${paymentMethod}\nEncaissé par ${user}`,
+      `Filiere: ${courseName}\nNiveau: ${gradeName}\nClasse: ${className}\nEnseignant: ${teacher}`,
+    ],
+    [
+      `${studentName} ${studentFirstName}\n${studentPhone}${
+        studentEmail ? `\n${studentEmail}` : ""
+      }\nMatricule: ${studentId}`,
+      `Montant a payer: ${totalFees}\nMontant paye: ${amount}\nSolde restant: ${remaining}\nTotal HT: ${amount}`,
+    ],
+    [
+      `Prochain versement a effectuer au plus tard le ${formatDateTime(
+        nextdeadline,
+        false
+      )}\nLes frais de scolarite ne sont ni remboursables, ni cessibles, ni transferables`,
+      "50.00",
+    ],
+    ["Total HT:", "5"],
+  ];
+
+  return input;
+}
+
+export const generateAndDownloadPdf2 = (payment: Payment) => {
+  const doc = new jsPDF();
+
+  // Add logo at the top left
+  const img = new Image();
+  img.src = "/gticimg.png"; // Path to your logo
+  doc.addImage(img, "PNG", 10, 10, 80, 20); // Adjust position (x, y) and size (width, height)
+
+  // Add text at the top right
+  doc.setFontSize(16); // Set font size for the heading
+  doc.setFont("helvetica", "bold"); // Set font style
+  doc.setTextColor(128); // Set text color to gray
+  const text =
+    "Centre de formation professionnelle\n         et de cours de langue";
+  doc.text(text, 100, 18); // Position text at top right
+
+  doc.setTextColor(0); // Reset text color to black
+
+  // Table Data
+  const data = PaymentTOReceiptData(payment); // Replace with your data transformation logic
+
+  // Add the table
+  autoTable(doc, {
+    startY: 50, // Adjust startY to leave space for the logo and text
+    head: [["RECU DE PAIEMENT", "Détails"]], // Table Headers
+    body: data,
+    theme: "grid",
+    styles: { fontSize: 10, cellPadding: 4 },
+    headStyles: { fillColor: [0, 128, 0], textColor: 255, fontStyle: "bold" },
+
+    didParseCell: function (data) {
+      // Merge header row across both columns
+      if (
+        data.row.index === 0 &&
+        data.column.index === 0 &&
+        data.section === "head"
+      ) {
+        data.cell.colSpan = 2;
+        data.cell.styles.halign = "center";
+        data.cell.styles.fontSize = 15;
+      }
+
+      // Style the first row of the body
+      if (
+        data.row.index === 0 &&
+        data.column.index === 0 &&
+        data.section !== "head"
+      ) {
+        data.cell.styles.fontStyle = "bold";
+      }
+
+      // Merge row 2 & 3 in the second column
+      if (data.row.index === 1 && data.column.index === 1) {
+        data.cell.rowSpan = 2;
+        data.cell.styles.valign = "middle";
+      }
+
+      // Merge last row across both columns
+      if (data.row.index === 3 && data.column.index === 0) {
+        data.cell.colSpan = 2;
+        data.cell.text = [
+          "Campus: Douala bonamoussadi carrefour lycée",
+          "Tel: 696054293 / 675723263",
+          "Facebook: Univgtic | https://gtic-univ.com",
+        ];
+        data.cell.styles.halign = "center";
+      }
+    },
+  });
+
+  // Add "CONDITION GENERALE DE VENTE" below the table
+  doc.setFontSize(12); // Set font size
+  doc.setFont("helvetica", "bold"); // Set font style
+  doc.setTextColor(128); // Set text color to gray
+  const conditionText = "CONDITION GENERALE DE VENTE";
+  const conditionTextWidth = doc.getTextWidth(conditionText); // Calculate text width
+  const pageWidth = doc.internal.pageSize.getWidth(); // Get page width
+  const conditionX = (pageWidth - conditionTextWidth) / 2; // Center the text horizontally
+  doc.text(
+    conditionText,
+    conditionX,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (doc as any).autoTable.previous.finalY + 15
+  ); // Position text below the table
+
+  // Add "Apprenant" and "Caissier(e)" at the bottom
+  doc.setFontSize(12); // Set font size
+  doc.setTextColor(0); // Reset text color to black
+  const bottomY = doc.internal.pageSize.getHeight() - 30; // Position near the bottom of the page
+
+  // "Apprenant" on the left
+  doc.text("Apprenant", 20, bottomY);
+
+  // Space for signature below "Apprenant"
+  doc.setLineWidth(0.5);
+  doc.line(20, bottomY + 20, 80, bottomY + 20); // Add a line for the signature
+
+  // "Caissier(e)" on the right
+  const caissierText = "Caissier(e)";
+  const caissierTextWidth = doc.getTextWidth(caissierText);
+  doc.text(caissierText, pageWidth - 20 - caissierTextWidth, bottomY);
+
+  // Space for signature below "Caissier(e)"
+  doc.line(pageWidth - 80, bottomY + 20, pageWidth - 20, bottomY + 20); // Add a line for the signature
+
+  // Save the PDF with a filename
+  doc.save(`recu_de_${payment.student.name}_${payment.createdAt}.pdf`);
 };

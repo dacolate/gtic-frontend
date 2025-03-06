@@ -121,6 +121,7 @@ export interface Payment {
   updatedAt: string;
   student: Student;
   student_class: StudentClass;
+  class: Class;
 }
 
 export interface StudentClass {
@@ -135,6 +136,7 @@ export interface StudentClass {
   remainingPayment: string; // Represented as a string to handle decimal values
   createdAt: string; // ISO date string
   updatedAt: string; // ISO date string
+  pricing: Pricing | undefined;
 }
 
 export interface Pricing {
