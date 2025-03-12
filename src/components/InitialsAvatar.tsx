@@ -7,10 +7,19 @@ const getInitials = (name: string): string => {
   return `${firstInitial}${lastInitial}`;
 };
 
-export default function InitialsAvatar({ name }: { name: string }) {
+export default function InitialsAvatar({
+  name,
+  size,
+}: {
+  name: string;
+  size?: number;
+}) {
   const initials = getInitials(name);
+  const s = size || 20;
   return (
-    <div className="rounded-full bg-[#d81b60] w-20 h-20 border-white border-4 flex items-center justify-center font-bold text-3xl">
+    <div
+      className={`rounded-full bg-[#d81b60] w-${s} h-${s}  border-white border-4 flex items-center justify-center font-bold text-3xl p-3`}
+    >
       {initials}
     </div>
   );

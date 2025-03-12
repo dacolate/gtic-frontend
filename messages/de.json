@@ -211,5 +211,74 @@
     "Profile": "Profil",
     "Settings": "Einstellungen",
     "Logout": "Abmelden"
+  },
+  "StudentInfo": {
+    "male": "Männlich",
+    "female": "Weiblich",
+    "dateOfBirth": "Geburtsdatum",
+    "phone": "Telefon",
+    "email": "E-Mail",
+    "address": "Adresse",
+    "firstRegisteredOn": "Zuerst registriert am",
+    "parent": "Elternteil",
+    "No parent information available": "Keine Elterninformationen verfügbar"
+  },
+  "CourseInfo": {
+    "classesTaken": "Belegte Kurse",
+    "coursesCount": "{count} Kurse",
+    "courseName": "Kursname",
+    "instructor": "Dozent",
+    "started": "Begonnen am"
+  },
+  "ActionButtons": {
+    "modify": "Ändern",
+    "addPayment": "Zahlung hinzufügen",
+    "affectToClass": "Einer Klasse zuweisen",
+    "reinscription": "Neueinschreibung"
+  },
+  "StudentDetails": {
+    "studentDetails": "Schülerdetails",
+    "errorOccurred": "Ein Fehler ist aufgetreten",
+    "errorLoadingCourses": "Fehler beim Laden der Kurse"
+  },
+  "PaymentInfo": {
+    "paymentInformation": "Zahlungsinformationen",
+    "date": "Datum",
+    "amount": "Betrag",
+    "download": "Herunterladen",
+    "currency": "FCFA"
+  },
+
+  "PaymentPopover": {
+    "addPayment": "Zahlung hinzufügen",
+    "newPaymentFrom": "Neue Zahlung von",
+    "paymentClass": "Klasse",
+    "selectPaymentClass": "Zahlungsklasse auswählen",
+    "paymentUpToDate": "Zahlung aktuell",
+    "paymentNotUpToDate": "Zahlung nicht aktuell",
+    "remaining": "Verbleibend",
+    "next": "Nächste",
+    "missed": "Verpasst",
+    "deadline": "Frist",
+    "days": "Tage",
+    "left": "übrig",
+    "ago": "vor",
+    "amount": "Betrag",
+    "paymentMethod": "Zahlungsmethode",
+    "selectPaymentMethod": "Zahlungsmethode auswählen",
+    "cash": "Bar",
+    "om": "OM",
+    "momo": "MOMO",
+    "bank": "Bank",
+    "other": "Andere",
+    "paidTooMuch": "Zu viel bezahlt",
+    "cancel": "Abbrechen",
+    "submitting": "Wird übermittelt...",
+    "submitPayment": "Zahlung absenden",
+    "paymentSuccessful": "Zahlung erfolgreich",
+    "paymentProcessedSuccessfully": "Die Zahlung wurde erfolgreich verarbeitet.",
+    "paymentFailed": "Zahlung fehlgeschlagen",
+    "errorProcessingPayment": "Ein Fehler ist bei der Zahlungsverarbeitung aufgetreten.",
+    "unexpectedError": "Ein unerwarteter Fehler ist aufgetreten."
   }
 }

@@ -1,7 +1,7 @@
 import { Student } from "@/components/datatable copy";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { NewStudResponse, Payment } from "./types";
+import { NewStudResponse, Payment, StudentClass } from "./types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -162,7 +162,9 @@ export function NewStudResponseTOReceiptData(response: NewStudResponse) {
       `${studentName} ${studentFirstName}\n${studentPhone}${
         studentEmail ? `\n${studentEmail}` : ""
       }\nMatricule: ${studentId}`,
-      `Montant a payer: ${totalFees}\nMontant paye: ${amount}\nSolde restant: ${remaining}\nTotal HT: ${amount}`,
+      `Montant à payer: ${totalFees}\nMontant paye: ${amount}\nCumul des versements: ${
+        totalFees - remaining
+      }\nSolde restant: ${remaining}`,
     ],
     [
       `Prochain versement a effectuer au plus tard le ${formatDateTime(
@@ -337,7 +339,9 @@ export function PaymentTOReceiptData(payment: Payment) {
       `${studentName} ${studentFirstName}\n${studentPhone}${
         studentEmail ? `\n${studentEmail}` : ""
       }\nMatricule: ${studentId}`,
-      `Montant a payer: ${totalFees}\nMontant paye: ${amount}\nSolde restant: ${remaining}\nTotal HT: ${amount}`,
+      `Montant à payer: ${totalFees}\nMontant paye: ${amount}\nCumul des versements: ${
+        totalFees - remaining
+      }\nSolde restant: ${remaining}`,
     ],
     [
       `Prochain versement a effectuer au plus tard le ${formatDateTime(
@@ -465,3 +469,38 @@ export const generateAndDownloadPdf2 = (payment: Payment) => {
   // Save the PDF with a filename
   doc.save(`recu_de_${payment.student.name}_${payment.createdAt}.pdf`);
 };
+
+export function capitalizeFullName(fullName: string) {
+  // Split the full name into parts
+  const nameParts = fullName.split(" ");
+
+  // Capitalize each part and join them back together
+  const capitalizedName = nameParts
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase())
+    .join(" ");
+
+  return capitalizedName;
+}
+
+// Example usage:
+export function PaymentStatus(studentClass: StudentClass) {
+  const paymentStatus = studentClass.paymentStatus;
+  const daysTilDeadline = studentClass.daysTilDeadline;
+  if (paymentStatus === "Not up to date") {
+    return false;
+  } else if (paymentStatus === "Up to date" && daysTilDeadline === 0) {
+    return true;
+  } else if (
+    paymentStatus === "Up to date" &&
+    daysTilDeadline !== null &&
+    daysTilDeadline < 7
+  ) {
+    return false;
+  } else if (
+    paymentStatus === "Up to date" &&
+    daysTilDeadline !== null &&
+    daysTilDeadline >= 7
+  ) {
+    return true;
+  }
+}

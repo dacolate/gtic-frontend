@@ -137,6 +137,7 @@ export interface StudentClass {
   createdAt: string; // ISO date string
   updatedAt: string; // ISO date string
   pricing: Pricing | undefined;
+  class: Class | undefined;
 }
 
 export interface Pricing {

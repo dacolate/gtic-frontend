@@ -211,5 +211,74 @@
     "Profile": "Profil",
     "Settings": "Paramètres",
     "Logout": "Déconnexion"
+  },
+  "StudentInfo": {
+    "male": "Masculin",
+    "female": "Féminin",
+    "dateOfBirth": "Date de naissance",
+    "phone": "Téléphone",
+    "email": "E-mail",
+    "address": "Adresse",
+    "firstRegisteredOn": "Première inscription le",
+    "parent": "Elternteil",
+    "No parent information available": "Pas d'informations disponibles sur le parent"
+  },
+  "CourseInfo": {
+    "classesTaken": "Cours Suivis",
+    "coursesCount": "{count} Cours",
+    "courseName": "Nom du Cours",
+    "instructor": "Instructeur",
+    "started": "Commencé le"
+  },
+  "ActionButtons": {
+    "modify": "Modifier",
+    "addPayment": "Ajouter un paiement",
+    "affectToClass": "Affecter à une classe",
+    "reinscription": "Réinscription"
+  },
+  "StudentDetails": {
+    "studentDetails": "Détails de l'étudiant",
+    "errorOccurred": "Une erreur s'est produite",
+    "errorLoadingCourses": "Erreur lors du chargement des cours"
+  },
+  "PaymentInfo": {
+    "paymentInformation": "Informations de paiement",
+    "date": "Date",
+    "amount": "Montant",
+    "download": "Télécharger",
+    "currency": "FCFA"
+  },
+
+  "PaymentPopover": {
+    "addPayment": "Ajouter un paiement",
+    "newPaymentFrom": "Nouveau paiement de",
+    "paymentClass": "Classe",
+    "selectPaymentClass": "Sélectionner la classe",
+    "paymentUpToDate": "Paiement à jour",
+    "paymentNotUpToDate": "Paiement non à jour",
+    "remaining": "Restant",
+    "next": "Prochaine",
+    "missed": "Manquée",
+    "deadline": "échéance",
+    "days": "jours",
+    "left": "restants",
+    "ago": "il y a",
+    "amount": "Montant",
+    "paymentMethod": "Méthode de paiement",
+    "selectPaymentMethod": "Sélectionner la méthode de paiement",
+    "cash": "Espèces",
+    "om": "OM",
+    "momo": "MOMO",
+    "bank": "Banque",
+    "other": "Autre",
+    "paidTooMuch": "Trop payé",
+    "cancel": "Annuler",
+    "submitting": "Envoi en cours...",
+    "submitPayment": "Soumettre le paiement",
+    "paymentSuccessful": "Paiement réussi",
+    "paymentProcessedSuccessfully": "Le paiement a été traité avec succès.",
+    "paymentFailed": "Échec du paiement",
+    "errorProcessingPayment": "Une erreur s'est produite lors du traitement du paiement.",
+    "unexpectedError": "Une erreur inattendue s'est produite."
   }
 }

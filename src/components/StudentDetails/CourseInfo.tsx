@@ -10,25 +10,29 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Student } from "@/lib/types";
 import { formatReadableDate } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 export function CourseInfo({ student }: { student: Student }) {
   const classes = student.classes;
-  console.log(classes);
+  const t = useTranslations("CourseInfo");
+
   return (
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
-          Classes Taken
-          <Badge variant="secondary">{classes?.length ?? 0} Courses</Badge>
+          {t("classesTaken")}
+          <Badge variant="secondary">
+            {t("coursesCount", { count: classes?.length ?? 0 })}
+          </Badge>
         </CardTitle>
       </CardHeader>
       <CardContent>
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Course Name</TableHead>
-              <TableHead>Instructor</TableHead>
-              <TableHead>Started</TableHead>
+              <TableHead>{t("courseName")}</TableHead>
+              <TableHead>{t("instructor")}</TableHead>
+              <TableHead>{t("started")}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

@@ -235,5 +235,74 @@
     "Profile": "Profile",
     "Settings": "Settings",
     "Logout": "Logout"
+  },
+  "StudentInfo": {
+    "male": "Male",
+    "female": "Female",
+    "dateOfBirth": "Date of Birth",
+    "phone": "Phone",
+    "email": "Email",
+    "address": "Address",
+    "firstRegisteredOn": "First registered on",
+    "parent": "Parent",
+    "No parent information available": "No parent information available"
+  },
+  "CourseInfo": {
+    "classesTaken": "Classes Taken",
+    "coursesCount": "{count} Courses",
+    "courseName": "Course Name",
+    "instructor": "Instructor",
+    "started": "Started"
+  },
+  "ActionButtons": {
+    "modify": "Modify",
+    "addPayment": "Add Payment",
+    "affectToClass": "Affect to a class",
+    "reinscription": "Reinscription"
+  },
+  "StudentDetails": {
+    "studentDetails": "Student Details",
+    "errorOccurred": "An error occurred",
+    "errorLoadingCourses": "Error loading courses"
+  },
+  "PaymentInfo": {
+    "paymentInformation": "Payment Information",
+    "date": "Date",
+    "amount": "Amount",
+    "download": "Download",
+    "currency": "FCFA"
+  },
+
+  "PaymentPopover": {
+    "addPayment": "Add Payment",
+    "newPaymentFrom": "New payment from",
+    "paymentClass": "Class",
+    "selectPaymentClass": "Select class",
+    "paymentUpToDate": "Payment up to date",
+    "paymentNotUpToDate": "Payment not up to date",
+    "remaining": "Remaining",
+    "next": "Next",
+    "missed": "Missed",
+    "deadline": "deadline",
+    "days": "days",
+    "left": "left",
+    "ago": "ago",
+    "amount": "Amount",
+    "paymentMethod": "Payment Method",
+    "selectPaymentMethod": "Select payment method",
+    "cash": "Cash",
+    "om": "OM",
+    "momo": "MOMO",
+    "bank": "Bank",
+    "other": "Other",
+    "paidTooMuch": "Paid too much",
+    "cancel": "Cancel",
+    "submitting": "Submitting...",
+    "submitPayment": "Submit Payment",
+    "paymentSuccessful": "Payment Successful",
+    "paymentProcessedSuccessfully": "The payment has been processed successfully.",
+    "paymentFailed": "Payment Failed",
+    "errorProcessingPayment": "An error occurred while processing the payment.",
+    "unexpectedError": "An unexpected error occurred."
   }
 }
