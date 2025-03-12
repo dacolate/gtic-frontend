@@ -220,7 +220,7 @@
     "email": "E-mail",
     "address": "Adresse",
     "firstRegisteredOn": "Première inscription le",
-    "parent": "Elternteil",
+    "parent": "parent",
     "No parent information available": "Pas d'informations disponibles sur le parent"
   },
   "CourseInfo": {
