@@ -40,8 +40,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { redirect } from "next/dist/server/api-utils";
-import { useRouter } from "next/navigation";
 
 interface ModifyStudentFormProps {
   studentId: string; // Pass the student data as a prop
@@ -53,7 +51,6 @@ export function ModifyStudentForm({ studentId }: ModifyStudentFormProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [isDataLoaded, setIsDataLoaded] = useState<boolean>(false); // New state to track if data is loaded
-  const router = useRouter();
 
   const formSchema = z.object({
     // Student Info

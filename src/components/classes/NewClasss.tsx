@@ -57,6 +57,7 @@ export function CreateClassForm() {
         const response = await api.get("/grades/");
         if (response.data.success) {
           setGrades(response.data.data);
+          console.log(grades);
         } else {
           console.log("Fetch failed:", response);
         }
@@ -111,7 +112,7 @@ export function CreateClassForm() {
     fetchGrades();
     fetchCourses();
     fetchTeachers();
-  }, []); // Add `studentId` to the dependency array
+  }); // Add `studentId` to the dependency array
 
   const formSchema = z.object({
     name: z.string().min(3, { message: t("errors.nameRequired") }),
