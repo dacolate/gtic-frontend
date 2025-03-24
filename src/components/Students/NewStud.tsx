@@ -82,10 +82,10 @@ export function NewStud() {
         message: "Phone number between 7 and 15 digits",
       })
       .nullable(),
-    parentAddress: z
-      .string()
-      .min(5, { message: "Parent address must be at least 5 characters." })
-      .nullable(),
+    // parentAddress: z
+    //   .string()
+    //   .min(5, { message: "Parent address must be at least 5 characters." })
+    //   .nullable(),
     parentEmail: z
       .string()
       .email({ message: "Invalid parent email address." })
@@ -130,7 +130,7 @@ export function NewStud() {
       gender: "M",
       parentName: null, // Set to null for optional fields
       parentPhone: null, // Set to null for optional fields
-      parentAddress: null, // Set to null for optional fields
+      // parentAddress: null, // Set to null for optional fields
       parentEmail: null, // Set to null for optional fields
       course: undefined,
       grade: undefined,
@@ -251,7 +251,7 @@ export function NewStud() {
           gender: "M",
           parentName: null,
           parentPhone: null,
-          parentAddress: null,
+          // parentAddress: null,
           parentEmail: null,
           course: "", // Reset course to empty
           grade: "", // Reset grade to empty
@@ -329,7 +329,22 @@ export function NewStud() {
                   <FormItem>
                     <FormLabel>{t("studentInfo.name")}</FormLabel>
                     <FormControl>
-                      <Input placeholder="Doe" {...field} />
+                      {/* <Input placeholder="Doe" {...field} /> */}
+                      <Input
+                        placeholder="Doe"
+                        {...field}
+                        onChange={(e) => {
+                          const capitalizedValue = e.target.value
+                            .split(" ")
+                            .map(
+                              (word) =>
+                                word.charAt(0).toUpperCase() +
+                                word.slice(1).toLowerCase()
+                            )
+                            .join(" ");
+                          field.onChange(capitalizedValue);
+                        }}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -342,7 +357,21 @@ export function NewStud() {
                   <FormItem>
                     <FormLabel>{t("studentInfo.firstName")}</FormLabel>
                     <FormControl>
-                      <Input placeholder="John" {...field} />
+                      <Input
+                        placeholder="John"
+                        {...field}
+                        onChange={(e) => {
+                          const capitalizedValue = e.target.value
+                            .split(" ")
+                            .map(
+                              (word) =>
+                                word.charAt(0).toUpperCase() +
+                                word.slice(1).toLowerCase()
+                            )
+                            .join(" ");
+                          field.onChange(capitalizedValue);
+                        }}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -355,7 +384,21 @@ export function NewStud() {
                   <FormItem>
                     <FormLabel>{t("studentInfo.nationality")}</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g. American" {...field} />
+                      <Input
+                        placeholder="e.g. American"
+                        {...field}
+                        onChange={(e) => {
+                          const capitalizedValue = e.target.value
+                            .split(" ")
+                            .map(
+                              (word) =>
+                                word.charAt(0).toUpperCase() +
+                                word.slice(1).toLowerCase()
+                            )
+                            .join(" ");
+                          field.onChange(capitalizedValue);
+                        }}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -402,6 +445,7 @@ export function NewStud() {
                   </FormItem>
                 )}
               />
+
               <FormField
                 control={form.control}
                 name="cni"
@@ -446,6 +490,14 @@ export function NewStud() {
                       <Input
                         placeholder="john@example.com"
                         {...field}
+                        onChange={(e) => {
+                          // Convert empty string to null
+                          const value =
+                            e.target.value.trim() === ""
+                              ? null
+                              : e.target.value;
+                          field.onChange(value);
+                        }}
                         value={field.value ?? ""}
                       />
                     </FormControl>
@@ -519,6 +571,17 @@ export function NewStud() {
                         placeholder="Jane Doe"
                         {...field}
                         value={field.value ?? ""}
+                        onChange={(e) => {
+                          const capitalizedValue = e.target.value
+                            .split(" ")
+                            .map(
+                              (word) =>
+                                word.charAt(0).toUpperCase() +
+                                word.slice(1).toLowerCase()
+                            )
+                            .join(" ");
+                          field.onChange(capitalizedValue);
+                        }}
                       />
                     </FormControl>
                     <FormMessage />
@@ -542,7 +605,7 @@ export function NewStud() {
                   </FormItem>
                 )}
               />
-              <FormField
+              {/* <FormField
                 control={form.control}
                 name="parentAddress"
                 render={({ field }) => (
@@ -558,7 +621,7 @@ export function NewStud() {
                     <FormMessage />
                   </FormItem>
                 )}
-              />
+              /> */}
               <FormField
                 control={form.control}
                 name="parentEmail"
@@ -1105,12 +1168,7 @@ export function NewStud() {
             </Alert>
           )}
 
-        <LoadingButton
-          loading={isLoading}
-          type="submit"
-          className="w-full"
-          disabled={!form.formState.isValid}
-        >
+        <LoadingButton loading={isLoading} type="submit" className="w-full">
           {t("buttons.submit")}
         </LoadingButton>
       </form>

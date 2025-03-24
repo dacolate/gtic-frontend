@@ -55,17 +55,29 @@ import { calculateAge } from "@/lib/utils";
 import { Link } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
 
-function paymentStatusColor(paymentStatus: string, daysTilDeadline: number) {
-  if (paymentStatus === "Not up to date") {
-    return "bg-red-500";
-  } else if (paymentStatus === "Up to date" && daysTilDeadline === 0) {
-    return "bg-green-500";
-  } else if (paymentStatus === "Up to date" && daysTilDeadline < 7) {
-    return "bg-orange-500";
-  } else if (paymentStatus === "Up to date" && daysTilDeadline >= 7) {
-    return "bg-green-500";
-  }
-}
+// function paymentStatusColor(
+//   paymentStatus: string,
+//   daysTilDeadline: number | null
+// ) {
+//   if (paymentStatus === "Not up to date") {
+//     return "bg-red-500"; // Red for late payments
+//   } else if (paymentStatus === "Up to date" && daysTilDeadline === null) {
+//     return "bg-green-500"; // Green for fully completed payments
+//   } else if (
+//     paymentStatus === "Up to date" &&
+//     daysTilDeadline !== null &&
+//     daysTilDeadline < 7
+//   ) {
+//     return "bg-orange-500"; // Orange for payments due in less than 7 days
+//   } else if (
+//     paymentStatus === "Up to date" &&
+//     daysTilDeadline !== null &&
+//     daysTilDeadline >= 7
+//   ) {
+//     return "bg-green-500"; // Green for payments due in 7 or more days
+//   }
+//   return "bg-gray-500"; // Default color (e.g., for unknown status)
+// }
 
 export function StudentTable({
   students,
@@ -104,39 +116,109 @@ export function StudentTable({
         </Link>
       ),
     },
+    // {
+    //   accessorKey: "paymentStatus",
+    //   header: () => <div className="text-center">{t("Payment Status")}</div>,
+    //   cell: ({ row }) => {
+    //     return (
+    //       <div className="flex justify-center text-center ">
+    //         <div
+    //           className={`rounded-full w-3 h-3
+    //              ${paymentStatusColor(
+    //                row.original.student_classes?.[0]?.paymentStatus || "",
+    //                row.original.student_classes?.[0]?.daysTilDeadline || 0
+    //              )}
+    //          `}
+    //         ></div>
+    //       </div>
+    //     );
+    //   },
+    //   filterFn: (row, columnId, filterValue) => {
+    //     const paymentStatus =
+    //       row.original.student_classes?.[0]?.paymentStatus || "";
+    //     const daysTilDeadline =
+    //       row.original.student_classes?.[0]?.daysTilDeadline || 0;
+
+    //     if (filterValue === "Up to date") {
+    //       return paymentStatus === "Up to date";
+    //     } else if (filterValue === "Due in 7 days") {
+    //       return (
+    //         paymentStatus === "Up to date" &&
+    //         !!daysTilDeadline &&
+    //         daysTilDeadline <= 7
+    //       );
+    //     } else if (filterValue === "Late") {
+    //       return paymentStatus === "Not up to date";
+    //     } else {
+    //       return true; // No filter applied
+    //     }
+    //   },
+    // },
     {
       accessorKey: "paymentStatus",
       header: () => <div className="text-center">{t("Payment Status")}</div>,
       cell: ({ row }) => {
+        const studentClasses = row.original.student_classes || [];
+
+        // Determine the overall payment status
+        let overallStatus = "green"; // Default to green (up to date)
+        for (const studentClass of studentClasses) {
+          const paymentStatus = studentClass.paymentStatus || "";
+          const daysTilDeadline = studentClass.daysTilDeadline;
+
+          if (paymentStatus === "Not up to date") {
+            overallStatus = "red"; // If any class is late, overall status is red
+            break;
+          } else if (
+            paymentStatus === "Up to date" &&
+            daysTilDeadline !== null &&
+            daysTilDeadline < 7
+          ) {
+            overallStatus = "orange"; // If any class is due in less than 7 days, overall status is orange
+          }
+        }
+
         return (
-          <div className="flex justify-center text-center ">
+          <div className="flex justify-center text-center">
             <div
-              className={`rounded-full w-3 h-3
-                 ${paymentStatusColor(
-                   row.original.student_classes?.[0]?.paymentStatus || "",
-                   row.original.student_classes?.[0]?.daysTilDeadline || 0
-                 )}
-             `}
+              className={`rounded-full w-3 h-3 ${
+                overallStatus === "red"
+                  ? "bg-red-500"
+                  : overallStatus === "orange"
+                  ? "bg-orange-500"
+                  : "bg-green-500"
+              }`}
             ></div>
           </div>
         );
       },
       filterFn: (row, columnId, filterValue) => {
-        const paymentStatus =
-          row.original.student_classes?.[0]?.paymentStatus || "";
-        const daysTilDeadline =
-          row.original.student_classes?.[0]?.daysTilDeadline || 0;
+        const studentClasses = row.original.student_classes || [];
+
+        // Determine the overall payment status for filtering
+        let isUpToDate = true;
+        let isDueIn7Days = false;
+        let isLate = false;
+
+        for (const studentClass of studentClasses) {
+          const paymentStatus = studentClass.paymentStatus || "";
+          const daysTilDeadline = studentClass.daysTilDeadline || 0;
+
+          if (paymentStatus === "Not up to date") {
+            isLate = true;
+            isUpToDate = false;
+            break;
+          } else if (paymentStatus === "Up to date" && daysTilDeadline < 7) {
+            isDueIn7Days = true;
+          }
+        }
 
         if (filterValue === "Up to date") {
-          return paymentStatus === "Up to date";
+          return isUpToDate && !isDueIn7Days; // Only show if all classes are up to date and not due in 7 days
         } else if (filterValue === "Due in 7 days") {
-          return (
-            paymentStatus === "Up to date" &&
-            !!daysTilDeadline &&
-            daysTilDeadline <= 7
-          );
+          return isDueIn7Days; // Show if any class is due in 7 days
         } else if (filterValue === "Late") {
-          return paymentStatus === "Not up to date";
+          return isLate; // Show if any class is late
         } else {
           return true; // No filter applied
         }
@@ -155,12 +237,18 @@ export function StudentTable({
       cell: ({ row }) => {
         const classes = row.getValue("class") as Array<string>;
         const firstClass = classes[0];
+        const l = classes.length;
 
         return (
           <div>
             {firstClass && (
               <div className="flex flex-col items-center justify-center">
                 <div className="text-sm">{firstClass}</div>
+              </div>
+            )}
+            {l > 1 && (
+              <div className="flex flex-col items-center justify-center">
+                <div className="text-xs text-gray-400">+{l - 1} more</div>
               </div>
             )}
           </div>

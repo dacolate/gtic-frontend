@@ -192,7 +192,9 @@
     },
     "success": {
       "studentRegistered": "Étudiant enregistré avec succès",
-      "studentAdded": "Le nouvel étudiant a été ajouté au système."
+      "studentAdded": "Le nouvel étudiant a été ajouté au système.",
+      "studentUpdated": "Étudiant mis à jour",
+      "studentUpdatedMessage": "Les informations de l'étudiant ont été mises à jour avec succès."
     },
     "buttons": {
       "submit": "Soumettre"
@@ -280,5 +282,88 @@
     "paymentFailed": "Échec du paiement",
     "errorProcessingPayment": "Une erreur s'est produite lors du traitement du paiement.",
     "unexpectedError": "Une erreur inattendue s'est produite."
+  },
+
+  "AssignClassForm": {
+    "studentInfo": {
+      "title": "Informations de l'étudiant",
+      "name": "Nom",
+      "firstName": "Prénom",
+      "nationality": "Nationalité",
+      "phone": "Téléphone",
+      "email": "Email",
+      "gender": "Genre"
+    },
+    "classAttribution": {
+      "title": "Attribution de classe",
+      "course": "Cours",
+      "grade": "Niveau",
+      "class": "Classe",
+      "selectCourse": "Sélectionnez un cours",
+      "selectGrade": "Sélectionnez un niveau",
+      "selectClass": "Sélectionnez une classe"
+    },
+    "pricing": {
+      "title": "Détails de tarification",
+      "registrationFee": "Frais d'inscription",
+      "firstInstalmentFee": "Frais du premier versement",
+      "firstInstalmentDeadline": "Date limite du premier versement",
+      "secondInstalmentFee": "Frais du deuxième versement",
+      "secondInstalmentDeadline": "Date limite du deuxième versement",
+      "pickadate": "Choisissez une date"
+    },
+    "errors": {
+      "courseRequired": "Veuillez sélectionner un cours",
+      "gradeRequired": "Veuillez sélectionner un niveau",
+      "classRequired": "Veuillez sélectionner une classe",
+      "positiveNumber": "La valeur doit être un nombre positif"
+    },
+    "success": {
+      "classAssigned": "Classe attribuée",
+      "studentAssignedToClass": "L'étudiant a été assigné à la classe avec succès."
+    },
+    "buttons": {
+      "submit": "Soumettre"
+    }
+  },
+  "CreateClassForm": {
+    "errors": {
+      "nameRequired": "Le nom de la classe doit comporter au moins 3 caractères",
+      "teacherRequired": "Veuillez sélectionner un enseignant",
+      "durationRequired": "Veuillez saisir la durée prévue"
+    },
+    "success": {
+      "classCreated": "Classe Créée",
+      "classCreatedMessage": "La classe a été créée avec succès"
+    },
+    "classInfo": {
+      "title": "Informations sur la Classe",
+      "name": "Nom de la Classe",
+      "namePlaceholder": "Entrez le nom de la classe",
+      "description": "Description",
+      "descriptionPlaceholder": "Entrez la description de la classe (facultatif)"
+    },
+    "classDetails": {
+      "title": "Détails de la Classe",
+      "teacher": "Enseignant",
+      "selectTeacher": "Sélectionnez un enseignant",
+      "startDate": "Date de Début",
+      "pickadate": "Choisissez une date"
+    },
+    "classDuration": {
+      "title": "Durée de la Classe",
+      "duration": "Durée Prévue (semaines)",
+      "durationPlaceholder": "Entrez la durée prévue"
+    },
+    "classGradeCourse": {
+      "title": "Niveau et Cours",
+      "grade": "Niveau",
+      "selectGrade": "Sélectionnez un niveau",
+      "course": "Cours",
+      "selectCourse": "Sélectionnez un cours"
+    },
+    "buttons": {
+      "submit": "Créer la Classe"
+    }
   }
 }

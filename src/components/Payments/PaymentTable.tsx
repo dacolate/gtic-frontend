@@ -52,7 +52,8 @@ interface PaymentTableProps {
 
 export function PaymentTable({ payments }: PaymentTableProps) {
   const t = useTranslations("PaymentTable");
-  console.log("pay", payments);
+  const studclasses = payments.map((payment) => payment.student_class);
+  console.log("studclass", studclasses);
 
   console.log("payments", payments);
   const columns: ColumnDef<Payment>[] = [
@@ -202,7 +203,9 @@ export function PaymentTable({ payments }: PaymentTableProps) {
         console.log("zdc jdz hzed", row.original);
         return (
           <div className="text-center">
-            {row.original.student_class.paymentStatus || "none"}
+            {row.original.student_class
+              ? row.original.student_class.paymentStatus
+              : "none"}
           </div>
         );
       },
@@ -223,7 +226,9 @@ export function PaymentTable({ payments }: PaymentTableProps) {
       },
       cell: ({ row }) => (
         <div className="text-center">
-          {row.original.student_class.remainingPayment}
+          {row.original.student_class
+            ? row.original.student_class.remainingPayment
+            : "none"}
         </div>
       ),
     },
@@ -242,13 +247,19 @@ export function PaymentTable({ payments }: PaymentTableProps) {
         );
       },
       cell: ({ row }) => (
-        <div className="text-center">
-          {row.original.student_class.nextdeadline
-            ? new Date(
-                row.original.student_class.nextdeadline
-              ).toLocaleDateString()
-            : "N/A"}
-        </div>
+        <>
+          {row.original.student_class ? (
+            <div className="text-center">
+              {row.original.student_class.nextdeadline
+                ? new Date(
+                    row.original.student_class.nextdeadline
+                  ).toLocaleDateString()
+                : "N/A"}
+            </div>
+          ) : (
+            <div className="text-center">none</div>
+          )}
+        </>
       ),
     },
     // {

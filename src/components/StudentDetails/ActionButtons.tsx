@@ -5,6 +5,7 @@ import { CreditCard, Edit, RefreshCw, Users } from "lucide-react";
 import { PaymentPopover } from "../PaymentPopover";
 import { Student } from "@/lib/types";
 import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/routing";
 
 export function ActionButtons({
   student,
@@ -17,10 +18,20 @@ export function ActionButtons({
 
   return (
     <div className={`flex flex-wrap gap-4 ${className}`}>
-      <Button variant="outline" className="flex items-center gap-2">
-        <Edit className="h-4 w-4" />
-        {t("modify")}
-      </Button>
+      {student ? (
+        <Button variant="outline" className="flex items-center gap-2" asChild>
+          <Link href={`${student?.id}/modifystudent`}>
+            <Edit className="h-4 w-4" />
+            {t("modify")}
+          </Link>
+        </Button>
+      ) : (
+        <Button variant="outline" className="flex items-center gap-2">
+          <Edit className="h-4 w-4" />
+          {t("modify")}
+        </Button>
+      )}
+
       {student ? (
         <PaymentPopover student={student} />
       ) : (
@@ -29,9 +40,16 @@ export function ActionButtons({
           {t("addPayment")}
         </Button>
       )}
-      <Button variant="outline" className="flex items-center gap-2">
-        <Users className="h-4 w-4" />
-        {t("affectToClass")}
+      <Button
+        variant="outline"
+        className="flex items-center gap-2"
+        disabled={!student}
+        asChild
+      >
+        <Link href={`${student?.id}/assignclass`}>
+          <Users className="h-4 w-4" />
+          {t("affectToClass")}
+        </Link>
       </Button>
       <Button variant="outline" className="flex items-center gap-2">
         <RefreshCw className="h-4 w-4" />

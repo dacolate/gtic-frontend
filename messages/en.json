@@ -304,5 +304,88 @@
     "paymentFailed": "Payment Failed",
     "errorProcessingPayment": "An error occurred while processing the payment.",
     "unexpectedError": "An unexpected error occurred."
+  },
+
+  "AssignClassForm": {
+    "studentInfo": {
+      "title": "Student Information",
+      "name": "Name",
+      "firstName": "First Name",
+      "nationality": "Nationality",
+      "phone": "Phone",
+      "email": "Email",
+      "gender": "Gender"
+    },
+    "classAttribution": {
+      "title": "Class Attribution",
+      "course": "Course",
+      "grade": "Grade",
+      "class": "Class",
+      "selectCourse": "Select a course",
+      "selectGrade": "Select a grade",
+      "selectClass": "Select a class"
+    },
+    "pricing": {
+      "title": "Pricing Details",
+      "registrationFee": "Registration Fee",
+      "firstInstalmentFee": "First Instalment Fee",
+      "firstInstalmentDeadline": "First Instalment Deadline",
+      "secondInstalmentFee": "Second Instalment Fee",
+      "secondInstalmentDeadline": "Second Instalment Deadline",
+      "pickadate": "Pick a date"
+    },
+    "errors": {
+      "courseRequired": "Please select a course",
+      "gradeRequired": "Please select a grade",
+      "classRequired": "Please select a class",
+      "positiveNumber": "Value must be a positive number"
+    },
+    "success": {
+      "classAssigned": "Class Assigned",
+      "studentAssignedToClass": "The student has been successfully assigned to the class."
+    },
+    "buttons": {
+      "submit": "Submit"
+    }
+  },
+  "CreateClassForm": {
+    "errors": {
+      "nameRequired": "Class name must be at least 3 characters",
+      "teacherRequired": "Please select a teacher",
+      "durationRequired": "Please enter the expected duration"
+    },
+    "success": {
+      "classCreated": "Class Created",
+      "classCreatedMessage": "The class has been created successfully"
+    },
+    "classInfo": {
+      "title": "Class Information",
+      "name": "Class Name",
+      "namePlaceholder": "Enter class name",
+      "description": "Description",
+      "descriptionPlaceholder": "Enter class description (optional)"
+    },
+    "classDetails": {
+      "title": "Class Details",
+      "teacher": "Teacher",
+      "selectTeacher": "Select a teacher",
+      "startDate": "Start Date",
+      "pickadate": "Pick a date"
+    },
+    "classDuration": {
+      "title": "Class Duration",
+      "duration": "Expected Duration (weeks)",
+      "durationPlaceholder": "Enter expected duration"
+    },
+    "classGradeCourse": {
+      "title": "Grade and Course",
+      "grade": "Grade",
+      "selectGrade": "Select a grade",
+      "course": "Course",
+      "selectCourse": "Select a course"
+    },
+    "buttons": {
+      "submit": "Create Class"
+    }
   }
 }

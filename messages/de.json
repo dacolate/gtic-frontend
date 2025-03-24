@@ -280,5 +280,88 @@
     "paymentFailed": "Zahlung fehlgeschlagen",
     "errorProcessingPayment": "Ein Fehler ist bei der Zahlungsverarbeitung aufgetreten.",
     "unexpectedError": "Ein unerwarteter Fehler ist aufgetreten."
+  },
+
+  "AssignClassForm": {
+    "studentInfo": {
+      "title": "Schülerinformationen",
+      "name": "Name",
+      "firstName": "Vorname",
+      "nationality": "Nationalität",
+      "phone": "Telefon",
+      "email": "E-Mail",
+      "gender": "Geschlecht"
+    },
+    "classAttribution": {
+      "title": "Klassenzuweisung",
+      "course": "Kurs",
+      "grade": "Klasse",
+      "class": "Klasse",
+      "selectCourse": "Wählen Sie einen Kurs",
+      "selectGrade": "Wählen Sie eine Klasse",
+      "selectClass": "Wählen Sie eine Klasse"
+    },
+    "pricing": {
+      "title": "Preisdetails",
+      "registrationFee": "Anmeldegebühr",
+      "firstInstalmentFee": "Gebühr für die erste Rate",
+      "firstInstalmentDeadline": "Frist für die erste Rate",
+      "secondInstalmentFee": "Gebühr für die zweite Rate",
+      "secondInstalmentDeadline": "Frist für die zweite Rate",
+      "pickadate": "Datum auswählen"
+    },
+    "errors": {
+      "courseRequired": "Bitte wählen Sie einen Kurs aus",
+      "gradeRequired": "Bitte wählen Sie eine Klasse aus",
+      "classRequired": "Bitte wählen Sie eine Klasse aus",
+      "positiveNumber": "Der Wert muss eine positive Zahl sein"
+    },
+    "success": {
+      "classAssigned": "Klasse zugewiesen",
+      "studentAssignedToClass": "Der Schüler wurde erfolgreich der Klasse zugewiesen."
+    },
+    "buttons": {
+      "submit": "Einreichen"
+    }
+  },
+  "CreateClassForm": {
+    "errors": {
+      "nameRequired": "Der Klassenname muss mindestens 3 Zeichen lang sein",
+      "teacherRequired": "Bitte wählen Sie einen Lehrer aus",
+      "durationRequired": "Bitte geben Sie die erwartete Dauer ein"
+    },
+    "success": {
+      "classCreated": "Klasse Erstellt",
+      "classCreatedMessage": "Die Klasse wurde erfolgreich erstellt"
+    },
+    "classInfo": {
+      "title": "Klasseninformationen",
+      "name": "Klassenname",
+      "namePlaceholder": "Klassenname eingeben",
+      "description": "Beschreibung",
+      "descriptionPlaceholder": "Klassenbeschreibung eingeben (optional)"
+    },
+    "classDetails": {
+      "title": "Klassendetails",
+      "teacher": "Lehrer",
+      "selectTeacher": "Wählen Sie einen Lehrer aus",
+      "startDate": "Startdatum",
+      "pickadate": "Wählen Sie ein Datum"
+    },
+    "classDuration": {
+      "title": "Klassendauer",
+      "duration": "Erwartete Dauer (Wochen)",
+      "durationPlaceholder": "Erwartete Dauer eingeben"
+    },
+    "classGradeCourse": {
+      "title": "Klassenstufe und Kurs",
+      "grade": "Klassenstufe",
+      "selectGrade": "Wählen Sie eine Klassenstufe",
+      "course": "Kurs",
+      "selectCourse": "Wählen Sie einen Kurs"
+    },
+    "buttons": {
+      "submit": "Klasse Erstellen"
+    }
   }
 }
