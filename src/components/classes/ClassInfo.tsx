@@ -11,7 +11,7 @@ export function ClassInfo({ classData }: { classData: Class }) {
 
   return (
     <Card className="overflow-hidden">
-      <CardHeader className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white">
+      <CardHeader className="bg-gradient-to-r from-green-500 to-purple-500 text-white">
         <CardTitle className="text-2xl">
           {classData.name}
           <Badge variant="secondary" className="ml-2">
@@ -31,7 +31,7 @@ export function ClassInfo({ classData }: { classData: Class }) {
           </div>
           <div>
             <dt className="font-medium text-gray-500">{t("startDate")}</dt>
-            <dd>{formatReadableDate(classData.startDate)}</dd>
+            <dd>{formatReadableDate(classData.startDate, t("locale"))}</dd>
           </div>
           <div>
             <dt className="font-medium text-gray-500">{t("duration")}</dt>
@@ -41,7 +41,7 @@ export function ClassInfo({ classData }: { classData: Class }) {
           </div>
           <div>
             <dt className="font-medium text-gray-500">{t("createdAt")}</dt>
-            <dd>{formatReadableDate(classData.createdAt)}</dd>
+            <dd>{formatReadableDate(classData.createdAt, t("locale"))}</dd>
           </div>
           <div>
             <dt className="font-medium text-gray-500">{t("description")}</dt>

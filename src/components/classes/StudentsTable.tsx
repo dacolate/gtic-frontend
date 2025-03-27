@@ -21,7 +21,10 @@ export function StudentsTable({ students }: { students: Student[] }) {
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
           {t("enrolledStudents")}
-          <span className="text-sm font-normal">{t("count")}</span>
+          <span className="text-sm font-normal">
+            {students.length + " "}
+            {t("count")}
+          </span>
         </CardTitle>
       </CardHeader>
       <CardContent>

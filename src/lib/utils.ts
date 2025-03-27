@@ -73,9 +73,16 @@ export const calculateAge = (birthday: string): number => {
   return age;
 };
 
-export function formatReadableDate(dateString: string): string {
+export function formatReadableDate(
+  dateString: string,
+  locale?: string | undefined
+): string {
+  let loc = locale;
+  if (!loc) {
+    loc = "en-US";
+  }
   const date = new Date(dateString);
-  return date.toLocaleDateString("en-US", {
+  return date.toLocaleDateString(loc, {
     year: "numeric",
     month: "long",
     day: "numeric",

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -40,64 +41,32 @@ import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Course, Grade, Teacher } from "@/lib/types";
+import { useRouter } from "@/i18n/routing";
 
 export function CreateClassForm() {
   const t = useTranslations("CreateClassForm");
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const [grades, setGrades] = useState<Grade[]>([]);
   const [courses, setCourses] = useState<Course[]>([]);
   const [teachers, setTeachers] = useState<Teacher[]>([]);
   const [apiErrors, setApiErrors] = useState<{ [key: string]: string }>({});
-  // const [selectedCourse, setSelectedCourse] = useState<Course | undefined>();
+  const [showPricing, setShowPricing] = useState(false);
+  // const [showExceptionalPricing, setShowExceptionalPricing] = useState(false);
 
   useEffect(() => {
-    async function fetchGrades() {
+    async function fetchInitialData() {
       try {
-        const response = await api.get("/grades/");
-        if (response.data.success) {
-          setGrades(response.data.data);
-          console.log(grades);
-        } else {
-          console.log("Fetch failed:", response);
-        }
-      } catch (err) {
-        if (err instanceof AxiosError) {
-          setError(err.response?.data?.message || "An error occurred");
-        } else if (err instanceof Error) {
-          setError(err.message || "An error occurred");
-        } else {
-          setError("An error occurred");
-        }
-      }
-    }
-    async function fetchCourses() {
-      try {
-        const response = await api.get("/courses/");
-        if (response.data.success) {
-          setCourses(response.data.data);
-          console.log("courses", courses);
-        } else {
-          console.log("Fetch failed:", response);
-        }
-      } catch (err) {
-        if (err instanceof AxiosError) {
-          setError(err.response?.data?.message || "An error occurred");
-        } else if (err instanceof Error) {
-          setError(err.message || "An error occurred");
-        } else {
-          setError("An error occurred");
-        }
-      }
-    }
-    async function fetchTeachers() {
-      try {
-        const response = await api.get("/teachers/");
-        if (response.data.success) {
-          setTeachers(response.data.data);
-        } else {
-          console.log("Fetch failed:", response);
-        }
+        const [gradesRes, coursesRes, teachersRes] = await Promise.all([
+          api.get("/grades/"),
+          api.get("/courses/"),
+          api.get("/teachers/"),
+        ]);
+
+        if (gradesRes.data.success) setGrades(gradesRes.data.data);
+        if (coursesRes.data.success) setCourses(coursesRes.data.data);
+        if (teachersRes.data.success) setTeachers(teachersRes.data.data);
       } catch (err) {
         if (err instanceof AxiosError) {
           setError(err.response?.data?.message || "An error occurred");
@@ -109,21 +78,31 @@ export function CreateClassForm() {
       }
     }
 
-    fetchGrades();
-    fetchCourses();
-    fetchTeachers();
-  }); // Add `studentId` to the dependency array
+    fetchInitialData();
+  }, []);
+
+  console.log(grades);
 
   const formSchema = z.object({
+    // Class Info
     name: z.string().min(3, { message: t("errors.nameRequired") }),
     description: z.string().optional(),
     teacher_id: z.number({ required_error: t("errors.teacherRequired") }),
-    start_date: z.date().optional(),
-    expected_duration: z.number({
-      required_error: t("errors.durationRequired"),
-    }),
-    grade_id: z.number().optional(),
-    course_id: z.number().optional(),
+    start_date: z.date(),
+    expected_duration: z
+      .number({
+        required_error: t("errors.durationRequired"),
+      })
+      .min(0),
+    grade_id: z.number(),
+    course_id: z.number(),
+
+    // Pricing
+    registrationFee: z.number().min(0),
+    firstInstalmentFee: z.number().min(0),
+    firstInstalmentDeadline: z.date(),
+    secondInstalmentFee: z.number().min(0),
+    secondInstalmentDeadline: z.date(),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -133,9 +112,14 @@ export function CreateClassForm() {
       description: "",
       teacher_id: undefined,
       start_date: undefined,
-      expected_duration: 0,
+      expected_duration: undefined,
       grade_id: undefined,
       course_id: undefined,
+      registrationFee: 0,
+      firstInstalmentFee: 0,
+      firstInstalmentDeadline: new Date(),
+      secondInstalmentFee: 0,
+      secondInstalmentDeadline: new Date(),
     },
     mode: "onSubmit",
   });
@@ -144,17 +128,19 @@ export function CreateClassForm() {
     try {
       setIsLoading(true);
 
-      // Transform start_date to ISO string
       const payload = {
         ...values,
-        start_date: values.start_date?.toISOString(), // Convert Date to ISO string
+        start_date: values.start_date?.toISOString(),
+        pricing: {
+          registerFee: values.registrationFee,
+          instalment1Fee: values.firstInstalmentFee,
+          instalment1Deadline: values.firstInstalmentDeadline.toISOString(),
+          instalment2Fee: values.secondInstalmentFee,
+          instalment2Deadline: values.secondInstalmentDeadline.toISOString(),
+        },
       };
 
-      console.log("Payload:", payload); // Debugging: Log the payload
-
       const response = await api.post("/classes", payload);
-
-      console.log("Response:", response); // Debugging: Log the response
 
       if (response.data.success) {
         toast({
@@ -163,6 +149,8 @@ export function CreateClassForm() {
         });
         form.reset();
         setApiErrors({});
+        setShowPricing(false);
+        router.push("/classes");
       }
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -199,12 +187,12 @@ export function CreateClassForm() {
           </Alert>
         )}
 
-        {/* Class Name and Description */}
+        {/* Class Information */}
         <Card>
           <CardHeader>
             <CardTitle>{t("classInfo.title")}</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
                 control={form.control}
@@ -224,37 +212,10 @@ export function CreateClassForm() {
               />
               <FormField
                 control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t("classInfo.description")}</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        placeholder={t("classInfo.descriptionPlaceholder")}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Teacher and Start Date */}
-        <Card>
-          <CardHeader>
-            <CardTitle>{t("classDetails.title")}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <FormField
-                control={form.control}
                 name="teacher_id"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("classDetails.teacher")}</FormLabel>
+                    <FormLabel>{t("classInfo.teacher")}</FormLabel>
                     <Select
                       onValueChange={(value) => field.onChange(Number(value))}
                       value={field.value?.toString()}
@@ -262,7 +223,7 @@ export function CreateClassForm() {
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue
-                            placeholder={t("classDetails.selectTeacher")}
+                            placeholder={t("classInfo.selectTeacher")}
                           />
                         </SelectTrigger>
                       </FormControl>
@@ -281,12 +242,32 @@ export function CreateClassForm() {
                   </FormItem>
                 )}
               />
+            </div>
+
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("classInfo.description")}</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder={t("classInfo.descriptionPlaceholder")}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <FormField
                 control={form.control}
                 name="start_date"
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t("classDetails.startDate")}</FormLabel>
+                  <FormItem className="flex flex-col">
+                    <FormLabel>{t("classInfo.startDate")}</FormLabel>
                     <Popover>
                       <PopoverTrigger asChild>
                         <FormControl>
@@ -300,7 +281,7 @@ export function CreateClassForm() {
                             {field.value ? (
                               format(field.value, "PPP")
                             ) : (
-                              <span>{t("classDetails.pickadate")}</span>
+                              <span>{t("classInfo.durationPlaceholder")}</span>
                             )}
                             <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                           </Button>
@@ -320,30 +301,17 @@ export function CreateClassForm() {
                   </FormItem>
                 )}
               />
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Expected Duration */}
-        <Card>
-          <CardHeader>
-            <CardTitle>{t("classDuration.title")}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
                 control={form.control}
                 name="expected_duration"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("classDuration.duration")}</FormLabel>
+                    <FormLabel>{t("classInfo.duration")}</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
-                        placeholder={t("classDuration.durationPlaceholder")}
+                        placeholder={t("classInfo.durationPlaceholder")}
                         {...field}
-                        // onChange={(e) => field.onChange(Number(e.target.value))}
-                        value={field.value ?? ""}
                         onChange={(e) => {
                           const value = e.target.value;
                           const parsedValue =
@@ -362,66 +330,37 @@ export function CreateClassForm() {
           </CardContent>
         </Card>
 
-        {/* Grade and Course Selection */}
+        {/* Course and Grade Selection */}
         <Card>
           <CardHeader>
-            <CardTitle>{t("classGradeCourse.title")}</CardTitle>
+            <CardTitle>{t("courseSelection.title")}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* <FormField
+              <FormField
                 control={form.control}
                 name="course_id"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("classGradeCourse.course")}</FormLabel>
+                    <FormLabel>{t("courseSelection.course")}</FormLabel>
                     <Select
                       onValueChange={(value) => {
                         field.onChange(Number(value));
-                        setSelectedCourse(
-                          courses.find((course) => course.id === Number(value))
-                        );
-                        console.log("sel", selectedCourse);
-                        console.log("coyrbej", courses);
+                        form.resetField("grade_id");
+
+                        if (showPricing) {
+                          setShowPricing(false);
+                        }
+
+                        // form.setValue("grade_id", null);
+                        // setShowPricing(true);
                       }}
                       value={field.value?.toString()}
                     >
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue
-                            placeholder={t("classGradeCourse.selectCourse")}
-                          />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {courses.map((course) => (
-                          <SelectItem
-                            key={course.id}
-                            value={course.id.toString()}
-                          >
-                            {course.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              /> */}
-              <FormField
-                control={form.control}
-                name="course_id"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t("classGradeCourse.course")}</FormLabel>
-                    <Select
-                      onValueChange={(value) => field.onChange(Number(value))}
-                      value={field.value?.toString()}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue
-                            placeholder={t("classGradeCourse.selectCourse")}
+                            placeholder={t("courseSelection.selectCourse")}
                           />
                         </SelectTrigger>
                       </FormControl>
@@ -440,54 +379,10 @@ export function CreateClassForm() {
                   </FormItem>
                 )}
               />
-              {/* <FormField
-                control={form.control}
-                name="grade_id"
-                render={({ field }) => {
-                  setSelectedCourse(
-                    courses.find(
-                      (course) => course.id === form.watch("course_id")
-                    )
-                  );
-                  const filteredGrades = selectedCourse
-                    ? selectedCourse?.grades || []
-                    : []; // Filter grades based on the selected course
-
-                  return (
-                    <FormItem>
-                      <FormLabel>{t("classGradeCourse.grade")}</FormLabel>
-                      <Select
-                        onValueChange={(value) => field.onChange(Number(value))}
-                        value={field.value?.toString()}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue
-                              placeholder={t("classGradeCourse.selectGrade")}
-                            />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {filteredGrades.map((grade) => (
-                            <SelectItem
-                              key={grade.id}
-                              value={grade.id.toString()}
-                            >
-                              {grade.name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  );
-                }}
-              /> */}
               <FormField
                 control={form.control}
                 name="grade_id"
                 render={({ field }) => {
-                  // Calculate selected course based on form value
                   const currentCourseId = form.watch("course_id");
                   const selectedCourse = courses.find(
                     (course) => course.id === currentCourseId
@@ -496,15 +391,19 @@ export function CreateClassForm() {
 
                   return (
                     <FormItem>
-                      <FormLabel>{t("classGradeCourse.grade")}</FormLabel>
+                      <FormLabel>{t("courseSelection.grade")}</FormLabel>
                       <Select
-                        onValueChange={(value) => field.onChange(Number(value))}
+                        onValueChange={(value) => {
+                          field.onChange(Number(value));
+                          setShowPricing(true);
+                        }}
                         value={field.value?.toString()}
+                        disabled={!currentCourseId}
                       >
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue
-                              placeholder={t("classGradeCourse.selectGrade")}
+                              placeholder={t("courseSelection.selectGrade")}
                             />
                           </SelectTrigger>
                         </FormControl>
@@ -528,6 +427,201 @@ export function CreateClassForm() {
           </CardContent>
         </Card>
 
+        {/* Pricing Section */}
+        <AnimatePresence>
+          {showPricing && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <Card>
+                <CardHeader>
+                  <CardTitle>{t("pricing.title")}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <FormField
+                      control={form.control}
+                      name="registrationFee"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>{t("pricing.registrationFee")}</FormLabel>
+                          <FormControl>
+                            <Input
+                              type="number"
+                              {...field}
+                              value={field.value ?? ""}
+                              onChange={(e) => {
+                                const value = e.target.value;
+                                const parsedValue =
+                                  value === ""
+                                    ? null
+                                    : Number.parseFloat(value);
+                                field.onChange(
+                                  isNaN(parsedValue || 1) ? null : parsedValue
+                                );
+                              }}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="firstInstalmentFee"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>
+                            {t("pricing.firstInstalmentFee")}
+                          </FormLabel>
+                          <FormControl>
+                            <Input
+                              type="number"
+                              {...field}
+                              value={field.value ?? ""}
+                              onChange={(e) => {
+                                const value = e.target.value;
+                                const parsedValue =
+                                  value === ""
+                                    ? null
+                                    : Number.parseFloat(value);
+                                field.onChange(
+                                  isNaN(parsedValue || 1) ? null : parsedValue
+                                );
+                              }}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="firstInstalmentDeadline"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>
+                            {t("pricing.firstInstalmentDeadline")}
+                          </FormLabel>
+                          <Popover>
+                            <PopoverTrigger asChild>
+                              <FormControl>
+                                <Button
+                                  variant={"outline"}
+                                  className={cn(
+                                    "w-full pl-3 text-left font-normal",
+                                    !field.value && "text-muted-foreground"
+                                  )}
+                                >
+                                  {field.value ? (
+                                    format(field.value, "PPP")
+                                  ) : (
+                                    <span>{t("pricing.pickadate")}</span>
+                                  )}
+                                  <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                </Button>
+                              </FormControl>
+                            </PopoverTrigger>
+                            <PopoverContent
+                              className="w-auto p-0"
+                              align="start"
+                            >
+                              <Calendar
+                                mode="single"
+                                selected={field.value}
+                                onSelect={field.onChange}
+                                disabled={(date) => date < new Date()}
+                                initialFocus
+                              />
+                            </PopoverContent>
+                          </Popover>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="secondInstalmentFee"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>
+                            {t("pricing.secondInstalmentFee")}
+                          </FormLabel>
+                          <FormControl>
+                            <Input
+                              type="number"
+                              {...field}
+                              value={field.value ?? ""}
+                              onChange={(e) => {
+                                const value = e.target.value;
+                                const parsedValue =
+                                  value === ""
+                                    ? null
+                                    : Number.parseFloat(value);
+                                field.onChange(
+                                  isNaN(parsedValue || 1) ? null : parsedValue
+                                );
+                              }}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="secondInstalmentDeadline"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>
+                            {t("pricing.secondInstalmentDeadline")}
+                          </FormLabel>
+                          <Popover>
+                            <PopoverTrigger asChild>
+                              <FormControl>
+                                <Button
+                                  variant={"outline"}
+                                  className={cn(
+                                    "w-full pl-3 text-left font-normal",
+                                    !field.value && "text-muted-foreground"
+                                  )}
+                                >
+                                  {field.value ? (
+                                    format(field.value, "PPP")
+                                  ) : (
+                                    <span>{t("pricing.pickadate")}</span>
+                                  )}
+                                  <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                </Button>
+                              </FormControl>
+                            </PopoverTrigger>
+                            <PopoverContent
+                              className="w-auto p-0"
+                              align="start"
+                            >
+                              <Calendar
+                                mode="single"
+                                selected={field.value}
+                                onSelect={field.onChange}
+                                disabled={(date) => date < new Date()}
+                                initialFocus
+                              />
+                            </PopoverContent>
+                          </Popover>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* Error Display */}
         {Object.keys(apiErrors).length > 0 && (
           <Alert variant="destructive">
@@ -542,12 +636,7 @@ export function CreateClassForm() {
         )}
 
         {/* Submit Button */}
-        <LoadingButton
-          loading={isLoading}
-          type="submit"
-          className="w-full"
-          disabled={!form.formState.isValid}
-        >
+        <LoadingButton loading={isLoading} type="submit" className="w-full">
           {t("buttons.submit")}
         </LoadingButton>
       </form>

@@ -45,7 +45,7 @@ export default function ClassDetails({ classId }: { classId: string }) {
   return (
     <div className="container mx-auto py-10 px-4">
       <h1 className="text-3xl font-bold mb-6">{t("classDetails")}</h1>
-      <ActionButtons className="mb-6" />
+      <ActionButtons classData={classData} className="mb-6" />
       {error && (
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />

@@ -13,7 +13,13 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, ChevronDown, Download, Search } from "lucide-react";
+import {
+  ArrowUpDown,
+  ChevronDown,
+  Download,
+  Search,
+  Trash2,
+} from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -54,29 +60,29 @@ export function ClassTable({ classes }: ClassTableProps) {
   console.log("classes", classes);
 
   const columns: ColumnDef<Class>[] = [
-    {
-      accessorKey: "id",
-      id: "id",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            className="text-center"
-          >
-            {t("Class ID")}
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <Link href={`/classes/${row.original.id}`} passHref>
-          <div className="text-green-500 hover:underline cursor-pointer text-center ">
-            {row.original.id}
-          </div>
-        </Link>
-      ),
-    },
+    // {
+    //   accessorKey: "id",
+    //   id: "id",
+    //   header: ({ column }) => {
+    //     return (
+    //       <Button
+    //         variant="ghost"
+    //         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+    //         className="text-center"
+    //       >
+    //         {t("Class ID")}
+    //         <ArrowUpDown className="ml-2 h-4 w-4" />
+    //       </Button>
+    //     );
+    //   },
+    //   cell: ({ row }) => (
+    //     <Link href={`/classes/${row.original.id}`} passHref>
+    //       <div className="text-green-500 hover:underline cursor-pointer text-center ">
+    //         {row.original.id}
+    //       </div>
+    //     </Link>
+    //   ),
+    // },
     {
       accessorKey: "name",
       id: "name",
@@ -92,7 +98,13 @@ export function ClassTable({ classes }: ClassTableProps) {
           </Button>
         );
       },
-      cell: ({ row }) => <div className="text-center">{row.original.name}</div>,
+      cell: ({ row }) => (
+        <Link href={`/classes/${row.original.id}`} passHref>
+          <div className="text-green-500 hover:underline cursor-pointer text-left ">
+            {row.original.name}
+          </div>
+        </Link>
+      ),
     },
     {
       accessorKey: "teacher.name",
@@ -194,6 +206,28 @@ export function ClassTable({ classes }: ClassTableProps) {
         const courseName = row.original.grade?.course?.name || "N/A";
         return courseName.toLowerCase().includes(filterValue.toLowerCase());
       },
+    },
+    {
+      id: "acions",
+      header: ({}) => {
+        return <div className="text-center"></div>;
+      },
+      cell: ({}) => (
+        <div className="text-center ">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="text-red-500 hover:text-red-700 hover:bg-red-50"
+            onClick={() => {
+              // Add your delete logic here
+              console.log("Delete class clicked");
+            }}
+          >
+            <Trash2 className="h-4 w-4" />
+            <span className="sr-only">Delete class</span>
+          </Button>
+        </div>
+      ),
     },
   ];
 

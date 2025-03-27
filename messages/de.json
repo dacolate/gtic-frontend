@@ -329,43 +329,52 @@
     }
   },
   "CreateClassForm": {
+    "header": {
+      "add new Class": "Neue Klasse hinzufügen",
+      "backToClasses": "Zurück zu den Klassen"
+    },
     "errors": {
       "nameRequired": "Der Klassenname muss mindestens 3 Zeichen lang sein",
       "teacherRequired": "Bitte wählen Sie einen Lehrer aus",
-      "durationRequired": "Bitte geben Sie die erwartete Dauer ein"
+      "durationRequired": "Bitte geben Sie die voraussichtliche Dauer ein"
     },
     "success": {
-      "classCreated": "Klasse Erstellt",
+      "classCreated": "Klasse erstellt",
       "classCreatedMessage": "Die Klasse wurde erfolgreich erstellt"
     },
     "classInfo": {
       "title": "Klasseninformationen",
       "name": "Klassenname",
-      "namePlaceholder": "Klassenname eingeben",
+      "namePlaceholder": "Klassennamen eingeben",
       "description": "Beschreibung",
-      "descriptionPlaceholder": "Klassenbeschreibung eingeben (optional)"
-    },
-    "classDetails": {
-      "title": "Klassendetails",
+      "descriptionPlaceholder": "Klassenbeschreibung eingeben (optional)",
       "teacher": "Lehrer",
-      "selectTeacher": "Wählen Sie einen Lehrer aus",
-      "startDate": "Startdatum",
-      "pickadate": "Wählen Sie ein Datum"
+      "selectTeacher": "Lehrer auswählen",
+      "startDate": "Klassenstartdatum",
+      "duration": "Voraussichtliche Dauer (Tage)",
+      "durationPlaceholder": "Dauer eingeben",
+      "locale": "de-DE"
     },
-    "classDuration": {
-      "title": "Klassendauer",
-      "duration": "Erwartete Dauer (Wochen)",
-      "durationPlaceholder": "Erwartete Dauer eingeben"
-    },
-    "classGradeCourse": {
-      "title": "Klassenstufe und Kurs",
-      "grade": "Klassenstufe",
-      "selectGrade": "Wählen Sie eine Klassenstufe",
+    "courseSelection": {
+      "title": "Klasse und Kurs",
+      "grade": "Klasse",
+      "selectGrade": "Klasse auswählen",
       "course": "Kurs",
-      "selectCourse": "Wählen Sie einen Kurs"
+      "selectCourse": "Kurs auswählen"
+    },
+    "pricing": {
+      "title": "Preisdetails",
+      "registrationFee": "Anmeldegebühr",
+      "firstInstalmentFee": "Gebühr für die erste Rate",
+      "firstInstalmentDeadline": "Frist für die erste Rate",
+      "secondInstalmentFee": "Gebühr für die zweite Rate",
+      "secondInstalmentDeadline": "Frist für die zweite Rate",
+      "pickadate": "Datum auswählen",
+      "makeException": "Ausnahme machen",
+      "cancelException": "Ausnahme stornieren"
     },
     "buttons": {
-      "submit": "Klasse Erstellen"
+      "submit": "Klasse erstellen"
     }
   },
 
@@ -440,7 +449,8 @@
     "createdAt": "Erstellt am",
     "description": "Beschreibung",
     "active": "Aktiv",
-    "inactive": "Inaktiv"
+    "inactive": "Inaktiv",
+    "locale": "de-DE"
   },
   "TeacherInfo": {
     "instructor": "Lehrer",
@@ -455,7 +465,8 @@
     "registrationFee": "Anmeldegebühr",
     "firstInstalment": "Erste Rate",
     "secondInstalment": "Zweite Rate",
-    "dueBy": "Fällig am"
+    "dueBy": "Fällig am",
+    "locale": "de-DE"
   },
   "StudentsTable": {
     "enrolledStudents": "Eingeschriebene Schüler",

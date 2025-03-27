@@ -353,6 +353,10 @@
     }
   },
   "CreateClassForm": {
+    "header": {
+      "add new Class": "Add New Class",
+      "backToClasses": "Back to Classes"
+    },
     "errors": {
       "nameRequired": "Class name must be at least 3 characters",
       "teacherRequired": "Please select a teacher",
@@ -360,33 +364,37 @@
     },
     "success": {
       "classCreated": "Class Created",
-      "classCreatedMessage": "The class has been created successfully"
+      "classCreatedMessage": "The class was created successfully"
     },
     "classInfo": {
       "title": "Class Information",
       "name": "Class Name",
       "namePlaceholder": "Enter class name",
       "description": "Description",
-      "descriptionPlaceholder": "Enter class description (optional)"
-    },
-    "classDetails": {
-      "title": "Class Details",
+      "descriptionPlaceholder": "Enter class description (optional)",
       "teacher": "Teacher",
       "selectTeacher": "Select a teacher",
-      "startDate": "Start Date",
-      "pickadate": "Pick a date"
+      "startDate": "Class Start Date",
+      "duration": "Expected Duration (days)",
+      "durationPlaceholder": "Enter the duration"
     },
-    "classDuration": {
-      "title": "Class Duration",
-      "duration": "Expected Duration (weeks)",
-      "durationPlaceholder": "Enter expected duration"
-    },
-    "classGradeCourse": {
+    "courseSelection": {
       "title": "Grade and Course",
       "grade": "Grade",
       "selectGrade": "Select a grade",
       "course": "Course",
       "selectCourse": "Select a course"
+    },
+    "pricing": {
+      "title": "Pricing Details",
+      "registrationFee": "Registration Fee",
+      "firstInstalmentFee": "First Installment Fee",
+      "firstInstalmentDeadline": "First Installment Deadline",
+      "secondInstalmentFee": "Second Installment Fee",
+      "secondInstalmentDeadline": "Second Installment Deadline",
+      "pickadate": "Pick a date",
+      "makeException": "Make an exception",
+      "cancelException": "Cancel exception"
     },
     "buttons": {
       "submit": "Create Class"
@@ -464,7 +472,8 @@
     "createdAt": "Created At",
     "description": "Description",
     "active": "Active",
-    "inactive": "Inactive"
+    "inactive": "Inactive",
+    "locale": "en-US"
   },
   "TeacherInfo": {
     "instructor": "Instructor",
@@ -479,7 +488,8 @@
     "registrationFee": "Registration Fee",
     "firstInstalment": "First Instalment",
     "secondInstalment": "Second Instalment",
-    "dueBy": "Due by"
+    "dueBy": "Due by",
+    "locale": "en-US"
   },
   "StudentsTable": {
     "enrolledStudents": "Enrolled Students",

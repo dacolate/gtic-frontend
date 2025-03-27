@@ -102,10 +102,10 @@
 
   "ClassTable": {
     "Classes": "Classes",
-    "Class ID": "ID de la Classe",
-    "Class Name": "Nom de la Classe",
+    "Class ID": "ID",
+    "Class Name": "Nom",
     "Teacher": "Enseignant",
-    "Start Date": "Date de Début",
+    "Start Date": "Début",
     "Duration (Days)": "Durée (Jours)",
     "Course": "Filière",
     "Courses": "Filières",
@@ -331,6 +331,10 @@
     }
   },
   "CreateClassForm": {
+    "header": {
+      "add new Class": "Ajouter une nouvelle classe",
+      "backToClasses": "Retour aux classes"
+    },
     "errors": {
       "nameRequired": "Le nom de la classe doit comporter au moins 3 caractères",
       "teacherRequired": "Veuillez sélectionner un enseignant",
@@ -345,26 +349,29 @@
       "name": "Nom de la Classe",
       "namePlaceholder": "Entrez le nom de la classe",
       "description": "Description",
-      "descriptionPlaceholder": "Entrez la description de la classe (facultatif)"
-    },
-    "classDetails": {
-      "title": "Détails de la Classe",
+      "descriptionPlaceholder": "Entrez la description de la classe (facultatif)",
       "teacher": "Enseignant",
       "selectTeacher": "Sélectionnez un enseignant",
-      "startDate": "Date de Début",
-      "pickadate": "Choisissez une date"
+      "startDate": "Début de la Classe",
+      "duration": "Durée Prévue (jours)",
+      "durationPlaceholder": "Entrez la date de début"
     },
-    "classDuration": {
-      "title": "Durée de la Classe",
-      "duration": "Durée Prévue (semaines)",
-      "durationPlaceholder": "Entrez la durée prévue"
-    },
-    "classGradeCourse": {
+    "courseSelection": {
       "title": "Niveau et Cours",
       "grade": "Niveau",
       "selectGrade": "Sélectionnez un niveau",
       "course": "Cours",
       "selectCourse": "Sélectionnez un cours"
+    },
+    "pricing": {
+      "title": "Détails de tarification",
+      "registrationFee": "Frais d'inscription",
+      "firstInstalmentFee": "Frais du premier versement",
+      "firstInstalmentDeadline": "Date limite du premier versement",
+      "secondInstalmentFee": "Frais du deuxième versement",
+      "secondInstalmentDeadline": "Date limite du deuxième versement",
+      "pickadate": "Choisissez une date",
+      "makeException": "Faire une exception"
     },
     "buttons": {
       "submit": "Créer la Classe"
@@ -443,7 +450,8 @@
     "createdAt": "Créé le",
     "description": "Description",
     "active": "Actif",
-    "inactive": "Inactif"
+    "inactive": "Inactif",
+    "locale": "fr-FR"
   },
   "TeacherInfo": {
     "instructor": "Enseignant",
@@ -458,7 +466,8 @@
     "registrationFee": "Frais d'inscription",
     "firstInstalment": "Premier versement",
     "secondInstalment": "Deuxième versement",
-    "dueBy": "Échéance le"
+    "dueBy": "Échéance le",
+    "locale": "fr-FR"
   },
   "StudentsTable": {
     "enrolledStudents": "Étudiants Inscrits",

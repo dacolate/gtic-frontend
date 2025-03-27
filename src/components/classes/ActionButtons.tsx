@@ -1,24 +1,37 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Edit, Trash2, Plus } from "lucide-react";
+import { Link } from "@/i18n/routing";
+import { Class } from "@/lib/types";
+import { Edit, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-export function ActionButtons({ className }: { className?: string }) {
+export function ActionButtons({
+  className,
+  classData,
+}: {
+  className?: string;
+  classData: Class | undefined;
+}) {
   const t = useTranslations("ActionButtons");
 
   return (
     <div className={`flex space-x-2 ${className}`}>
-      <Button variant="outline">
-        <Edit className="mr-2 h-4 w-4" />
-        {t("edit")}
-      </Button>
-      <Button variant="outline">
-        <Plus className="mr-2 h-4 w-4" />
-        {t("addStudent")}
-      </Button>
-      <Button variant="destructive">
-        <Trash2 className="mr-2 h-4 w-4" />
+      {classData ? (
+        <Button variant="outline" className="flex items-center gap-2" asChild>
+          <Link href={`${classData?.id}/modifyclass`}>
+            <Edit className="h-4 w-4" />
+            {t("edit")}
+          </Link>
+        </Button>
+      ) : (
+        <Button variant="outline" className="flex items-center gap-2">
+          <Edit className="h-4 w-4" />
+          {t("edit")}
+        </Button>
+      )}
+      <Button variant="destructive" className="flex items-center gap-2">
+        <Trash2 className=" h-4 w-4" />
         {t("delete")}
       </Button>
     </div>

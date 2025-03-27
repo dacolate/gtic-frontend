@@ -27,7 +27,8 @@ export function PricingInfo({ pricing }: { pricing: Pricing }) {
             </dt>
             <dd className="text-lg font-bold">${pricing.instalment1Fee}</dd>
             <dd className="text-sm text-gray-500">
-              {t("dueBy")} {formatReadableDate(pricing.instalment1Deadline)}
+              {t("dueBy")}{" "}
+              {formatReadableDate(pricing.instalment1Deadline, t("locale"))}
             </dd>
           </div>
           <div>
@@ -36,7 +37,8 @@ export function PricingInfo({ pricing }: { pricing: Pricing }) {
             </dt>
             <dd className="text-lg font-bold">${pricing.instalment2Fee}</dd>
             <dd className="text-sm text-gray-500">
-              {t("dueBy")} {formatReadableDate(pricing.instalment2Deadline)}
+              {t("dueBy")}{" "}
+              {formatReadableDate(pricing.instalment2Deadline, t("locale"))}
             </dd>
           </div>
         </dl>
