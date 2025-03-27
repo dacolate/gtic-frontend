@@ -46,6 +46,8 @@ export interface Class {
   grade: Grade | null;
   teacher: Teacher;
   pricing: Pricing;
+  students: Student[];
+  active: boolean;
 }
 
 export interface Grade {

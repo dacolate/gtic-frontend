@@ -49,7 +49,7 @@ export function CreateClassForm() {
   const [courses, setCourses] = useState<Course[]>([]);
   const [teachers, setTeachers] = useState<Teacher[]>([]);
   const [apiErrors, setApiErrors] = useState<{ [key: string]: string }>({});
-  const [selectedCourse, setSelectedCourse] = useState<Course | undefined>();
+  // const [selectedCourse, setSelectedCourse] = useState<Course | undefined>();
 
   useEffect(() => {
     async function fetchGrades() {
@@ -369,7 +369,7 @@ export function CreateClassForm() {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <FormField
+              {/* <FormField
                 control={form.control}
                 name="course_id"
                 render={({ field }) => (
@@ -407,8 +407,40 @@ export function CreateClassForm() {
                     <FormMessage />
                   </FormItem>
                 )}
-              />
+              /> */}
               <FormField
+                control={form.control}
+                name="course_id"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t("classGradeCourse.course")}</FormLabel>
+                    <Select
+                      onValueChange={(value) => field.onChange(Number(value))}
+                      value={field.value?.toString()}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue
+                            placeholder={t("classGradeCourse.selectCourse")}
+                          />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {courses.map((course) => (
+                          <SelectItem
+                            key={course.id}
+                            value={course.id.toString()}
+                          >
+                            {course.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              {/* <FormField
                 control={form.control}
                 name="grade_id"
                 render={({ field }) => {
@@ -420,6 +452,47 @@ export function CreateClassForm() {
                   const filteredGrades = selectedCourse
                     ? selectedCourse?.grades || []
                     : []; // Filter grades based on the selected course
+
+                  return (
+                    <FormItem>
+                      <FormLabel>{t("classGradeCourse.grade")}</FormLabel>
+                      <Select
+                        onValueChange={(value) => field.onChange(Number(value))}
+                        value={field.value?.toString()}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue
+                              placeholder={t("classGradeCourse.selectGrade")}
+                            />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {filteredGrades.map((grade) => (
+                            <SelectItem
+                              key={grade.id}
+                              value={grade.id.toString()}
+                            >
+                              {grade.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  );
+                }}
+              /> */}
+              <FormField
+                control={form.control}
+                name="grade_id"
+                render={({ field }) => {
+                  // Calculate selected course based on form value
+                  const currentCourseId = form.watch("course_id");
+                  const selectedCourse = courses.find(
+                    (course) => course.id === currentCourseId
+                  );
+                  const filteredGrades = selectedCourse?.grades || [];
 
                   return (
                     <FormItem>

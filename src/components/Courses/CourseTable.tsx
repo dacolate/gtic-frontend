@@ -12,8 +12,16 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
+  Row,
 } from "@tanstack/react-table";
-import { ArrowUpDown, ChevronDown, Download, Search } from "lucide-react";
+import {
+  ArrowUpDown,
+  Ban,
+  ChevronDown,
+  ChevronRight,
+  Download,
+  Search,
+} from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -31,11 +39,141 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Input } from "../ui/input";
-// import { Label } from "../ui/label";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { useTranslations } from "next-intl";
 import { Course } from "@/lib/types";
+import { AddGradeDialog } from "./AddGradeDialog";
+
+// Create a new component file or at the top of your current file
+const CourseSubComponent = ({ row }: { row: Row<Course> }) => {
+  const course = row.original;
+  const [isDialogOpen, setIsDialogOpen] = React.useState(false);
+  const t = useTranslations("CourseTable");
+
+  return (
+    <div className="p-4 bg-gray-50 rounded-lg border border-gray-200 my-2">
+      {/* Add Grade Button Row */}
+      <div className="mb-4">
+        <Button
+          variant="outline"
+          className="w-full"
+          onClick={() => setIsDialogOpen(true)}
+        >
+          {t("addGrade")}
+        </Button>
+      </div>
+
+      {/* Add Grade Dialog */}
+      <AddGradeDialog
+        open={isDialogOpen}
+        onOpenChange={setIsDialogOpen}
+        course={{ id: course.id, name: course.name }}
+      />
+
+      {/* Rest of your component */}
+      {/* ... */}
+      {/* Grades Section */}
+      <div className="mb-6">
+        <h3 className="font-semibold text-lg mb-3">
+          {t("Grades")} ({course.grades?.length || 0})
+        </h3>
+        {course.grades && course.grades.length > 0 ? (
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-100">
+                <tr>
+                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    {t("Grade Name")}
+                  </th>
+                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    {t("Description")}
+                  </th>
+                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    {t("Classes Count")}
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {course.grades.map((grade) => (
+                  <tr key={grade.id}>
+                    <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-900">
+                      {grade.name}
+                    </td>
+                    <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-500">
+                      {grade.description || "-"}
+                    </td>
+                    <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-900">
+                      {grade.classes?.length || 0}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <p className="text-sm text-gray-500">No grades available</p>
+        )}
+      </div>
+
+      {/* Classes Section */}
+      {/* <div>
+          <h3 className="font-semibold text-lg mb-3">
+            Classes ({course.classes?.length || 0})
+          </h3>
+          {course.classes && course.classes.length > 0 ? (
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-100">
+                  <tr>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Class Name
+                    </th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Teacher
+                    </th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Start Date
+                    </th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Duration (min)
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {course.classes.map((classItem) => (
+                    <tr key={classItem.id}>
+                      <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-900">
+                        {classItem.name}
+                      </td>
+                      <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-900">
+                        {classItem.teacher?.name || "-"}
+                      </td>
+                      <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-900">
+                        {classItem.startDate
+                          ? formatDate(classItem.startDate)
+                          : "-"}
+                      </td>
+                      <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-900">
+                        {classItem.expectedDuration || "-"}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <p className="text-sm text-gray-500">No classes available</p>
+          )}
+         </div> */}
+    </div>
+  );
+};
+
+// Then in your table component:
+const renderSubComponent = ({ row }: { row: Row<Course> }) => {
+  return <CourseSubComponent row={row} />;
+};
 
 interface CourseTableProps {
   courses: Course[];
@@ -44,23 +182,35 @@ interface CourseTableProps {
 export function CourseTable({ courses }: CourseTableProps) {
   const t = useTranslations("CourseTable");
 
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString(t("locale"), {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  };
+
+  // Format date to a readable string
+
   const columns: ColumnDef<Course>[] = [
     {
-      accessorKey: "id",
-      id: "id",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            className="text-center"
+      id: "expander",
+      header: () => null,
+      cell: ({ row }) => {
+        return row.getCanExpand() ? (
+          <button
+            {...{
+              onClick: row.getToggleExpandedHandler(),
+              style: { cursor: "pointer" },
+            }}
           >
-            {t("Course ID")}
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
+            {row.getIsExpanded() ? <ChevronDown /> : <ChevronRight />}
+          </button>
+        ) : (
+          <Ban />
         );
       },
-      cell: ({ row }) => <div className="text-center">{row.original.id}</div>,
     },
     {
       accessorKey: "name",
@@ -98,6 +248,63 @@ export function CourseTable({ courses }: CourseTableProps) {
         <div className="text-center">{row.original.description}</div>
       ),
     },
+    {
+      id: "createdAt",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            className="text-center"
+          >
+            {t("Created Date")}
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div className="text-center">{formatDate(row.original.createdAt)}</div>
+      ),
+      accessorFn: (row) => new Date(row.createdAt).getTime(), // For proper sorting
+    },
+    {
+      id: "gradesCount",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            className="text-center"
+          >
+            {t("Grades Count")}
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div className="text-center">{row.original.grades?.length || 0}</div>
+      ),
+      accessorFn: (row) => row.grades?.length || 0, // For proper sorting
+    },
+    {
+      id: "classesCount",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            className="text-center"
+          >
+            {t("Classes Count")}
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div className="text-center">{row.original.classes?.length || 0}</div>
+      ),
+      accessorFn: (row) => row.classes?.length || 0, // For proper sorting
+    },
   ];
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -119,24 +326,31 @@ export function CourseTable({ courses }: CourseTableProps) {
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
+    getRowCanExpand: (row) => (row.original.grades ?? []).length > 0,
     state: {
       sorting,
       columnFilters,
       columnVisibility,
       rowSelection,
     },
-    getSubRows: (row) => row.grades as unknown as Course[] | undefined, // Use grades as subrows
   });
 
   const handleDownload = () => {
-    const headers = ["Course ID", "Course Name", "Description"];
-    const tableData = table
-      .getRowModel()
-      .rows.map((row) => [
-        row.original.id,
-        row.original.name,
-        row.original.description,
-      ]);
+    const headers = [
+      "Course Name",
+      "Description",
+      "Created Date",
+      "Grades Count",
+      "Classes Count",
+    ];
+
+    const tableData = courses.map((course) => [
+      course.name,
+      course.description,
+      formatDate(course.createdAt),
+      course.grades?.length || 0,
+      course.classes?.length || 0,
+    ]);
 
     const doc = new jsPDF();
 
@@ -159,6 +373,108 @@ export function CourseTable({ courses }: CourseTableProps) {
     // Save the PDF
     doc.save("courses.pdf");
   };
+
+  // const renderSubComponent = ({ row }: { row: Row<Course> }) => {
+  //   const course = row.original;
+
+  //   return (
+  //     <div className="p-4 bg-gray-50 rounded-lg border border-gray-200 my-2">
+  //       {/* Grades Section */}
+  //       <div className="mb-6">
+  //         <h3 className="font-semibold text-lg mb-3">
+  //           {t("Grades")} ({course.grades?.length || 0})
+  //         </h3>
+  //         {course.grades && course.grades.length > 0 ? (
+  //           <div className="overflow-x-auto">
+  //             <table className="min-w-full divide-y divide-gray-200">
+  //               <thead className="bg-gray-100">
+  //                 <tr>
+  //                   <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+  //                     {t("Grade Name")}
+  //                   </th>
+  //                   <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+  //                     {t("Description")}
+  //                   </th>
+  //                   <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+  //                     {t("Classes Count")}
+  //                   </th>
+  //                 </tr>
+  //               </thead>
+  //               <tbody className="bg-white divide-y divide-gray-200">
+  //                 {course.grades.map((grade) => (
+  //                   <tr key={grade.id}>
+  //                     <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-900">
+  //                       {grade.name}
+  //                     </td>
+  //                     <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-500">
+  //                       {grade.description || "-"}
+  //                     </td>
+  //                     <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-900">
+  //                       {grade.classes?.length || 0}
+  //                     </td>
+  //                   </tr>
+  //                 ))}
+  //               </tbody>
+  //             </table>
+  //           </div>
+  //         ) : (
+  //           <p className="text-sm text-gray-500">No grades available</p>
+  //         )}
+  //       </div>
+
+  //       {/* Classes Section */}
+  //       {/* <div>
+  //         <h3 className="font-semibold text-lg mb-3">
+  //           Classes ({course.classes?.length || 0})
+  //         </h3>
+  //         {course.classes && course.classes.length > 0 ? (
+  //           <div className="overflow-x-auto">
+  //             <table className="min-w-full divide-y divide-gray-200">
+  //               <thead className="bg-gray-100">
+  //                 <tr>
+  //                   <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+  //                     Class Name
+  //                   </th>
+  //                   <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+  //                     Teacher
+  //                   </th>
+  //                   <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+  //                     Start Date
+  //                   </th>
+  //                   <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+  //                     Duration (min)
+  //                   </th>
+  //                 </tr>
+  //               </thead>
+  //               <tbody className="bg-white divide-y divide-gray-200">
+  //                 {course.classes.map((classItem) => (
+  //                   <tr key={classItem.id}>
+  //                     <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-900">
+  //                       {classItem.name}
+  //                     </td>
+  //                     <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-900">
+  //                       {classItem.teacher?.name || "-"}
+  //                     </td>
+  //                     <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-900">
+  //                       {classItem.startDate
+  //                         ? formatDate(classItem.startDate)
+  //                         : "-"}
+  //                     </td>
+  //                     <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-900">
+  //                       {classItem.expectedDuration || "-"}
+  //                     </td>
+  //                   </tr>
+  //                 ))}
+  //               </tbody>
+  //             </table>
+  //           </div>
+  //         ) : (
+  //           <p className="text-sm text-gray-500">No classes available</p>
+  //         )}
+  //       </div> */}
+  //     </div>
+  //   );
+  // };
 
   return (
     <div className="w-full">
@@ -247,19 +563,13 @@ export function CourseTable({ courses }: CourseTableProps) {
                       </TableCell>
                     ))}
                   </TableRow>
-                  {row.getIsExpanded() &&
-                    row.subRows.map((subRow) => (
-                      <TableRow key={subRow.id}>
-                        {subRow.getVisibleCells().map((cell) => (
-                          <TableCell key={cell.id}>
-                            {flexRender(
-                              cell.column.columnDef.cell,
-                              cell.getContext()
-                            )}
-                          </TableCell>
-                        ))}
-                      </TableRow>
-                    ))}
+                  {row.getIsExpanded() && (
+                    <TableRow>
+                      <TableCell colSpan={row.getVisibleCells().length}>
+                        {renderSubComponent({ row })}
+                      </TableCell>
+                    </TableRow>
+                  )}
                 </React.Fragment>
               ))
             ) : (

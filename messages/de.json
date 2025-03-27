@@ -108,6 +108,7 @@
     "Start Date": "Startdatum",
     "Duration (Days)": "Dauer (Tage)",
     "Course": "Kurs",
+    "Courses": "Kurse",
     "Grade": "Klasse",
     "Search classes": "Klassen suchen...",
     "Columns": "Spalten",
@@ -234,7 +235,10 @@
     "modify": "Ändern",
     "addPayment": "Zahlung hinzufügen",
     "affectToClass": "Einer Klasse zuweisen",
-    "reinscription": "Neueinschreibung"
+    "reinscription": "Neueinschreibung",
+    "edit": "Bearbeiten",
+    "addStudent": "Schüler hinzufügen",
+    "delete": "Löschen"
   },
   "StudentDetails": {
     "studentDetails": "Schülerdetails",
@@ -363,5 +367,102 @@
     "buttons": {
       "submit": "Klasse Erstellen"
     }
+  },
+
+  "CreateCourseDialog": {
+    "createCourse": "Kurs erstellen",
+    "createNewCourseDescription": "Erstellen Sie einen neuen Kurs im System",
+    "name": "Name",
+    "namePlaceholder": "Kursname eingeben",
+    "description": "Beschreibung",
+    "descriptionPlaceholder": "Kursbeschreibung eingeben",
+    "pricing": "Preisplan",
+    "selectPricing": "Preisplan auswählen",
+    "noPricing": "Kein Preisplan",
+    "cancel": "Abbrechen",
+    "create": "Erstellen",
+    "submitting": "Wird erstellt...",
+    "successTitle": "Erfolg",
+    "successDescription": "Kurs erfolgreich erstellt",
+    "errorTitle": "Fehler",
+    "errorDescription": "Kurs konnte nicht erstellt werden",
+    "unexpectedError": "Ein unerwarteter Fehler ist aufgetreten"
+  },
+
+  "AddGradeDialog": {
+    "title": "Neue Stufe hinzufügen",
+    "description": "Erstellen Sie eine neue Stufe für diesen Kurs",
+    "courseLabel": "Kurs",
+    "gradeNameLabel": "Stufenname",
+    "gradeNamePlaceholder": "z.B. Anfänger, Fortgeschrittene",
+    "descriptionLabel": "Beschreibung",
+    "descriptionPlaceholder": "Optionale Stufenbeschreibung",
+    "cancelButton": "Abbrechen",
+    "submitButton": "Stufe hinzufügen",
+    "errors": {
+      "gradeNameRequired": "Stufenname ist erforderlich (min. 2 Zeichen)"
+    },
+    "success": {
+      "title": "Stufe hinzugefügt",
+      "description": "Die neue Stufe wurde erfolgreich erstellt"
+    }
+  },
+  "CourseTable": {
+    "Course Name": "Kursname",
+    "Description": "Beschreibung",
+    "Created Date": "Erstellungsdatum",
+    "Grades Count": "Anzahl der Stufen",
+    "Classes Count": "Anzahl der Klassen",
+    "Search courses": "Kurse suchen...",
+    "Columns": "Spalten",
+    "Download List": "Liste herunterladen",
+    "New Course": "Neuer Kurs",
+    "Ancient Courses": "Alte Kurse",
+    "Delete Course": "Kurs löschen",
+    "locale": "de-DE",
+    "Grade Name": "Stufenname",
+    "Classes count": "Anzahl der Klassen",
+    "Grades": "Stufen",
+    "addGrade": "Stufe hinzufügen"
+  },
+  "ClassDetails": {
+    "classDetails": "Klassendetails",
+    "errorLoadingClass": "Fehler beim Laden der Klasse",
+    "errorOccurred": "Ein Fehler ist aufgetreten",
+    "fetchFailed": "Fehler beim Abrufen der Klassendaten"
+  },
+  "ClassInfo": {
+    "course": "Kurs",
+    "grade": "Stufe",
+    "startDate": "Startdatum",
+    "duration": "Dauer",
+    "minutes": "tags",
+    "createdAt": "Erstellt am",
+    "description": "Beschreibung",
+    "active": "Aktiv",
+    "inactive": "Inaktiv"
+  },
+  "TeacherInfo": {
+    "instructor": "Lehrer",
+    "email": "E-Mail",
+    "phone": "Telefon",
+    "status": "Status",
+    "active": "Aktiv",
+    "inactive": "Inaktiv"
+  },
+  "PricingInfo": {
+    "pricingDetails": "Preisdetails",
+    "registrationFee": "Anmeldegebühr",
+    "firstInstalment": "Erste Rate",
+    "secondInstalment": "Zweite Rate",
+    "dueBy": "Fällig am"
+  },
+  "StudentsTable": {
+    "enrolledStudents": "Eingeschriebene Schüler",
+    "count": "{count} Schüler",
+    "student": "Schüler",
+    "email": "E-Mail",
+    "phone": "Telefon",
+    "noStudents": "Keine Schüler in dieser Klasse eingeschrieben"
   }
 }

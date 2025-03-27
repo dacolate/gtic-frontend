@@ -108,6 +108,7 @@
     "Start Date": "Date de Début",
     "Duration (Days)": "Durée (Jours)",
     "Course": "Filière",
+    "Courses": "Filières",
     "Grade": "Niveau",
     "Search classes": "Rechercher des classes...",
     "Columns": "Colonnes",
@@ -236,7 +237,10 @@
     "modify": "Modifier",
     "addPayment": "Ajouter un paiement",
     "affectToClass": "Affecter à une classe",
-    "reinscription": "Réinscription"
+    "reinscription": "Réinscription",
+    "edit": "Modifier",
+    "addStudent": "Ajouter un Étudiant",
+    "delete": "Supprimer"
   },
   "StudentDetails": {
     "studentDetails": "Détails de l'étudiant",
@@ -365,5 +369,103 @@
     "buttons": {
       "submit": "Créer la Classe"
     }
+  },
+
+  "CreateCourseDialog": {
+    "createCourse": "Nouvelle filière",
+    "createNewCourseDescription": "Créer un nouveau cours dans le système",
+    "name": "Nom",
+    "namePlaceholder": "Entrez le nom du cours",
+    "description": "Description",
+    "descriptionPlaceholder": "Entrez la description du cours",
+    "pricing": "Plan de tarification",
+    "selectPricing": "Sélectionnez un plan de tarification",
+    "noPricing": "Pas de plan de tarification",
+    "cancel": "Annuler",
+    "create": "Créer",
+    "submitting": "Création...",
+    "successTitle": "Succès",
+    "successDescription": "Cours créé avec succès",
+    "errorTitle": "Erreur",
+    "errorDescription": "Échec de la création du cours",
+    "unexpectedError": "Une erreur inattendue s'est produite"
+  },
+
+  "AddGradeDialog": {
+    "title": "Ajouter un nouveau niveau",
+    "description": "Créer un nouveau niveau pour ce cours",
+    "courseLabel": "Cours",
+    "gradeNameLabel": "Nom du niveau",
+    "gradeNamePlaceholder": "ex. : Débutant, Intermédiaire",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "Description facultative du niveau",
+    "cancelButton": "Annuler",
+    "submitButton": "Ajouter le niveau",
+    "errors": {
+      "gradeNameRequired": "Le nom du niveau est requis (min 2 caractères)"
+    },
+    "success": {
+      "title": "Niveau ajouté",
+      "description": "Le nouveau niveau a été créé avec succès"
+    }
+  },
+  "CourseTable": {
+    "Course Name": "Nom du cours",
+    "Description": "Description",
+    "Created Date": "Date de création",
+    "Grades Count": "Nombre de niveaux",
+    "Classes Count": "Nombre de classes",
+    "Search courses": "Rechercher des cours...",
+    "Columns": "Colonnes",
+    "Download List": "Télécharger la liste",
+    "New Course": "Nouveau cours",
+    "Ancient Courses": "Anciens cours",
+    "Delete Course": "Supprimer le cours",
+    "locale": "fr-FR",
+    "Grade Name": "Nom du niveau",
+    "Classes count": "Nombre de classes",
+    "Grades": "Niveaux",
+    "addGrade": "Ajouter un niveau"
+  },
+
+  "ClassDetails": {
+    "classDetails": "Détails de la Classe",
+    "errorLoadingClass": "Erreur de chargement de la classe",
+    "errorOccurred": "Une erreur est survenue",
+    "fetchFailed": "Échec de la récupération des données de la classe"
+  },
+  "ClassInfo": {
+    "course": "Cours",
+    "grade": "Niveau",
+    "startDate": "Date de début",
+    "duration": "Durée",
+    "days": "jours",
+    "createdAt": "Créé le",
+    "description": "Description",
+    "active": "Actif",
+    "inactive": "Inactif"
+  },
+  "TeacherInfo": {
+    "instructor": "Enseignant",
+    "email": "Email",
+    "phone": "Téléphone",
+    "status": "Statut",
+    "active": "Actif",
+    "inactive": "Inactif"
+  },
+  "PricingInfo": {
+    "pricingDetails": "Détails Tarifaires",
+    "registrationFee": "Frais d'inscription",
+    "firstInstalment": "Premier versement",
+    "secondInstalment": "Deuxième versement",
+    "dueBy": "Échéance le"
+  },
+  "StudentsTable": {
+    "enrolledStudents": "Étudiants Inscrits",
+    "count": "{count} étudiants",
+    "student": "Étudiant",
+    "email": "Email",
+    "phone": "Téléphone",
+    "noStudents": "Aucun étudiant inscrit à ce cours"
   }
 }

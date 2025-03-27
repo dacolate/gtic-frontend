@@ -2,35 +2,24 @@
 
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/routing";
-import { Trash2, Feather, History } from "lucide-react";
+import { Trash2, History } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { CreateCourseDialog } from "./CreateCourseDialog";
 
-export function ClassActionButton() {
-  const t = useTranslations("ClassTable");
-  const handleDeleteTeacher = () => {
-    // Implement delete teacher functionality
-    console.log("Delete teacher");
-  };
+export function CourseActionButton() {
+  const t = useTranslations("CourseTable");
 
   return (
     <div className="flex flex-wrap gap-4 mb-8">
-      <Button
-        asChild
-        className="flex items-center gap-2 bg-green-500 hover:bg-green-600"
-      >
-        <Link href="/classes/new">
-          <Feather className="h-4 w-4 font-extrabold" />
+      <CreateCourseDialog />
 
-          {t("New Class")}
-        </Link>
-      </Button>
       <Button
         asChild
         className="flex items-center gap-2 bg-gray-500 hover:bg-green-600"
       >
-        <Link href="/teachers/new">
+        <Link href="/courses/old">
           <History className="h-4 w-4 font-extrabold" />
-          {t("Ancient Classes")}
+          {t("Ancient Courses")}
         </Link>
       </Button>
       {/* <Button
@@ -42,12 +31,11 @@ export function ClassActionButton() {
         Assign to Class
       </Button> */}
       <Button
-        onClick={handleDeleteTeacher}
         variant="destructive"
         className="flex items-center gap-2 opacity-45"
       >
         <Trash2 className="h-4 w-4" />
-        {t("Delete Class")}
+        {t("Delete Course")}
       </Button>
     </div>
   );
