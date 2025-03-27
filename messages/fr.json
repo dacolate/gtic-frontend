@@ -462,7 +462,7 @@
   },
   "StudentsTable": {
     "enrolledStudents": "Étudiants Inscrits",
-    "count": "{count} étudiants",
+    "count": "étudiants",
     "student": "Étudiant",
     "email": "Email",
     "phone": "Téléphone",
