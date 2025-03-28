@@ -54,6 +54,7 @@ export function CreateClassForm() {
   const [apiErrors, setApiErrors] = useState<{ [key: string]: string }>({});
   const [showPricing, setShowPricing] = useState(false);
   // const [showExceptionalPricing, setShowExceptionalPricing] = useState(false);
+  let selectedCourse: Course | undefined;
 
   useEffect(() => {
     async function fetchInitialData() {
@@ -111,8 +112,8 @@ export function CreateClassForm() {
       name: "",
       description: "",
       teacher_id: undefined,
-      start_date: undefined,
-      expected_duration: undefined,
+      start_date: new Date(),
+      expected_duration: 0,
       grade_id: undefined,
       course_id: undefined,
       registrationFee: 0,
@@ -131,13 +132,11 @@ export function CreateClassForm() {
       const payload = {
         ...values,
         start_date: values.start_date?.toISOString(),
-        pricing: {
-          registerFee: values.registrationFee,
-          instalment1Fee: values.firstInstalmentFee,
-          instalment1Deadline: values.firstInstalmentDeadline.toISOString(),
-          instalment2Fee: values.secondInstalmentFee,
-          instalment2Deadline: values.secondInstalmentDeadline.toISOString(),
-        },
+        registrationFee: values.registrationFee,
+        firstInstalmentFee: values.firstInstalmentFee,
+        firstInstalmentDeadline: values.firstInstalmentDeadline.toISOString(),
+        secondInstalmentFee: values.secondInstalmentFee,
+        secondInstalmentDeadline: values.secondInstalmentDeadline.toISOString(),
       };
 
       const response = await api.post("/classes", payload);
@@ -148,12 +147,13 @@ export function CreateClassForm() {
           description: t("success.classCreatedMessage"),
         });
         form.reset();
-        setApiErrors({});
         setShowPricing(false);
+        setApiErrors({});
         router.push("/classes");
       }
     } catch (error) {
       if (error instanceof AxiosError) {
+        console.log("df", error);
         const errorData = error.response?.data;
         const errors: { [key: string]: string } = {};
         if (Array.isArray(errorData.data)) {
@@ -167,7 +167,7 @@ export function CreateClassForm() {
         }
         setApiErrors(errors);
       } else {
-        console.error("Non-Axios error:", error);
+        console.log("Non-Axios error:", error);
       }
     } finally {
       setIsLoading(false);
@@ -310,12 +310,12 @@ export function CreateClassForm() {
                     <FormControl>
                       <Input
                         type="number"
-                        placeholder={t("classInfo.durationPlaceholder")}
+                        placeholder={t("classInfo.expectedduration")}
                         {...field}
                         onChange={(e) => {
                           const value = e.target.value;
                           const parsedValue =
-                            value === "" ? null : Number.parseFloat(value);
+                            value === "" ? undefined : Number.parseFloat(value);
                           field.onChange(
                             isNaN(parsedValue || 1) ? null : parsedValue
                           );
@@ -384,7 +384,7 @@ export function CreateClassForm() {
                 name="grade_id"
                 render={({ field }) => {
                   const currentCourseId = form.watch("course_id");
-                  const selectedCourse = courses.find(
+                  selectedCourse = courses.find(
                     (course) => course.id === currentCourseId
                   );
                   const filteredGrades = selectedCourse?.grades || [];

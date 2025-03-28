@@ -6,6 +6,7 @@ import { TeacherActionButtons } from "@/components/Teachers/TeacherActionButtons
 import { Teacher } from "@/lib/types";
 import { TeacherGrid } from "@/components/Teachers/TeacherGrid";
 import { AxiosError } from "axios";
+import TypingLoader from "@/components/TypingLoader";
 
 export interface TeachersResponse {
   success: boolean;
@@ -50,7 +51,7 @@ export default function TeachersPage() {
   }, []);
 
   if (loading) {
-    return <div>Loading teachers...</div>;
+    return <TypingLoader />;
   }
 
   if (error) {

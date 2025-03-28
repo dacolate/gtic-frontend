@@ -376,7 +376,8 @@
       "selectTeacher": "Select a teacher",
       "startDate": "Class Start Date",
       "duration": "Expected Duration (days)",
-      "durationPlaceholder": "Enter the duration"
+      "durationPlaceholder": "Enter the duration",
+      "expectedduration": "Durée prévue"
     },
     "courseSelection": {
       "title": "Grade and Course",

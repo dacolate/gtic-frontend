@@ -19,13 +19,17 @@ export function PricingInfo({ pricing }: { pricing: Pricing }) {
             <dt className="font-medium text-gray-500">
               {t("registrationFee")}
             </dt>
-            <dd className="text-lg font-bold">${pricing.registerFee}</dd>
+            <dd className="text-lg font-bold">
+              {pricing.registerFee + " FCFA"}
+            </dd>
           </div>
           <div>
             <dt className="font-medium text-gray-500">
               {t("firstInstalment")}
             </dt>
-            <dd className="text-lg font-bold">${pricing.instalment1Fee}</dd>
+            <dd className="text-lg font-bold">
+              {pricing.instalment1Fee + " FCFA"}
+            </dd>
             <dd className="text-sm text-gray-500">
               {t("dueBy")}{" "}
               {formatReadableDate(pricing.instalment1Deadline, t("locale"))}
@@ -35,7 +39,9 @@ export function PricingInfo({ pricing }: { pricing: Pricing }) {
             <dt className="font-medium text-gray-500">
               {t("secondInstalment")}
             </dt>
-            <dd className="text-lg font-bold">${pricing.instalment2Fee}</dd>
+            <dd className="text-lg font-bold">
+              {pricing.instalment2Fee + " FCFA"}{" "}
+            </dd>
             <dd className="text-sm text-gray-500">
               {t("dueBy")}{" "}
               {formatReadableDate(pricing.instalment2Deadline, t("locale"))}

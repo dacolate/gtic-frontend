@@ -354,7 +354,8 @@
       "selectTeacher": "Sélectionnez un enseignant",
       "startDate": "Début de la Classe",
       "duration": "Durée Prévue (jours)",
-      "durationPlaceholder": "Entrez la date de début"
+      "durationPlaceholder": "Entrez la date de début",
+      "expectedduration": "Durée prévue"
     },
     "courseSelection": {
       "title": "Niveau et Cours",

@@ -353,7 +353,7 @@
       "startDate": "Klassenstartdatum",
       "duration": "Voraussichtliche Dauer (Tage)",
       "durationPlaceholder": "Dauer eingeben",
-      "locale": "de-DE"
+      "expectedduration": "Durée prévue"
     },
     "courseSelection": {
       "title": "Klasse und Kurs",

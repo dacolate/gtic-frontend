@@ -2,6 +2,7 @@
 
 import { CourseActionButton } from "@/components/Courses/CourseActionButton";
 import { CourseTable } from "@/components/Courses/CourseTable";
+import TypingLoader from "@/components/TypingLoader";
 import api from "@/lib/axios";
 import { Course } from "@/lib/types";
 import { motion } from "framer-motion";
@@ -38,7 +39,8 @@ export default function ClassesPage() {
   }, []); // Empty dependency array ensures this runs only once on mount
 
   if (isLoading) {
-    return <div>Loading courses...</div>; // Display loading state
+    // return <div>Loading courses...</div>; // Display loading state
+    return <TypingLoader />;
   }
 
   if (error) {
