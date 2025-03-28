@@ -174,6 +174,12 @@ export function CreateClassForm() {
     }
   };
 
+  function addDays(date: Date, days: number): Date {
+    const result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return result;
+  }
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 mx-5">
@@ -396,6 +402,73 @@ export function CreateClassForm() {
                         onValueChange={(value) => {
                           field.onChange(Number(value));
                           setShowPricing(true);
+                          const selectedGrade = filteredGrades.find((grade) => {
+                            return grade.id === Number(value);
+                          });
+                          form.setValue(
+                            "registrationFee",
+                            parseInt(selectedGrade?.pricing.registerFee || "0")
+                          );
+                          form.setValue(
+                            "firstInstalmentFee",
+                            parseInt(
+                              selectedGrade?.pricing.instalment1Fee || "0"
+                            )
+                          );
+                          form.setValue(
+                            "secondInstalmentFee",
+                            parseInt(
+                              selectedGrade?.pricing.instalment2Fee || "0"
+                            )
+                          );
+
+                          const createdAt = new Date(
+                            selectedGrade?.createdAt || 0
+                          );
+
+                          const firstInstalmentDays = selectedGrade?.pricing
+                            .instalment1Deadline
+                            ? Math.max(
+                                0,
+                                Math.ceil(
+                                  (new Date(
+                                    selectedGrade.pricing.instalment1Deadline
+                                  ).getTime() -
+                                    createdAt.getTime()) /
+                                    (1000 * 60 * 60 * 24)
+                                )
+                              )
+                            : 0;
+
+                          const secondInstalmentDays = selectedGrade?.pricing
+                            .instalment2Deadline
+                            ? Math.max(
+                                0,
+                                Math.ceil(
+                                  (new Date(
+                                    selectedGrade.pricing.instalment2Deadline
+                                  ).getTime() -
+                                    createdAt.getTime()) /
+                                    (1000 * 60 * 60 * 24)
+                                )
+                              )
+                            : 0;
+                          form.setValue(
+                            "firstInstalmentDeadline",
+                            selectedGrade?.pricing.instalment1Deadline
+                              ? new Date(
+                                  selectedGrade.pricing.instalment1Deadline
+                                )
+                              : addDays(new Date(), firstInstalmentDays)
+                          );
+                          form.setValue(
+                            "secondInstalmentDeadline",
+                            selectedGrade?.pricing.instalment2Deadline
+                              ? new Date(
+                                  selectedGrade.pricing.instalment2Deadline
+                                )
+                              : addDays(new Date(), secondInstalmentDays)
+                          );
                         }}
                         value={field.value?.toString()}
                         disabled={!currentCourseId}

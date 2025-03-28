@@ -1,11 +1,12 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { CreditCard, Edit, RefreshCw, Users } from "lucide-react";
+import { CreditCard, Edit, RefreshCw, Trash2, Users } from "lucide-react";
 import { PaymentPopover } from "../PaymentPopover";
 import { Student } from "@/lib/types";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
+import { DeleteDialog } from "../classes/DeleteDialog";
 
 export function ActionButtons({
   student,
@@ -55,6 +56,12 @@ export function ActionButtons({
         <RefreshCw className="h-4 w-4" />
         {t("reinscription")}
       </Button>
+      <DeleteDialog objectName="students" id={student?.id}>
+        <Button variant="destructive" className="flex items-center gap-2">
+          <Trash2 className="h-4 w-4" />
+          {t("delete")}
+        </Button>
+      </DeleteDialog>
     </div>
   );
 }

@@ -2,6 +2,7 @@
 
 import { PaymentActionButtons } from "@/components/Payments/PaymentActionButton";
 import { PaymentTable } from "@/components/Payments/PaymentTable";
+import TypingLoader from "@/components/TypingLoader";
 import { usePayments } from "@/lib/axios";
 import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
@@ -12,7 +13,7 @@ export default function PaymentsPage() {
   const { data, error, isLoading, isError } = usePayments();
   // const { data } = useStudents();
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <TypingLoader />; // Display loading state
 
   if (isError) return <div>{error.message}</div>;
 

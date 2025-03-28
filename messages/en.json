@@ -421,24 +421,7 @@
     "errorDescription": "Failed to create course",
     "unexpectedError": "An unexpected error occurred"
   },
-  "AddGradeDialog": {
-    "title": "Add New Grade",
-    "description": "Create a new grade level for this course",
-    "courseLabel": "Course",
-    "gradeNameLabel": "Grade Name",
-    "gradeNamePlaceholder": "e.g., Beginner, Intermediate",
-    "descriptionLabel": "Description",
-    "descriptionPlaceholder": "Optional grade description",
-    "cancelButton": "Cancel",
-    "submitButton": "Add Grade",
-    "errors": {
-      "gradeNameRequired": "Grade name is required (min 2 characters)"
-    },
-    "success": {
-      "title": "Grade Added",
-      "description": "The new grade was successfully created"
-    }
-  },
+
   "CourseTable": {
     "Course Name": "Course Name",
     "Description": "Description",
@@ -499,5 +482,53 @@
     "email": "Email",
     "phone": "Phone",
     "noStudents": "No students enrolled in this class"
+  },
+
+  "AddGradeDialog": {
+    "title": "Add New Grade",
+    "days": "days",
+    "description": "Create a new grade level for your course",
+    "courseLabel": "Course",
+    "gradeNameLabel": "Grade Name",
+    "gradeNamePlaceholder": "Enter grade name (e.g., Grade 1, Level A)",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "Optional description for this grade",
+    "errors": {
+      "gradeNameRequired": "Grade name is required (min. 2 characters)"
+    },
+    "success": {
+      "title": "Grade Created",
+      "description": "The grade has been successfully created"
+    },
+    "cancelButton": "Cancel",
+    "submitButton": "Create Grade",
+    "showPricing": "Add Pricing",
+    "hidePricing": "Hide Pricing",
+    "pricing": {
+      "registrationFee": "Registration Fee",
+      "firstInstalmentFee": "First Installment Fee",
+      "firstInstalmentDeadline": "First Installment Deadline",
+      "secondInstalmentFee": "Second Installment Fee",
+      "secondInstalmentDeadline": "Second Installment Deadline",
+      "pickadate": "Pick a date",
+      "firstInstalmentDeadlineDays": "Days to instalment 1",
+      "secondInstalmentDeadlineDays": "Days to instalment 2"
+    }
+  },
+
+  "DeleteDialog": {
+    "title": "Are you absolutely sure?",
+    "description": "This action cannot be undone. This will permanently delete this {objectName}.",
+    "cancel": "Cancel",
+    "continue": "Continue",
+    "deleting": "Deleting...",
+    "success": {
+      "title": "Success",
+      "description": "Deleted successfully"
+    },
+    "error": {
+      "title": "Error",
+      "description": "Failed to delete"
+    }
   }
 }

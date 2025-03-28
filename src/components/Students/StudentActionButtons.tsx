@@ -27,7 +27,7 @@ export function StudentActionButtons() {
         asChild
         className="flex items-center gap-2 bg-gray-500 hover:bg-green-600"
       >
-        <Link href="/teachers/new">
+        <Link href="/students/inactive">
           <History className="h-4 w-4 font-extrabold" />
           {t("Ancient Students")}
         </Link>

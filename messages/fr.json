@@ -399,24 +399,6 @@
     "unexpectedError": "Une erreur inattendue s'est produite"
   },
 
-  "AddGradeDialog": {
-    "title": "Ajouter un nouveau niveau",
-    "description": "Créer un nouveau niveau pour ce cours",
-    "courseLabel": "Cours",
-    "gradeNameLabel": "Nom du niveau",
-    "gradeNamePlaceholder": "ex. : Débutant, Intermédiaire",
-    "descriptionLabel": "Description",
-    "descriptionPlaceholder": "Description facultative du niveau",
-    "cancelButton": "Annuler",
-    "submitButton": "Ajouter le niveau",
-    "errors": {
-      "gradeNameRequired": "Le nom du niveau est requis (min 2 caractères)"
-    },
-    "success": {
-      "title": "Niveau ajouté",
-      "description": "Le nouveau niveau a été créé avec succès"
-    }
-  },
   "CourseTable": {
     "Course Name": "Nom du cours",
     "Description": "Description",
@@ -477,5 +459,53 @@
     "email": "Email",
     "phone": "Téléphone",
     "noStudents": "Aucun étudiant inscrit à ce cours"
+  },
+
+  "AddGradeDialog": {
+    "title": "Ajouter un nouveau niveau",
+    "days": "jours",
+    "description": "Créez un nouveau niveau pour votre cours",
+    "courseLabel": "Cours",
+    "gradeNameLabel": "Nom du niveau",
+    "gradeNamePlaceholder": "Entrez le nom du niveau (ex. Niveau 1, Grade A)",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "Description optionnelle pour ce niveau",
+    "errors": {
+      "gradeNameRequired": "Le nom du niveau est requis (min. 2 caractères)"
+    },
+    "success": {
+      "title": "Niveau créé",
+      "description": "Le niveau a été créé avec succès"
+    },
+    "cancelButton": "Annuler",
+    "submitButton": "Créer le niveau",
+    "showPricing": "Ajouter des tarifs",
+    "hidePricing": "Masquer les tarifs",
+    "pricing": {
+      "registrationFee": "Frais d'inscription",
+      "firstInstalmentFee": "Premier versement",
+      "firstInstalmentDeadline": "Échéance premier versement",
+      "secondInstalmentFee": "Deuxième versement",
+      "secondInstalmentDeadline": "Échéance deuxième versement",
+      "pickadate": "Choisir une date",
+      "firstInstalmentDeadlineDays": "Jours pour versement 1",
+      "secondInstalmentDeadlineDays": "Jours pour versement 2"
+    }
+  },
+
+  "DeleteDialog": {
+    "title": "Êtes-vous absolument sûr ?",
+    "description": "Cette action ne peut pas être annulée. Cela supprimera définitivement l'élément sélectionné.",
+    "cancel": "Annuler",
+    "continue": "Continuer",
+    "deleting": "Suppression en cours...",
+    "success": {
+      "title": "Succès",
+      "description": "Supprimé avec succès"
+    },
+    "error": {
+      "title": "Erreur",
+      "description": "Échec de la suppression"
+    }
   }
 }

@@ -50,6 +50,7 @@ import autoTable from "jspdf-autotable";
 import { useTranslations } from "next-intl";
 import { Class } from "@/lib/types";
 import { Link } from "@/i18n/routing";
+import { DeleteDialog } from "./DeleteDialog";
 
 interface ClassTableProps {
   classes: Class[];
@@ -208,24 +209,26 @@ export function ClassTable({ classes }: ClassTableProps) {
       },
     },
     {
-      id: "acions",
+      id: "actions",
       header: ({}) => {
         return <div className="text-center"></div>;
       },
-      cell: ({}) => (
+      cell: ({ row }) => (
         <div className="text-center ">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="text-red-500 hover:text-red-700 hover:bg-red-50"
-            onClick={() => {
-              // Add your delete logic here
-              console.log("Delete class clicked");
-            }}
-          >
-            <Trash2 className="h-4 w-4" />
-            <span className="sr-only">Delete class</span>
-          </Button>
+          <DeleteDialog objectName="classes" id={row.original.id}>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-red-500 hover:text-red-700 hover:bg-red-50"
+              onClick={() => {
+                // Add your delete logic here
+                console.log("Delete class clicked");
+              }}
+            >
+              <Trash2 className="h-4 w-4" />
+              <span className="sr-only">Delete class</span>
+            </Button>
+          </DeleteDialog>
         </div>
       ),
     },

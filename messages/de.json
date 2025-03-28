@@ -398,24 +398,6 @@
     "unexpectedError": "Ein unerwarteter Fehler ist aufgetreten"
   },
 
-  "AddGradeDialog": {
-    "title": "Neue Stufe hinzufügen",
-    "description": "Erstellen Sie eine neue Stufe für diesen Kurs",
-    "courseLabel": "Kurs",
-    "gradeNameLabel": "Stufenname",
-    "gradeNamePlaceholder": "z.B. Anfänger, Fortgeschrittene",
-    "descriptionLabel": "Beschreibung",
-    "descriptionPlaceholder": "Optionale Stufenbeschreibung",
-    "cancelButton": "Abbrechen",
-    "submitButton": "Stufe hinzufügen",
-    "errors": {
-      "gradeNameRequired": "Stufenname ist erforderlich (min. 2 Zeichen)"
-    },
-    "success": {
-      "title": "Stufe hinzugefügt",
-      "description": "Die neue Stufe wurde erfolgreich erstellt"
-    }
-  },
   "CourseTable": {
     "Course Name": "Kursname",
     "Description": "Beschreibung",
@@ -475,5 +457,53 @@
     "email": "E-Mail",
     "phone": "Telefon",
     "noStudents": "Keine Schüler in dieser Klasse eingeschrieben"
+  },
+
+  "AddGradeDialog": {
+    "title": "Neue Klasse hinzufügen",
+    "days": "tags",
+    "description": "Erstellen Sie eine neue Klassenstufe für Ihren Kurs",
+    "courseLabel": "Kurs",
+    "gradeNameLabel": "Klassenname",
+    "gradeNamePlaceholder": "Klassennamen eingeben (z.B. Klasse 1, Stufe A)",
+    "descriptionLabel": "Beschreibung",
+    "descriptionPlaceholder": "Optionale Beschreibung für diese Klasse",
+    "errors": {
+      "gradeNameRequired": "Klassenname ist erforderlich (mind. 2 Zeichen)"
+    },
+    "success": {
+      "title": "Klasse erstellt",
+      "description": "Die Klasse wurde erfolgreich erstellt"
+    },
+    "cancelButton": "Abbrechen",
+    "submitButton": "Klasse erstellen",
+    "showPricing": "Preise hinzufügen",
+    "hidePricing": "Preise ausblenden",
+    "pricing": {
+      "registrationFee": "Anmeldegebühr",
+      "firstInstalmentFee": "Erste Rate",
+      "firstInstalmentDeadline": "Fälligkeit erste Rate",
+      "secondInstalmentFee": "Zweite Rate",
+      "secondInstalmentDeadline": "Fälligkeit zweite Rate",
+      "pickadate": "Datum auswählen",
+      "firstInstalmentDeadlineDays": "Days to instalment 1",
+      "secondInstalmentDeadlineDays": "Days to instalment 2"
+    }
+  },
+
+  "DeleteDialog": {
+    "title": "Sind Sie absolut sicher?",
+    "description": "Diese Aktion kann nicht rückgängig gemacht werden. Dadurch wird {objectName} dauerhaft gelöscht.",
+    "cancel": "Abbrechen",
+    "continue": "Fortfahren",
+    "deleting": "Wird gelöscht...",
+    "success": {
+      "title": "Erfolg",
+      "description": "Erfolgreich gelöscht"
+    },
+    "error": {
+      "title": "Fehler",
+      "description": "Löschen fehlgeschlagen"
+    }
   }
 }
