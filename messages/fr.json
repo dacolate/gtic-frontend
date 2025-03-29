@@ -97,7 +97,18 @@
     "Yesterday": "Hier",
     "Last 7 Days": "7 Derniers Jours",
     "Download List": "Télécharger la Liste",
-    "NoResults": "Aucun résultat."
+    "NoResults": "Aucun résultat.",
+    "class": "Classe",
+    "Students": "étudiants",
+    "Courses": "Filières",
+    "Select course": "Sélectionner une filière",
+    "Date Range": "Période",
+    "Pick a date range": "Choisir une période",
+    "Clear": "Effacer",
+    "Last Month": "Mois Dernier",
+    "Last Year": "Année Dernière",
+    "Generated on": "Généré le",
+    "Payment Report": "Rapport des paiements"
   },
 
   "ClassTable": {
@@ -520,7 +531,7 @@
     "Courses": "Filières",
     "Columns": "Colonnes",
     "Searchstudent": "Rechercher un enseignant...",
-    "Select course": "Sélectionner un cours",
+    "Select course": "Sélectionner une filière",
     "All Courses": "Tous les cours",
     "Select grade": "Sélectionner un niveau",
     "All Grades": "Tous les niveaux",

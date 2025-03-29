@@ -96,7 +96,16 @@
     "Yesterday": "Yesterday",
     "Last 7 Days": "Last 7 Days",
     "Download List": "Download List",
-    "NoResults": "No results."
+    "NoResults": "No results.",
+    "class": "Class",
+    "Students": "Students",
+    "Courses": "Courses",
+    "Select course": "Select course",
+    "Date Range": "Date Range",
+    "Pick a date range": "Pick a date range",
+    "Clear": "Clear",
+    "Last Month": "Last Month",
+    "Last Year": "Last Year"
   },
 
   "ClassTable": {

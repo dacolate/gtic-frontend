@@ -120,9 +120,6 @@ export function ModifyStudentForm({ studentId }: ModifyStudentFormProps) {
             phone: response.data.data.phone,
             address: response.data.data.address || "",
             gender: response.data.data.gender,
-            parentName: response.data.data.parents?.[0]?.name || "",
-            parentPhone: response.data.data.parents?.[0]?.phone || "",
-            parentEmail: response.data.data.parents?.[0]?.email || "",
           });
           setIsDataLoaded(true); // Set data loaded to true
         } else {

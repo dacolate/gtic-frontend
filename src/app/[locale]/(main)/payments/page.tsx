@@ -1,6 +1,6 @@
 "use client";
 
-import { PaymentActionButtons } from "@/components/Payments/PaymentActionButton";
+// import { PaymentActionButtons } from "@/components/Payments/PaymentActionButton";
 import { PaymentTable } from "@/components/Payments/PaymentTable";
 import TypingLoader from "@/components/TypingLoader";
 import { usePayments } from "@/lib/axios";
@@ -31,7 +31,7 @@ export default function PaymentsPage() {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">{t("Payments")}</h1>
       </div>
-      <PaymentActionButtons />
+      {/* <PaymentActionButtons /> */}
 
       <PaymentTable payments={data.data} />
     </motion.div>
