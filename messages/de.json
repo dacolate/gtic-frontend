@@ -504,6 +504,39 @@
     "error": {
       "title": "Fehler",
       "description": "Löschen fehlgeschlagen"
+    },
+    "TeacherTable": {
+      "No course": "No course",
+      "Our Teachers": "Our Teachers",
+      "New Teacher": "New Teacher",
+      "Course": "Kurs",
+      "Name": "Name",
+      "Class": "Klasse",
+      "Contact": "Kontakt",
+      "Grade": "Stufe",
+      "Courses": "Kurse",
+      "Columns": "Spalten",
+      "Searchstudent": "Lehrer suchen...",
+      "Select course": "Kurs auswählen",
+      "All Courses": "Alle Kurse",
+      "Select grade": "Stufe auswählen",
+      "All Grades": "Alle Stufen",
+      "Select class": "Klasse auswählen",
+      "All Classes": "Alle Klassen",
+      "Download List": "Liste herunterladen"
     }
+  },
+  "TeacherDetails": {
+    "teacherDetails": "Lehrerdetails",
+    "errorOccurred": "Ein Fehler ist aufgetreten",
+    "errorLoadingCourses": "Fehler beim Laden der Kurse"
+  },
+  "TeacherCourseInfo": {
+    "classesTaught": "Classes Taught",
+    "coursesCount": "{count} classes",
+    "courseName": "Course Name",
+    "gradeName": "Grade Name",
+    "className": "Class Name",
+    "started": "Started"
   }
 }

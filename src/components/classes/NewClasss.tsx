@@ -425,6 +425,7 @@ export function CreateClassForm() {
                           const createdAt = new Date(
                             selectedGrade?.createdAt || 0
                           );
+                          const startDate = form.getValues("start_date");
 
                           const firstInstalmentDays = selectedGrade?.pricing
                             .instalment1Deadline
@@ -456,17 +457,13 @@ export function CreateClassForm() {
                           form.setValue(
                             "firstInstalmentDeadline",
                             selectedGrade?.pricing.instalment1Deadline
-                              ? new Date(
-                                  selectedGrade.pricing.instalment1Deadline
-                                )
+                              ? addDays(startDate, firstInstalmentDays)
                               : addDays(new Date(), firstInstalmentDays)
                           );
                           form.setValue(
                             "secondInstalmentDeadline",
                             selectedGrade?.pricing.instalment2Deadline
-                              ? new Date(
-                                  selectedGrade.pricing.instalment2Deadline
-                                )
+                              ? addDays(startDate, secondInstalmentDays)
                               : addDays(new Date(), secondInstalmentDays)
                           );
                         }}

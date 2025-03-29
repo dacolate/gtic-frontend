@@ -20,6 +20,8 @@ interface DeleteDialogProps {
   objectName: string;
   id: number | undefined;
   onSuccess?: () => void;
+  back?: boolean;
+  refresh?: boolean;
 }
 
 export function DeleteDialog({
@@ -27,6 +29,8 @@ export function DeleteDialog({
   objectName,
   id,
   onSuccess,
+  back = true,
+  refresh = false,
 }: DeleteDialogProps) {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
@@ -44,7 +48,12 @@ export function DeleteDialog({
         });
       }
       onSuccess?.();
-      router.back();
+      if (back) {
+        router.back();
+      }
+      if (refresh) {
+        router.refresh();
+      }
     } catch (error) {
       console.log(error);
       toast({

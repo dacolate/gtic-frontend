@@ -227,9 +227,9 @@
     "No parent information available": "Pas d'informations disponibles sur le parent"
   },
   "CourseInfo": {
-    "classesTaken": "Cours Suivis",
-    "coursesCount": "{count} Cours",
-    "courseName": "Nom du Cours",
+    "classesTaken": "Filières Suivis",
+    "coursesCount": "{count} Filières",
+    "courseName": "Nom de la filière",
     "instructor": "Instructeur",
     "started": "Commencé le"
   },
@@ -245,7 +245,7 @@
   "StudentDetails": {
     "studentDetails": "Détails de l'étudiant",
     "errorOccurred": "Une erreur s'est produite",
-    "errorLoadingCourses": "Erreur lors du chargement des cours"
+    "errorLoadingCourses": "Erreur lors du chargement des filères"
   },
   "PaymentInfo": {
     "paymentInformation": "Informations de paiement",
@@ -300,10 +300,10 @@
     },
     "classAttribution": {
       "title": "Attribution de classe",
-      "course": "Cours",
+      "course": "Filière",
       "grade": "Niveau",
       "class": "Classe",
-      "selectCourse": "Sélectionnez un cours",
+      "selectCourse": "Sélectionnez une filière",
       "selectGrade": "Sélectionnez un niveau",
       "selectClass": "Sélectionnez une classe"
     },
@@ -317,7 +317,7 @@
       "pickadate": "Choisissez une date"
     },
     "errors": {
-      "courseRequired": "Veuillez sélectionner un cours",
+      "courseRequired": "Veuillez sélectionner une filière",
       "gradeRequired": "Veuillez sélectionner un niveau",
       "classRequired": "Veuillez sélectionner une classe",
       "positiveNumber": "La valeur doit être un nombre positif"
@@ -358,11 +358,11 @@
       "expectedduration": "Durée prévue"
     },
     "courseSelection": {
-      "title": "Niveau et Cours",
+      "title": "Niveau et Filière",
       "grade": "Niveau",
       "selectGrade": "Sélectionnez un niveau",
-      "course": "Cours",
-      "selectCourse": "Sélectionnez un cours"
+      "course": "Filière",
+      "selectCourse": "Sélectionnez une filière"
     },
     "pricing": {
       "title": "Détails de tarification",
@@ -381,11 +381,11 @@
 
   "CreateCourseDialog": {
     "createCourse": "Nouvelle filière",
-    "createNewCourseDescription": "Créer un nouveau cours dans le système",
+    "createNewCourseDescription": "Créer un nouvelle filière dans le système",
     "name": "Nom",
-    "namePlaceholder": "Entrez le nom du cours",
+    "namePlaceholder": "Entrez le nom de la filière",
     "description": "Description",
-    "descriptionPlaceholder": "Entrez la description du cours",
+    "descriptionPlaceholder": "Entrez la description de la filière",
     "pricing": "Plan de tarification",
     "selectPricing": "Sélectionnez un plan de tarification",
     "noPricing": "Pas de plan de tarification",
@@ -393,24 +393,24 @@
     "create": "Créer",
     "submitting": "Création...",
     "successTitle": "Succès",
-    "successDescription": "Cours créé avec succès",
+    "successDescription": "Filière créé avec succès",
     "errorTitle": "Erreur",
-    "errorDescription": "Échec de la création du cours",
+    "errorDescription": "Échec de la création de la filière",
     "unexpectedError": "Une erreur inattendue s'est produite"
   },
 
   "CourseTable": {
-    "Course Name": "Nom du cours",
+    "Course Name": "Nom de filière",
     "Description": "Description",
     "Created Date": "Date de création",
     "Grades Count": "Nombre de niveaux",
     "Classes Count": "Nombre de classes",
-    "Search courses": "Rechercher des cours...",
+    "Search courses": "Rechercher des filères...",
     "Columns": "Colonnes",
     "Download List": "Télécharger la liste",
-    "New Course": "Nouveau cours",
-    "Ancient Courses": "Anciens cours",
-    "Delete Course": "Supprimer le cours",
+    "New Course": "Nouvelle filières",
+    "Ancient Courses": "Anciennes filières",
+    "Delete Course": "Supprimer la filière",
     "locale": "fr-FR",
     "Grade Name": "Nom du niveau",
     "Classes count": "Nombre de classes",
@@ -425,7 +425,7 @@
     "fetchFailed": "Échec de la récupération des données de la classe"
   },
   "ClassInfo": {
-    "course": "Cours",
+    "course": "Filière",
     "grade": "Niveau",
     "startDate": "Date de début",
     "duration": "Durée",
@@ -458,14 +458,14 @@
     "student": "Étudiant",
     "email": "Email",
     "phone": "Téléphone",
-    "noStudents": "Aucun étudiant inscrit à ce cours"
+    "noStudents": "Aucun étudiant inscrit à cette filière"
   },
 
   "AddGradeDialog": {
     "title": "Ajouter un nouveau niveau",
     "days": "jours",
-    "description": "Créez un nouveau niveau pour votre cours",
-    "courseLabel": "Cours",
+    "description": "Créez un nouveau niveau pour votre filère",
+    "courseLabel": "Filière",
     "gradeNameLabel": "Nom du niveau",
     "gradeNamePlaceholder": "Entrez le nom du niveau (ex. Niveau 1, Grade A)",
     "descriptionLabel": "Description",
@@ -507,5 +507,38 @@
       "title": "Erreur",
       "description": "Échec de la suppression"
     }
+  },
+  "TeacherTable": {
+    "No course": "Aucun cours",
+    "Our Teachers": "Enseignants",
+    "New Teacher": "Nouvel enseignant",
+    "Course": "Filière",
+    "Name": "Nom",
+    "Class": "Classe",
+    "Contact": "Contact",
+    "Grade": "Niveau",
+    "Courses": "Filières",
+    "Columns": "Colonnes",
+    "Searchstudent": "Rechercher un enseignant...",
+    "Select course": "Sélectionner un cours",
+    "All Courses": "Tous les cours",
+    "Select grade": "Sélectionner un niveau",
+    "All Grades": "Tous les niveaux",
+    "Select class": "Sélectionner une classe",
+    "All Classes": "Toutes les classes",
+    "Download List": "Télécharger la liste"
+  },
+  "TeacherDetails": {
+    "teacherDetails": "Détails de l'enseignant",
+    "errorOccurred": "Une erreur s'est produite",
+    "errorLoadingCourses": "Erreur lors du chargement des filères"
+  },
+  "TeacherCourseInfo": {
+    "classesTaught": "Filières Enseignées",
+    "coursesCount": "{count} Classes",
+    "courseName": "Nom de la filière",
+    "gradeName": "Nom du niveau",
+    "className": "Nom de la classe",
+    "started": "Commencé le"
   }
 }

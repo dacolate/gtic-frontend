@@ -530,5 +530,38 @@
       "title": "Error",
       "description": "Failed to delete"
     }
+  },
+  "TeacherTable": {
+    "No course": "No course",
+    "Our Teachers": "Our Teachers",
+    "New Teacher": "New Teacher",
+    "Course": "Course",
+    "Name": "Name",
+    "Class": "Class",
+    "Contact": "Contact",
+    "Grade": "Grade",
+    "Courses": "Courses",
+    "Columns": "Columns",
+    "Searchstudent": "Search teacher...",
+    "Select course": "Select course",
+    "All Courses": "All Courses",
+    "Select grade": "Select grade",
+    "All Grades": "All Grades",
+    "Select class": "Select class",
+    "All Classes": "All Classes",
+    "Download List": "Download List"
+  },
+  "TeacherDetails": {
+    "teacherDetails": "Teacher Details",
+    "errorOccurred": "An error occurred",
+    "errorLoadingCourses": "Error loading courses"
+  },
+  "TeacherCourseInfo": {
+    "classesTaught": "Classes Taught",
+    "coursesCount": "{count} classes",
+    "courseName": "Course Name",
+    "gradeName": "Grade Name",
+    "className": "Class Name",
+    "started": "Started"
   }
 }

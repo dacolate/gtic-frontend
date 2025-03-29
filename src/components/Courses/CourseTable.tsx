@@ -20,7 +20,9 @@ import {
   ChevronDown,
   ChevronRight,
   Download,
+  Plus,
   Search,
+  Trash2,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -44,136 +46,7 @@ import autoTable from "jspdf-autotable";
 import { useTranslations } from "next-intl";
 import { Course } from "@/lib/types";
 import { AddGradeDialog } from "./AddGradeDialog";
-
-// Create a new component file or at the top of your current file
-const CourseSubComponent = ({ row }: { row: Row<Course> }) => {
-  const course = row.original;
-  const [isDialogOpen, setIsDialogOpen] = React.useState(false);
-  const t = useTranslations("CourseTable");
-
-  return (
-    <div className="p-4 bg-gray-50 rounded-lg border border-gray-200 my-2">
-      {/* Add Grade Button Row */}
-      <div className="mb-4">
-        <Button
-          variant="outline"
-          className="w-full"
-          onClick={() => setIsDialogOpen(true)}
-        >
-          {t("addGrade")}
-        </Button>
-      </div>
-
-      {/* Add Grade Dialog */}
-      <AddGradeDialog
-        open={isDialogOpen}
-        onOpenChange={setIsDialogOpen}
-        course={{ id: course.id, name: course.name }}
-      />
-
-      {/* Rest of your component */}
-      {/* ... */}
-      {/* Grades Section */}
-      <div className="mb-6">
-        <h3 className="font-semibold text-lg mb-3">
-          {t("Grades")} ({course.grades?.length || 0})
-        </h3>
-        {course.grades && course.grades.length > 0 ? (
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-100">
-                <tr>
-                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    {t("Grade Name")}
-                  </th>
-                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    {t("Description")}
-                  </th>
-                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    {t("Classes Count")}
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {course.grades.map((grade) => (
-                  <tr key={grade.id}>
-                    <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-900">
-                      {grade.name}
-                    </td>
-                    <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-500">
-                      {grade.description || "-"}
-                    </td>
-                    <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-900">
-                      {grade.classes?.length || 0}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        ) : (
-          <p className="text-sm text-gray-500">No grades available</p>
-        )}
-      </div>
-
-      {/* Classes Section */}
-      {/* <div>
-          <h3 className="font-semibold text-lg mb-3">
-            Classes ({course.classes?.length || 0})
-          </h3>
-          {course.classes && course.classes.length > 0 ? (
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-100">
-                  <tr>
-                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Class Name
-                    </th>
-                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Teacher
-                    </th>
-                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Start Date
-                    </th>
-                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Duration (min)
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {course.classes.map((classItem) => (
-                    <tr key={classItem.id}>
-                      <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-900">
-                        {classItem.name}
-                      </td>
-                      <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-900">
-                        {classItem.teacher?.name || "-"}
-                      </td>
-                      <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-900">
-                        {classItem.startDate
-                          ? formatDate(classItem.startDate)
-                          : "-"}
-                      </td>
-                      <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-900">
-                        {classItem.expectedDuration || "-"}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          ) : (
-            <p className="text-sm text-gray-500">No classes available</p>
-          )}
-         </div> */}
-    </div>
-  );
-};
-
-// Then in your table component:
-const renderSubComponent = ({ row }: { row: Row<Course> }) => {
-  return <CourseSubComponent row={row} />;
-};
+import { DeleteDialog } from "../classes/DeleteDialog";
 
 interface CourseTableProps {
   courses: Course[];
@@ -191,7 +64,137 @@ export function CourseTable({ courses }: CourseTableProps) {
     });
   };
 
-  // Format date to a readable string
+  const [isDialogOpen, setIsDialogOpen] = React.useState(false);
+
+  const CourseSubComponent = ({ row }: { row: Row<Course> }) => {
+    const course = row.original;
+
+    const t = useTranslations("CourseTable");
+
+    return (
+      <div className="p-4 bg-gray-50 rounded-lg border border-gray-200 my-2">
+        {/* Add Grade Button Row */}
+
+        {/* Rest of your component */}
+        {/* ... */}
+        {/* Grades Section */}
+        <div className="mb-6">
+          <h3 className="font-semibold text-lg mb-3">
+            {t("Grades")} ({course.grades?.length || 0})
+          </h3>
+          {course.grades && course.grades.length > 0 ? (
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-100">
+                  <tr>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      {t("Grade Name")}
+                    </th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      {t("Description")}
+                    </th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      {t("Classes Count")}
+                    </th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {course.grades.map((grade) => (
+                    <tr key={grade.id}>
+                      <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-900">
+                        {grade.name}
+                      </td>
+                      <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-500">
+                        {grade.description || "-"}
+                      </td>
+                      <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-900">
+                        {grade.classes?.length || 0}
+                      </td>
+                      <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-900">
+                        <DeleteDialog
+                          objectName="grades"
+                          id={grade.id}
+                          back={false}
+                          refresh={true}
+                        >
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="text-red-500 hover:text-red-700 hover:bg-red-50 p-0"
+                          >
+                            <Trash2 />
+                          </Button>
+                        </DeleteDialog>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <p className="text-sm text-gray-500">No grades available</p>
+          )}
+        </div>
+
+        {/* Classes Section */}
+        {/* <div>
+            <h3 className="font-semibold text-lg mb-3">
+              Classes ({course.classes?.length || 0})
+            </h3>
+            {course.classes && course.classes.length > 0 ? (
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-100">
+                    <tr>
+                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Class Name
+                      </th>
+                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Teacher
+                      </th>
+                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Start Date
+                      </th>
+                      <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Duration (min)
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {course.classes.map((classItem) => (
+                      <tr key={classItem.id}>
+                        <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-900">
+                          {classItem.name}
+                        </td>
+                        <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-900">
+                          {classItem.teacher?.name || "-"}
+                        </td>
+                        <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-900">
+                          {classItem.startDate
+                            ? formatDate(classItem.startDate)
+                            : "-"}
+                        </td>
+                        <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-900">
+                          {classItem.expectedDuration || "-"}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <p className="text-sm text-gray-500">No classes available</p>
+            )}
+           </div> */}
+      </div>
+    );
+  };
+
+  // Then in your table component:
+  const renderSubComponent = ({ row }: { row: Row<Course> }) => {
+    return <CourseSubComponent row={row} />;
+  };
 
   const columns: ColumnDef<Course>[] = [
     {
@@ -304,6 +307,41 @@ export function CourseTable({ courses }: CourseTableProps) {
         <div className="text-center">{row.original.classes?.length || 0}</div>
       ),
       accessorFn: (row) => row.classes?.length || 0, // For proper sorting
+    },
+    {
+      id: "actions",
+      header: () => <span></span>,
+      cell: ({ row }) => (
+        <div className="flex justify-center">
+          <AddGradeDialog
+            open={isDialogOpen}
+            onOpenChange={setIsDialogOpen}
+            course={{ id: row.original.id, name: row.original.name }}
+          />
+          <Button
+            variant="ghost"
+            size="icon"
+            className="p-0"
+            onClick={() => setIsDialogOpen(true)}
+          >
+            <Plus />
+          </Button>
+          <DeleteDialog
+            objectName="courses"
+            id={row.original.id}
+            back={false}
+            refresh={true}
+          >
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-red-500 hover:text-red-700 hover:bg-red-50 p-0"
+            >
+              <Trash2 />
+            </Button>
+          </DeleteDialog>
+        </div>
+      ),
     },
   ];
 
