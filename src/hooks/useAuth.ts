@@ -1,27 +1,30 @@
 "use client";
 
+import api from "@/lib/axios";
 import axios, { AxiosError } from "axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
-interface UserInfo {
+export type UserInfo = {
   name: string;
   role: string;
   email: string;
-}
+};
+
+const baseURL = "https://gtic-backend.onrender.com/";
+// "http://127.0.0.1:3333/";
 
 export function useAuth() {
   const [token, setToken] = useState<string | null>(null);
-  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
+  const [userInfo, setUserInfo] = useState<UserInfo>();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const storedToken = localStorage.getItem("authToken");
-    const storedUserInfo = localStorage.getItem("userInfo");
     if (storedToken) {
       setToken(storedToken);
     }
-    if (storedUserInfo) {
-      setUserInfo(JSON.parse(storedUserInfo));
-    }
+
+    setLoading(false);
   }, []);
   interface LoginResponse {
     success: boolean;
@@ -34,7 +37,7 @@ export function useAuth() {
     try {
       console.log(`${process.env.API_BASE_URL}`);
       const response = await axios.post(
-        "https://gtic-backend.onrender.com/auth/login",
+        baseURL + "auth/login",
         // "http://127.0.0.1:3333/auth/login",
         {
           email: email,
@@ -47,9 +50,11 @@ export function useAuth() {
       if (response.data.success) {
         const { token, ...userInfo } = response.data.data;
         localStorage.setItem("authToken", token);
-        localStorage.setItem("userInfo", JSON.stringify(userInfo));
+
         setToken(token);
         setUserInfo(userInfo);
+        console.log("uss", userInfo);
+        console.log("usd", response.data.data);
         return { success: true, message: "Login successful" };
       } else {
         console.log("Login failed:", response);
@@ -67,9 +72,28 @@ export function useAuth() {
   const logout = () => {
     localStorage.removeItem("authToken");
 
-    localStorage.removeItem("userInfo");
     setToken(null);
   };
 
-  return { token, login, logout, userInfo };
+  const verifyToken = useCallback(async (): Promise<boolean> => {
+    const storedToken = localStorage.getItem("authToken");
+    if (!storedToken) return false;
+
+    try {
+      const response = await api.get("auth/verify");
+
+      if (response.data.valid) {
+        // Add this: Fetch user info after token verification
+        const userResponse = await api.get("auth/me"); // Assuming an endpoint like this exists
+        setUserInfo(userResponse.data.data);
+        return true;
+      }
+      return false;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  }, []);
+
+  return { token, login, verifyToken, loading, logout, userInfo };
 }

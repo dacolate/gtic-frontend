@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect } from "react";
-import { useRouter } from "next/router";
-import axios from "axios";
+import api from "@/lib/axios";
+import { useRouter } from "@/i18n/routing";
 
 const LogoutPage = () => {
   const router = useRouter();
@@ -11,7 +11,7 @@ const LogoutPage = () => {
     const handleLogout = async () => {
       try {
         // Clear the token by calling the logout API
-        await axios.delete("/api/logout");
+        await api.delete("/auth/logout");
         router.push("/auth/login"); // Redirect to login page
       } catch (error) {
         console.error("Logout failed", error);

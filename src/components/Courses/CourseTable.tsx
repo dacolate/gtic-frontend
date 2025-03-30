@@ -47,6 +47,7 @@ import { useTranslations } from "next-intl";
 import { Course } from "@/lib/types";
 import { AddGradeDialog } from "./AddGradeDialog";
 import { DeleteDialog } from "../classes/DeleteDialog";
+import { AdminOnly } from "../adminOnly";
 
 interface CourseTableProps {
   courses: Course[];
@@ -318,28 +319,32 @@ export function CourseTable({ courses }: CourseTableProps) {
             onOpenChange={setIsDialogOpen}
             course={{ id: row.original.id, name: row.original.name }}
           />
-          <Button
-            variant="ghost"
-            size="icon"
-            className="p-0"
-            onClick={() => setIsDialogOpen(true)}
-          >
-            <Plus />
-          </Button>
-          <DeleteDialog
-            objectName="courses"
-            id={row.original.id}
-            back={false}
-            refresh={true}
-          >
+          <AdminOnly>
             <Button
               variant="ghost"
               size="icon"
-              className="text-red-500 hover:text-red-700 hover:bg-red-50 p-0"
+              className="p-0"
+              // onClick={() => setIsDialogOpen(true)}
             >
-              <Trash2 />
+              <Plus />
             </Button>
-          </DeleteDialog>
+          </AdminOnly>
+          <AdminOnly>
+            <DeleteDialog
+              objectName="courses"
+              id={row.original.id}
+              back={false}
+              refresh={true}
+            >
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-red-500 hover:text-red-700 hover:bg-red-50 p-0"
+              >
+                <Trash2 />
+              </Button>
+            </DeleteDialog>
+          </AdminOnly>
         </div>
       ),
     },

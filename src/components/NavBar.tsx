@@ -1,14 +1,15 @@
 "use client";
 
-import { useAuth } from "@/hooks/useAuth";
+import { UserInfo } from "@/hooks/useAuth";
 // import Image from "next/image";
 import { Input } from "./ui/input";
 import { Bell } from "lucide-react";
 import { useTranslations } from "next-intl";
 import LocaleSwitcher from "./LocaleSwitcher";
 
-const Navbar = () => {
-  const { userInfo } = useAuth();
+const Navbar = ({ userInfo }: { userInfo: UserInfo | undefined }) => {
+  // const { userInfo } = useAuth();
+  console.log("usb", userInfo);
   const t = useTranslations("Navbar");
   return (
     <header className="bg-white border-b border-gray-200 h-16 flex items-center px-6 py-8">

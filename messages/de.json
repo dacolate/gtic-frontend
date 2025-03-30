@@ -1,4 +1,7 @@
 {
+  "adminonly": "Admins only",
+  "forbidden": "Forbidden",
+  "cancel": "Abbrechen",
   "Navbar": {
     "title": "Gutten!",
     "Search": "Suche"

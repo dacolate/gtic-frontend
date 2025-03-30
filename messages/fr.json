@@ -1,4 +1,7 @@
 {
+  "adminonly": "Réservé aux admins",
+  "forbidden": "Interdit",
+  "cancel": "Annuler",
   "Navbar": {
     "title": "Salut monde!",
     "Search": "Rechercher"

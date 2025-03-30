@@ -1,4 +1,7 @@
 {
+  "adminonly": "Admins only",
+  "forbidden": "Forbidden",
+  "cancel": "Cancel",
   "Navbar": {
     "title": "Hello world!",
     "Search": "Search"
