@@ -36,7 +36,6 @@ import {
 } from "@/components/ui/form";
 import api from "@/lib/axios";
 import { AxiosError } from "axios";
-import { AdminOnly } from "../adminOnly";
 
 // Define the form schema using zod
 const courseSchema = z.object({
@@ -137,13 +136,11 @@ export function CreateCourseDialog() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <AdminOnly>
-          <Button className="flex items-center gap-2 bg-green-500 hover:bg-green-600">
-            <Feather className="h-4 w-4 font-extrabold" />
+        <Button className="flex items-center gap-2 bg-green-500 hover:bg-green-600">
+          <Feather className="h-4 w-4 font-extrabold" />
 
-            {t("createCourse")}
-          </Button>
-        </AdminOnly>
+          {t("createCourse")}
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

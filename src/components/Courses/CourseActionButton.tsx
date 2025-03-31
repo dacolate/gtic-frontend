@@ -5,13 +5,16 @@ import { Link } from "@/i18n/routing";
 import { Trash2, History } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { CreateCourseDialog } from "./CreateCourseDialog";
+import { AdminOnly } from "../adminOnly";
 
 export function CourseActionButton() {
   const t = useTranslations("CourseTable");
 
   return (
     <div className="flex flex-wrap gap-4 mb-8">
-      <CreateCourseDialog />
+      <AdminOnly>
+        <CreateCourseDialog />
+      </AdminOnly>
 
       <Button
         asChild
