@@ -5,9 +5,11 @@ import axios, { AxiosError } from "axios";
 import { useState, useEffect, useCallback } from "react";
 
 export type UserInfo = {
+  id: number;
   name: string;
   role: string;
   email: string;
+  createdAt: string;
 };
 
 const baseURL = "https://gtic-backend.onrender.com/";

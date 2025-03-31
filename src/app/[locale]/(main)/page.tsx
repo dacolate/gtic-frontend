@@ -9,7 +9,7 @@ function Home() {
     <main className="flex flex-col gap-3">
       <Dashboard />
       <div className="flex lg:justify-start gap-3 flex-col lg:flex-row w-full h-full">
-        <div className="mx-3 w-full h-full ">
+        <div className="mx-3 w-full h-full bg-yellow-500">
           <CountChartContainer />
         </div>
         <div className="mx-3 w-full h-full">

@@ -243,3 +243,14 @@ export type NewStudResponse = {
   };
   message: string;
 };
+
+export interface Activity {
+  id: number;
+  userId: number;
+  recordId: number | undefined;
+  description: string | undefined;
+  tableName: string;
+  createdAt: string;
+  updatedAt: string;
+  action: string;
+}

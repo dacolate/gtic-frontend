@@ -8,7 +8,8 @@
 //   AlertDialogTitle,
 // AlertDialogTrigger,
 // } from "@/components/ui/alert-dialog";
-import { useAuth } from "@/hooks/useAuth";
+import { useUserInfo } from "@/app/[locale]/(main)/provider";
+// import { useAuth } from "@/hooks/useAuth";
 // import { useTranslations } from "next-intl";
 
 interface AdminOnlyProps {
@@ -16,13 +17,15 @@ interface AdminOnlyProps {
 }
 
 export function AdminOnly({ children }: AdminOnlyProps) {
-  const { userInfo, loading } = useAuth();
+  // const { userInfo, loading } = useAuth();
   // const trans = useTranslations();
 
-  if (loading) {
-    return null;
-  }
+  const userInfo = useUserInfo();
+
+  console.log("adbn", userInfo);
+
   if (userInfo?.role === "admin") {
+    console.log("Really an admin");
     return children;
   }
   return (

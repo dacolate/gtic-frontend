@@ -1,11 +1,6 @@
 "use client";
 import Image from "next/image";
-import {
-  RadialBarChart,
-  RadialBar,
-  // Legend,
-  ResponsiveContainer,
-} from "recharts";
+import { RadialBarChart, RadialBar, ResponsiveContainer } from "recharts";
 
 const CountChart = ({
   late,
@@ -17,11 +12,6 @@ const CountChart = ({
   sevenday: number;
 }) => {
   const data = [
-    {
-      name: "total",
-      count: late + threeday + sevenday,
-      fill: "white",
-    },
     {
       name: "Late payments",
       count: late,
@@ -37,19 +27,36 @@ const CountChart = ({
       count: sevenday,
       fill: "#16a34a",
     },
+    // Total should be last to render behind others
+    {
+      name: "total",
+      count: late + threeday + sevenday,
+      fill: "#f0f0f0", // Changed from white to light gray for better visibility
+    },
   ];
+
   return (
-    <div className="relative w-full h-[75%]">
-      <ResponsiveContainer>
+    <div className="relative w-full h-[300px]">
+      {" "}
+      {/* Fixed height */}
+      <ResponsiveContainer width="100%" height="100%">
         <RadialBarChart
           cx="50%"
           cy="50%"
           innerRadius="40%"
           outerRadius="100%"
-          barSize={32}
+          barSize={16} // Reduced for better visibility
           data={data}
+          startAngle={90} // Start from top
+          endAngle={-270} // Full circle
         >
-          <RadialBar background dataKey="count" />
+          <RadialBar
+            // minAngle={15}
+            background
+            // clockWise
+            dataKey="count"
+            cornerRadius={8}
+          />
         </RadialBarChart>
       </ResponsiveContainer>
       <Image

@@ -324,7 +324,7 @@ export function CourseTable({ courses }: CourseTableProps) {
               variant="ghost"
               size="icon"
               className="p-0"
-              // onClick={() => setIsDialogOpen(true)}
+              onClick={() => setIsDialogOpen(true)}
             >
               <Plus />
             </Button>

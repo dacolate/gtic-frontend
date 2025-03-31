@@ -14,8 +14,7 @@ import api from "@/lib/axios";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/routing";
-import { useAuth } from "@/hooks/useAuth";
-import { AdminOnly } from "../adminOnly";
+import { useUserInfo } from "@/app/[locale]/(main)/provider";
 
 interface DeleteDialogProps {
   children: React.ReactNode;
@@ -34,7 +33,7 @@ export function DeleteDialog({
   back = true,
   refresh = false,
 }: DeleteDialogProps) {
-  const { userInfo } = useAuth();
+  const userInfo = useUserInfo();
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const trans = useTranslations();
@@ -71,33 +70,31 @@ export function DeleteDialog({
   };
 
   return (
-    <AdminOnly>
-      <AlertDialog>
-        <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>
-              {" "}
-              {userInfo?.role === "admin" ? t("title") : trans("forbidden")}
-            </AlertDialogTitle>
-            <AlertDialogDescription>
-              {userInfo?.role === "admin"
-                ? t("description", { objectName })
-                : trans("adminonly")}
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel disabled={isLoading}>
-              {t("cancel")}
-            </AlertDialogCancel>
-            {userInfo?.role === "admin" && (
-              <AlertDialogAction onClick={handleDelete} disabled={isLoading}>
-                {isLoading ? t("deleting") : t("continue")}
-              </AlertDialogAction>
-            )}
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-    </AdminOnly>
+    <AlertDialog>
+      <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>
+            {" "}
+            {userInfo?.role === "admin" ? t("title") : trans("forbidden")}
+          </AlertDialogTitle>
+          <AlertDialogDescription>
+            {userInfo?.role === "admin"
+              ? t("description", { objectName })
+              : trans("adminonly")}
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel disabled={isLoading}>
+            {t("cancel")}
+          </AlertDialogCancel>
+          {userInfo?.role === "admin" && (
+            <AlertDialogAction onClick={handleDelete} disabled={isLoading}>
+              {isLoading ? t("deleting") : t("continue")}
+            </AlertDialogAction>
+          )}
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }
