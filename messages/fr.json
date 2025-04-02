@@ -1,4 +1,35 @@
 {
+  "userDialog": {
+    "triggerButton": "Nouvel Utilisateur",
+    "title": "Créer un Nouvel Utilisateur",
+    "description": "Remplissez les détails pour créer un nouveau compte utilisateur",
+    "form": {
+      "name": {
+        "label": "Nom",
+        "placeholder": "Entrez le nom complet de l'utilisateur"
+      },
+      "email": {
+        "label": "Email",
+        "placeholder": "Entrez l'email de l'utilisateur"
+      },
+      "password": {
+        "label": "Mot de passe",
+        "placeholder": "Entrez un mot de passe sécurisé"
+      },
+      "cancel": "Annuler",
+      "submit": "Créer",
+      "submitting": "Création en cours..."
+    },
+    "success": {
+      "title": "Succès",
+      "description": "Utilisateur créé avec succès"
+    },
+    "error": {
+      "title": "Erreur",
+      "description": "Échec de la création de l'utilisateur",
+      "unexpected": "Une erreur inattendue est survenue"
+    }
+  },
   "adminonly": "Réservé aux admins",
   "forbidden": "Interdit",
   "cancel": "Annuler",
@@ -554,5 +585,84 @@
     "gradeName": "Nom du niveau",
     "className": "Nom de la classe",
     "started": "Commencé le"
+  },
+
+  "profile": {
+    "title": "Votre Profil",
+    "description": "Gérez votre compte et consultez votre activité",
+    "userInformation": {
+      "title": "Informations Utilisateur",
+      "description": "Vos informations personnelles",
+      "edit": "Modifier le Profil",
+      "joined": "A rejoint le",
+      "createUser": "Créer un Utilisateur"
+    },
+    "activity": {
+      "allUsers": {
+        "title": "Activité de Tous les Utilisateurs",
+        "description": "Voir l'historique d'activité de tous les utilisateurs"
+      },
+      "history": {
+        "title": "Votre Historique d'Activité",
+        "description": "Actions et changements récents",
+        "filter": {
+          "placeholder": "Filtrer par type",
+          "all": "Toutes les Activités",
+          "user": "Activités Utilisateur",
+          "student": "Activités Étudiant",
+          "class": "Activités Classe",
+          "course": "Activités Cours",
+          "grade": "Activités Note",
+          "payment": "Activités Paiement"
+        },
+        "loading": "Chargement des activités...",
+        "noActivities": "Aucune activité {filter} trouvée",
+        "actions": {
+          "create": "Créé",
+          "update": "Mis à jour",
+          "delete": "Supprimé",
+          "register": "Inscrit",
+          "login": "Connecté",
+          "logout": "Déconnecté"
+        },
+        "pagination": {
+          "page": "Page {current} sur {total}"
+        }
+      }
+    }
+  },
+
+  "validation": {
+    "name": {
+      "min": "Le nom doit contenir au moins 3 caractères",
+      "max": "Le nom doit contenir au maximum 64 caractères"
+    },
+    "email": {
+      "invalid": "Veuillez entrer une adresse email valide"
+    },
+    "password": {
+      "min": "Le mot de passe doit contenir au moins 8 caractères",
+      "max": "Le mot de passe doit contenir au maximum 512 caractères"
+    }
+  },
+
+  "NewTeacherForm": {
+    "title": {
+      "step1": "Informations sur l'enseignant",
+      "step2": "Attribuer une classe (Optionnel)"
+    },
+    "form": {
+      "name": "Nom",
+      "email": "Email",
+      "phone": "Téléphone",
+      "submit": "Enregistrer les informations",
+      "saving": "Enregistrement en cours..."
+    },
+    "messages": {
+      "success": "Les informations sur l'enseignant ont été enregistrées avec succès.",
+      "error": "Échec de l'enregistrement des informations sur l'enseignant.",
+      "unexpectedError": "Une erreur s'est produite lors de l'enregistrement des informations sur l'enseignant.",
+      "teacherAdded": "Le nouvel enseignant a été ajouté avec succès."
+    }
   }
 }

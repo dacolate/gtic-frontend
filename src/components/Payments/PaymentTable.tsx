@@ -97,17 +97,15 @@ export function PaymentTable({ payments }: PaymentTableProps) {
         );
 
         return (
-          <div className="text-green-500  cursor-pointer flex gap-2">
+          <div className="text-green-500 flex gap-2">
             <Button
               variant="ghost"
               onClick={() => generateAndDownloadPdf2(row.original)}
-              className="text-center"
+              className="text-center  cursor-pointer "
             >
               <Download />
             </Button>
-            <Link href={`/payments/${row.original.id}`} passHref>
-              <p className="hover:underline cursor-pointer">{matricule}</p>
-            </Link>
+            <p>{matricule}</p>
           </div>
         );
       },

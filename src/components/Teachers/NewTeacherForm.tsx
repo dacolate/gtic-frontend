@@ -13,6 +13,7 @@ import { teacherValidator } from "@/lib/validation";
 import { ClassAssignmentForm } from "./TeacherClassAssignmentForm";
 import { useRouter } from "@/i18n/routing";
 import { AxiosError } from "axios";
+import { useTranslations } from "next-intl";
 
 interface TeacherInfo {
   name: string;
@@ -22,6 +23,7 @@ interface TeacherInfo {
 }
 
 export function NewTeacherForm() {
+  const t = useTranslations("NewTeacherForm");
   const [step, setStep] = useState(1);
   const [teacherInfo, setTeacherInfo] = useState<TeacherInfo>({
     name: "",
@@ -29,7 +31,6 @@ export function NewTeacherForm() {
     phone: "",
     active: true,
   });
-  // Store errors keyed by field name
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
@@ -38,7 +39,6 @@ export function NewTeacherForm() {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setTeacherInfo((prev) => ({ ...prev, [name]: value }));
-    // Clear the error for the field when the user starts typing
     setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
@@ -46,7 +46,6 @@ export function NewTeacherForm() {
     e.preventDefault();
     setIsLoading(true);
 
-    // First, validate locally with Zod
     const validationResult = teacherValidator.safeParse(teacherInfo);
     if (!validationResult.success) {
       const fieldErrors: { [key: string]: string } = {};
@@ -60,7 +59,6 @@ export function NewTeacherForm() {
       return;
     }
 
-    // Clear any previous errors if local validation passes
     setErrors({});
 
     try {
@@ -68,17 +66,16 @@ export function NewTeacherForm() {
       if (response.status === 201) {
         toast({
           title: "Success",
-          description: "Teacher information saved successfully.",
+          description: t("messages.success"),
         });
       } else {
         toast({
           title: "Error",
-          description: "Failed to save teacher information.",
+          description: t("messages.error"),
           variant: "destructive",
         });
       }
     } catch (error) {
-      // Check if the API returned a validation error response
       if (
         error instanceof AxiosError &&
         error.response &&
@@ -98,18 +95,17 @@ export function NewTeacherForm() {
       } else {
         toast({
           title: "Error",
-          description: "An error occurred while saving teacher information.",
+          description: t("messages.errorGeneric"),
           variant: "destructive",
         });
       }
     }
 
     setIsLoading(false);
-    // If no errors were set from the API, proceed to the next step
     if (Object.keys(errors).length === 0) {
       toast({
-        title: "Teacher Added",
-        description: "The new teacher has been successfully added.",
+        title: t("messages.teacherAdded"),
+        description: t("messages.teacherAdded"),
       });
       setStep(2);
     }
@@ -123,7 +119,7 @@ export function NewTeacherForm() {
     <Card className="max-w-2xl mx-auto">
       <CardHeader>
         <CardTitle>
-          {step === 1 ? "Teacher Information" : "Assign Class (Optional)"}
+          {step === 1 ? t("title.step1") : t("title.step2")}
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -138,7 +134,7 @@ export function NewTeacherForm() {
               className="space-y-4"
             >
               <div>
-                <Label htmlFor="name">Name</Label>
+                <Label htmlFor="name">{t("form.name")}</Label>
                 <Input
                   id="name"
                   name="name"
@@ -151,7 +147,7 @@ export function NewTeacherForm() {
                 )}
               </div>
               <div>
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">{t("form.email")}</Label>
                 <Input
                   id="email"
                   name="email"
@@ -165,7 +161,7 @@ export function NewTeacherForm() {
                 )}
               </div>
               <div>
-                <Label htmlFor="phone">Phone</Label>
+                <Label htmlFor="phone">{t("form.phone")}</Label>
                 <Input
                   id="phone"
                   name="phone"
@@ -182,10 +178,10 @@ export function NewTeacherForm() {
                 {isLoading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Saving...
+                    {t("form.saving")}
                   </>
                 ) : (
-                  "Save Teacher Information"
+                  t("form.submit")
                 )}
               </Button>
             </motion.form>

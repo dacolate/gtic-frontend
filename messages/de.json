@@ -550,5 +550,70 @@
     "gradeName": "Grade Name",
     "className": "Class Name",
     "started": "Started"
+  },
+
+  "profile": {
+    "title": "Ihr Profil",
+    "description": "Verwalten Sie Ihr Konto und sehen Sie Ihre Aktivitäten",
+    "userInformation": {
+      "title": "Benutzerinformationen",
+      "description": "Ihre persönlichen Informationen",
+      "edit": "Profil bearbeiten",
+      "joined": "Beigetreten am",
+      "createUser": "Benutzer erstellen"
+    },
+    "activity": {
+      "allUsers": {
+        "title": "Aktivitäten aller Benutzer",
+        "description": "Aktivitätsverlauf aller Benutzer anzeigen"
+      },
+      "history": {
+        "title": "Ihr Aktivitätsverlauf",
+        "description": "Letzte Aktionen und Änderungen",
+        "filter": {
+          "placeholder": "Nach Typ filtern",
+          "all": "Alle Aktivitäten",
+          "user": "Benutzeraktivitäten",
+          "student": "Schüleraktivitäten",
+          "class": "Klassenaktivitäten",
+          "course": "Kursaktivitäten",
+          "grade": "Notenaktivitäten",
+          "payment": "Zahlungsaktivitäten"
+        },
+        "loading": "Aktivitäten werden geladen...",
+        "noActivities": "Keine {filter} Aktivitäten gefunden",
+        "actions": {
+          "create": "Erstellt",
+          "update": "Aktualisiert",
+          "delete": "Gelöscht",
+          "register": "Registriert",
+          "login": "Angemeldet",
+          "logout": "Abgemeldet"
+        },
+        "pagination": {
+          "page": "Page {current} of {total}"
+        }
+      }
+    }
+  },
+
+  "NewTeacherForm": {
+    "title": {
+      "step1": "Lehrerinformationen",
+      "step2": "Klasse zuweisen (Optional)"
+    },
+    "form": {
+      "name": "Name",
+      "email": "E-Mail",
+      "phone": "Telefon",
+      "submit": "Lehrerinformationen speichern",
+      "saving": "Wird gespeichert..."
+    },
+    "messages": {
+      "success": "Lehrerinformationen erfolgreich gespeichert.",
+      "error": "Speichern der Lehrerinformationen fehlgeschlagen.",
+      "unexpectedError": "Ein Fehler ist beim Speichern der Lehrerinformationen aufgetreten.",
+      "teacherAdded": "Der neue Lehrer wurde erfolgreich hinzugefügt."
+    }
   }
 }

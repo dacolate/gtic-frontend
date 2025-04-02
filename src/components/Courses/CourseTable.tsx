@@ -43,7 +43,7 @@ import {
 import { Input } from "../ui/input";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-import { useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "next-intl";
 import { Course } from "@/lib/types";
 import { AddGradeDialog } from "./AddGradeDialog";
 import { DeleteDialog } from "../classes/DeleteDialog";
@@ -56,11 +56,13 @@ interface CourseTableProps {
 export function CourseTable({ courses }: CourseTableProps) {
   const t = useTranslations("CourseTable");
 
+  const format = useFormatter();
+
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString(t("locale"), {
+    return format.dateTime(date, {
       year: "numeric",
-      month: "short",
+      month: "long",
       day: "numeric",
     });
   };

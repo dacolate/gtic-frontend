@@ -575,5 +575,70 @@
     "gradeName": "Grade Name",
     "className": "Class Name",
     "started": "Started"
+  },
+
+  "profile": {
+    "title": "Your Profile",
+    "description": "Manage your account and view your activity",
+    "userInformation": {
+      "title": "User Information",
+      "description": "Your personal information",
+      "edit": "Edit Profile",
+      "joined": "Joined",
+      "createUser": "Create User"
+    },
+    "activity": {
+      "allUsers": {
+        "title": "All Users Activity",
+        "description": "View activity history for all users"
+      },
+      "history": {
+        "title": "Your Activity History",
+        "description": "Recent actions and changes",
+        "filter": {
+          "placeholder": "Filter by type",
+          "all": "All Activities",
+          "user": "User Activities",
+          "student": "Student Activities",
+          "class": "Class Activities",
+          "course": "Course Activities",
+          "grade": "Grade Activities",
+          "payment": "Payment Activities"
+        },
+        "loading": "Loading activities...",
+        "noActivities": "No {filter} activities found",
+        "actions": {
+          "create": "Created",
+          "update": "Updated",
+          "delete": "Deleted",
+          "register": "Registered",
+          "login": "Logged in",
+          "logout": "Logged out"
+        },
+        "pagination": {
+          "page": "Page {current} of {total}"
+        }
+      }
+    }
+  },
+
+  "NewTeacherForm": {
+    "title": {
+      "step1": "Teacher Information",
+      "step2": "Assign Class (Optional)"
+    },
+    "form": {
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "submit": "Save Teacher Information",
+      "saving": "Saving..."
+    },
+    "messages": {
+      "success": "Teacher information saved successfully.",
+      "error": "Failed to save teacher information.",
+      "unexpectedError": "An error occurred while saving teacher information.",
+      "teacherAdded": "The new teacher has been successfully added."
+    }
   }
 }

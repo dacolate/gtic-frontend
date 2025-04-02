@@ -1,31 +1,15 @@
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
+"use client";
+
+import { useTranslations } from "next-intl";
 
 export function ProfileHeader() {
+  const t = useTranslations("profile");
+
   return (
     <div className="space-y-4">
-      <Breadcrumb>
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink href="/">Home</BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbLink href="/profile">Profile</BreadcrumbLink>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
-
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Your Profile</h1>
-        <p className="text-muted-foreground">
-          Manage your account and view your activity
-        </p>
+        <h1 className="text-3xl font-bold tracking-tight">{t("title")}</h1>
+        <p className="text-muted-foreground">{t("description")}</p>
       </div>
     </div>
   );

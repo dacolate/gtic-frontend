@@ -12,12 +12,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { fr } from "date-fns/locale";
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>;
 
 function Calendar({
   className,
   classNames,
+  locale = fr,
   showOutsideDays = true,
   ...props
 }: CalendarProps) {
@@ -37,7 +39,7 @@ function Calendar({
 
   // Generate an array of months
   const months = Array.from({ length: 12 }, (_, i) =>
-    new Date(0, i).toLocaleString("eng", { month: "long" })
+    new Date(0, i).toLocaleString("fr", { month: "long" })
   );
 
   // Handle year change
@@ -58,6 +60,7 @@ function Calendar({
 
   return (
     <DayPicker
+      locale={locale}
       showOutsideDays={showOutsideDays}
       className={cn("p-3", className)}
       classNames={{

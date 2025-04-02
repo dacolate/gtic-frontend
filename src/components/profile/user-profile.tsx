@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Card,
   CardContent,
@@ -11,24 +13,26 @@ import { Badge } from "@/components/ui/badge";
 import { CalendarDays, Mail, PenSquare } from "lucide-react";
 import { UserInfo } from "@/hooks/useAuth";
 import InitialsAvatar from "../InitialsAvatar";
+import { useFormatter, useTranslations } from "next-intl";
+import { NewUserDialog } from "./NewUserDialog";
 
 interface UserProfileProps {
   user: UserInfo;
 }
 
 export function UserProfile({ user }: UserProfileProps) {
-  // Get initials for avatar fallback
+  const t = useTranslations("profile.userInformation");
+  const format = useFormatter();
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
+    return format.dateTime(date, {
       year: "numeric",
       month: "long",
       day: "numeric",
     });
   };
 
-  // Get role badge variant
   const getRoleBadgeVariant = (role: string) => {
     switch (role) {
       case "admin":
@@ -46,13 +50,13 @@ export function UserProfile({ user }: UserProfileProps) {
     <Card>
       <CardHeader className="pb-2">
         <div className="flex justify-between items-start">
-          <CardTitle>User Information</CardTitle>
+          <CardTitle>{t("title")}</CardTitle>
           <Button variant="ghost" size="icon">
             <PenSquare className="h-4 w-4" />
-            <span className="sr-only">Edit Profile</span>
+            <span className="sr-only">{t("edit")}</span>
           </Button>
         </div>
-        <CardDescription>Your personal information</CardDescription>
+        <CardDescription>{t("description")}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="flex flex-col items-center space-y-3">
@@ -72,14 +76,17 @@ export function UserProfile({ user }: UserProfileProps) {
           </div>
           <div className="flex items-center gap-2">
             <CalendarDays className="h-4 w-4 text-muted-foreground" />
-            <span>Joined {formatDate(user.createdAt)}</span>
+            <span>
+              {t("joined")} {formatDate(user.created_at)}
+            </span>
           </div>
         </div>
       </CardContent>
       <CardFooter>
-        <Button variant="outline" className="w-full">
-          Change Password
-        </Button>
+        {/* <Button variant="outline" className="w-full">
+          {t("createUser")}
+        </Button> */}
+        <NewUserDialog />
       </CardFooter>
     </Card>
   );

@@ -9,7 +9,7 @@ export type UserInfo = {
   name: string;
   role: string;
   email: string;
-  createdAt: string;
+  created_at: string;
 };
 
 const baseURL = "https://gtic-backend.onrender.com/";
