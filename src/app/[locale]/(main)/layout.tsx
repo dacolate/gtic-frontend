@@ -63,7 +63,13 @@ export default function DashboardLayout({
       {/* Sidebar */}
       <div className="w-[14%] md:w-[8%] lg:w-[16%] xl:w-[14%] text-center bg-white border-r">
         <Link href="/" className="flex items-center justify-center gap-2 py-4">
-          <Image src="/gtic.png" alt="GTIC" width={48} height={48} priority />
+          <Image
+            src="/gticHorizontal.png"
+            alt="GTIC"
+            width={128}
+            height={128}
+            priority
+          />
         </Link>
         <Menu />
       </div>

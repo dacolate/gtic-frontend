@@ -15,6 +15,7 @@ import { UserInfo } from "@/hooks/useAuth";
 import InitialsAvatar from "../InitialsAvatar";
 import { useFormatter, useTranslations } from "next-intl";
 import { NewUserDialog } from "./NewUserDialog";
+import { AdminOnly } from "../adminOnly";
 
 interface UserProfileProps {
   user: UserInfo;
@@ -86,7 +87,9 @@ export function UserProfile({ user }: UserProfileProps) {
         {/* <Button variant="outline" className="w-full">
           {t("createUser")}
         </Button> */}
-        <NewUserDialog />
+        <AdminOnly>
+          <NewUserDialog />
+        </AdminOnly>
       </CardFooter>
     </Card>
   );

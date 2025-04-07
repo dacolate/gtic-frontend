@@ -17,6 +17,7 @@ import {
   ArrowUpDown,
   ChevronDown,
   Download,
+  RefreshCw,
   // MoreHorizontal,
   Search,
 } from "lucide-react";
@@ -54,6 +55,7 @@ import autoTable from "jspdf-autotable";
 import { calculateAge } from "@/lib/utils";
 import { Link } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
+import { useDebounce } from "use-debounce";
 
 // function paymentStatusColor(
 //   paymentStatus: string,
@@ -79,17 +81,61 @@ import { useTranslations } from "next-intl";
 //   return "bg-gray-500"; // Default color (e.g., for unknown status)
 // }
 
+interface StudentTableProps {
+  students: Student[];
+  courses: Course[];
+  isRefreshing?: boolean; // NEW: Add refreshing state prop
+}
+
 export function StudentTable({
   students,
   courses,
-}: {
-  students: Student[];
-  courses: Course[];
-}) {
+  isRefreshing,
+}: StudentTableProps) {
   console.log("dbdb d ", students);
   const [selectedCourse, setSelectedCourse] = React.useState<Course>();
   const [selectedGrade, setSelectedGrade] = React.useState<Grade>();
   const t = useTranslations("StudentTable");
+
+  const [sorting, setSorting] = React.useState<SortingState>(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("studentsTableSorting");
+      return saved ? JSON.parse(saved) : [{ id: "createdAt", desc: true }];
+    }
+    return [{ id: "createdAt", desc: true }];
+  });
+
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    () => {
+      if (typeof window !== "undefined") {
+        const saved = localStorage.getItem("studentsTableFilters");
+        return saved ? JSON.parse(saved) : [];
+      }
+      return [];
+    }
+  );
+
+  const [columnVisibility, setColumnVisibility] =
+    React.useState<VisibilityState>(() => {
+      if (typeof window !== "undefined") {
+        const saved = localStorage.getItem("studentsTableVisibility");
+        return saved ? JSON.parse(saved) : {};
+      }
+      return {};
+    });
+
+  // NEW: Debounced search
+  const [searchValue, setSearchValue] = React.useState("");
+  const [debouncedSearch] = useDebounce(searchValue, 300);
+
+  React.useEffect(() => {
+    localStorage.setItem("studentsTableSorting", JSON.stringify(sorting));
+    localStorage.setItem("studentsTableFilters", JSON.stringify(columnFilters));
+    localStorage.setItem(
+      "studentsTableVisibility",
+      JSON.stringify(columnVisibility)
+    );
+  }, [sorting, columnFilters, columnVisibility]);
 
   const columns: ColumnDef<Student>[] = [
     {
@@ -116,44 +162,6 @@ export function StudentTable({
         </Link>
       ),
     },
-    // {
-    //   accessorKey: "paymentStatus",
-    //   header: () => <div className="text-center">{t("Payment Status")}</div>,
-    //   cell: ({ row }) => {
-    //     return (
-    //       <div className="flex justify-center text-center ">
-    //         <div
-    //           className={`rounded-full w-3 h-3
-    //              ${paymentStatusColor(
-    //                row.original.student_classes?.[0]?.paymentStatus || "",
-    //                row.original.student_classes?.[0]?.daysTilDeadline || 0
-    //              )}
-    //          `}
-    //         ></div>
-    //       </div>
-    //     );
-    //   },
-    //   filterFn: (row, columnId, filterValue) => {
-    //     const paymentStatus =
-    //       row.original.student_classes?.[0]?.paymentStatus || "";
-    //     const daysTilDeadline =
-    //       row.original.student_classes?.[0]?.daysTilDeadline || 0;
-
-    //     if (filterValue === "Up to date") {
-    //       return paymentStatus === "Up to date";
-    //     } else if (filterValue === "Due in 7 days") {
-    //       return (
-    //         paymentStatus === "Up to date" &&
-    //         !!daysTilDeadline &&
-    //         daysTilDeadline <= 7
-    //       );
-    //     } else if (filterValue === "Late") {
-    //       return paymentStatus === "Not up to date";
-    //     } else {
-    //       return true; // No filter applied
-    //     }
-    //   },
-    // },
     {
       accessorKey: "paymentStatus",
       header: () => <div className="text-center">{t("Payment Status")}</div>,
@@ -385,6 +393,7 @@ export function StudentTable({
 
     {
       accessorKey: "createdAt",
+      id: "createdAt",
       header: () => <div className="text-center">Created At</div>,
       cell: ({ row }) => (
         <div className="text-center">{row.getValue("createdAt")}</div>
@@ -466,22 +475,6 @@ export function StudentTable({
     doc.save("students.pdf");
   }
 
-  console.log(students);
-  const [sorting, setSorting] = React.useState<SortingState>([
-    {
-      id: "createdAt",
-      desc: true, // sort by name in descending order by default
-    },
-  ]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({
-      createdAt: false,
-    });
-  const [rowSelection, setRowSelection] = React.useState({});
-
   const table = useReactTable({
     data: students,
     columns,
@@ -492,17 +485,32 @@ export function StudentTable({
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
     state: {
       sorting,
       columnFilters,
       columnVisibility,
-      rowSelection,
+    },
+    initialState: {
+      sorting: [
+        {
+          id: "createdAt",
+          desc: true, // sort by name in descending order by default
+        },
+      ],
     },
   });
 
+  React.useEffect(() => {
+    table.getColumn("name")?.setFilterValue(debouncedSearch);
+  }, [debouncedSearch, table]);
+
   return (
-    <div className="w-full">
+    <div className="w-full relative">
+      {isRefreshing && (
+        <div className="absolute inset-0 bg-white bg-opacity-50 flex items-center justify-center z-10">
+          <RefreshCw className="h-8 w-8 animate-spin" />
+        </div>
+      )}
       <div className="space-y-4">
         <div className="flex ">
           {/* <Label htmlFor="search" className="sr-only">
@@ -512,12 +520,8 @@ export function StudentTable({
             <Input
               id="search"
               placeholder={`${t("Searchstudent")}`}
-              value={
-                (table.getColumn("name")?.getFilterValue() as string) ?? ""
-              }
-              onChange={(event) =>
-                table.getColumn("name")?.setFilterValue(event.target.value)
-              }
+              value={searchValue} // CHANGED: Use local state instead of direct table access
+              onChange={(e) => setSearchValue(e.target.value)}
               className="w-full pl-10"
             />
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />

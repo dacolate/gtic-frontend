@@ -21,6 +21,7 @@ import { Activity } from "@/lib/types";
 import { useFormatter, useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Link } from "@/i18n/routing";
 
 interface ActivityHistoryProps {
   userId: string;
@@ -122,6 +123,28 @@ export function ActivityHistory({ userId, title }: ActivityHistoryProps) {
     });
   };
 
+  function getActivityLinks(tableName: string, recordId: number | undefined) {
+    if (!recordId) {
+      return;
+    }
+    switch (tableName) {
+      case "User":
+        return `/user/${recordId}`;
+      case "Student":
+        return `/student/${recordId}`;
+      case "Class":
+        return `/class/${recordId}`;
+      case "Course":
+        return `/course/${recordId}`;
+      case "Grade":
+        return `/grade/${recordId}`;
+      case "Payment":
+        return `/payment/${recordId}`;
+      default:
+        return "#";
+    }
+  }
+
   return (
     <Card>
       <CardHeader className="pb-3">
@@ -155,40 +178,51 @@ export function ActivityHistory({ userId, title }: ActivityHistoryProps) {
           <div className="space-y-8">
             {currentActivities.length > 0 ? (
               currentActivities.map((activity) => (
-                <div key={activity.id} className="flex">
-                  <div className="flex flex-col items-center mr-4">
-                    <div className="flex items-center justify-center w-10 h-10 rounded-full bg-primary/10">
-                      <span className="text-xs font-bold">
-                        {new Date(activity.createdAt).getDate()}
-                      </span>
+                <Link
+                  key={activity.id}
+                  href={`${getActivityLinks(
+                    activity.tableName,
+                    activity.recordId
+                  )}`}
+                  className="flex items-center justify-between hover:bg-gray-100  transition-colors"
+                >
+                  <div className="flex">
+                    <div className="flex flex-col items-center mr-4">
+                      <div className="flex items-center justify-center w-10 h-10 rounded-full bg-primary/10">
+                        <span className="text-xs font-bold">
+                          {new Date(activity.createdAt).getDate()}
+                        </span>
+                      </div>
+                      <div className="w-px h-full bg-border"></div>
                     </div>
-                    <div className="w-px h-full bg-border"></div>
-                  </div>
-                  <div className="pb-8">
-                    <div className="flex items-center gap-2">
-                      <time className="text-sm text-muted-foreground">
-                        {formatDate(activity.createdAt)} •{" "}
-                        {new Date(activity.createdAt).toLocaleTimeString([], {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                      </time>
-                      {getActivityBadge(activity.tableName, activity.action)}
-                    </div>
-                    <h3 className="font-medium mt-1">
-                      {getActionLabel(
-                        activity.action,
-                        activity.tableName,
-                        activity.description
+                    <div className="pb-8">
+                      <div className="flex items-center gap-2">
+                        <time className="text-sm text-muted-foreground">
+                          {formatDate(activity.createdAt)} •{" "}
+                          {new Date(activity.createdAt).toLocaleTimeString([], {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </time>
+                        {getActivityBadge(activity.tableName, activity.action)}
+                      </div>
+                      <h3 className="font-medium mt-1">
+                        {getActionLabel(
+                          activity.action,
+                          activity.tableName,
+                          activity.description
+                        )}
+                      </h3>
+                      {activity.description && (
+                        <p className="text-sm text-muted-foreground mt-1">
+                          {activity.description}
+                        </p>
                       )}
-                    </h3>
-                    {activity.description && (
-                      <p className="text-sm text-muted-foreground mt-1">
-                        {activity.description}
-                      </p>
-                    )}
+                    </div>
                   </div>
-                </div>
+
+                  <ChevronRight size={40} className="opacity-50" />
+                </Link>
               ))
             ) : (
               <div className="text-center py-8">

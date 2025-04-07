@@ -1,124 +1,223 @@
+// "use client";
+
+// import React, { useEffect, useState } from "react";
+// import api from "@/lib/axios"; // Adjust the import path as needed
+// import { Course, Student } from "@/lib/types";
+// import { StudentActionButtons } from "@/components/Students/StudentActionButtons";
+// // import { StudentGrid } from "@/components/Students/StudentGrid";
+// import { StudentGridSkeleton } from "@/components/Students/StudentGridSkeleton";
+// // import { Button } from "@/components/ui/button";
+// // import { LayoutGrid, List } from "lucide-react";
+// // import Link from "next/link";
+// import { StudentTable } from "@/components/Students/StudentTable";
+// import { AxiosError } from "axios";
+// import { useTranslations } from "next-intl";
+// // import { Loader2 } from "lucide-react";
+
+// export default function TeachersPage() {
+//   const [students, setStudents] = useState<Student[]>([]);
+//   const [courses, setCourses] = useState<Course[]>([]);
+//   const [loading, setLoading] = useState<boolean>(true);
+//   const [error, setError] = useState<string>("");
+//   const t = useTranslations("StudentTable");
+//   // const [viewMode, setViewMode] = useState<string>("card");
+
+//   useEffect(() => {
+//     async function fetchStudents() {
+//       try {
+//         // Use the custom axios instance to get the teachers.
+//         const response = await api.get("/students");
+//         console.log("dzv", response);
+//         // If your API returns the data directly or in a nested property,
+//         // adjust accordingly. For example, if it returns { teachers: [...] }:
+//         // setTeachers(response.data.teachers);
+
+//         if (response.data.success) {
+//           setStudents(response.data.data);
+//         } else {
+//           console.log("Fetch failed:", response);
+//           return null;
+//         }
+//       } catch (err) {
+//         if (err instanceof AxiosError) {
+//           setError(err.response?.data?.message || "An error occurred");
+//         } else if (err instanceof Error) {
+//           setError(err.message || "An error occurred");
+//         } else {
+//           setError("An error occurred");
+//         }
+//       } finally {
+//         setLoading(false);
+//       }
+//     }
+
+//     async function fetchCourses() {
+//       try {
+//         // Use the custom axios instance to get the teachers.
+//         const response = await api.get("/courses");
+//         // If your API returns the data directly or in a nested property,
+//         // adjust accordingly. For example, if it returns { teachers: [...] }:
+//         // setTeachers(response.data.teachers);
+
+//         if (response.data.success) {
+//           setCourses(response.data.data);
+//         } else {
+//           console.log("Fetch failed:", response);
+//           return null;
+//         }
+//       } catch (err) {
+//         if (err instanceof AxiosError) {
+//           setError(err.response?.data?.message || "An error occurred");
+//         } else if (err instanceof Error) {
+//           setError(err.message || "An error occurred");
+//         } else {
+//           setError("An error occurred");
+//         }
+//       }
+//     }
+
+//     fetchCourses();
+
+//     fetchStudents();
+//   }, []);
+
+//   if (loading) {
+//     return <StudentGridSkeleton />;
+//     // return (
+//     //   <div className="w-full h-full flex justify-center items-center">
+//     //     <Loader2 size={80} />
+//     //   </div>
+//     // );
+//   }
+
+//   if (error) {
+//     return <div>Error: {error}</div>;
+//   }
+//   console.log("bjd", students);
+
+//   return (
+//     <div className="container mx-auto py-10 px-4">
+//       {/* <h1 className="text-4xl font-bold mb-6 text-gray-800">Our Students</h1> */}
+//       <div className="flex justify-between items-center mb-6">
+//         <h1 className="text-3xl font-bold">{t("Students")}</h1>
+//         {/* <div className="flex items-center space-x-2">
+//           <Button
+//             variant={viewMode === "card" ? "default" : "outline"}
+//             size="icon"
+//             onClick={() => setViewMode("card")}
+//           >
+//             <LayoutGrid className="h-4 w-4" />
+//           </Button>
+//           <Button
+//             variant={viewMode === "list" ? "default" : "outline"}
+//             size="icon"
+//             onClick={() => setViewMode("list")}
+//           >
+//             <List className="h-4 w-4" />
+//           </Button>
+//         </div> */}
+//       </div>
+//       <StudentActionButtons />
+//       <StudentTable students={students} courses={courses} />
+//     </div>
+//   );
+// }
+
 "use client";
 
-import React, { useEffect, useState } from "react";
-import api from "@/lib/axios"; // Adjust the import path as needed
-import { Course, Student } from "@/lib/types";
-import { StudentActionButtons } from "@/components/Students/StudentActionButtons";
-// import { StudentGrid } from "@/components/Students/StudentGrid";
-import { StudentGridSkeleton } from "@/components/Students/StudentGridSkeleton";
-// import { Button } from "@/components/ui/button";
-// import { LayoutGrid, List } from "lucide-react";
-// import Link from "next/link";
-import { StudentTable } from "@/components/Students/StudentTable";
-import { AxiosError } from "axios";
+import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
-// import { Loader2 } from "lucide-react";
+import TypingLoader from "@/components/TypingLoader";
+import {
+  QueryClient,
+  QueryClientProvider,
+  useQuery,
+} from "@tanstack/react-query";
+import { RefreshCw } from "lucide-react"; // NEW: Import refresh icon
+import { Button } from "@/components/ui/button";
+import api from "@/lib/axios";
+import { StudentTable } from "@/components/Students/StudentTable";
+import { StudentActionButtons } from "@/components/Students/StudentActionButtons";
 
-export default function TeachersPage() {
-  const [students, setStudents] = useState<Student[]>([]);
-  const [courses, setCourses] = useState<Course[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string>("");
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000, // 5 minutes cache
+      refetchOnWindowFocus: false, // NEW: Prevent refetch on tab switch
+    },
+  },
+});
+
+function StudentDataFetcher() {
   const t = useTranslations("StudentTable");
-  // const [viewMode, setViewMode] = useState<string>("card");
+  const {
+    data: students,
+    isLoading: isLoading1,
+    error: error1,
+    refetch, // NEW: Get the refetch function from useQuery
+    isRefetching, // NEW: Track refresh state
+  } = useQuery({
+    queryKey: ["students"],
+    queryFn: async () => {
+      const response = await api.get("/students");
+      if (!response.data.success) throw new Error(response.data.message);
+      return response.data.data;
+    },
+  });
+  const {
+    data: courses,
+    error: error2,
+    // refetch, // NEW: Get the refetch function from useQuery
+    // isRefetching, // NEW: Track refresh state
+  } = useQuery({
+    queryKey: ["courses"],
+    queryFn: async () => {
+      const response = await api.get("/courses");
+      if (!response.data.success) throw new Error(response.data.message);
+      return response.data.data;
+    },
+  });
 
-  useEffect(() => {
-    async function fetchStudents() {
-      try {
-        // Use the custom axios instance to get the teachers.
-        const response = await api.get("/students");
-        console.log("dzv", response);
-        // If your API returns the data directly or in a nested property,
-        // adjust accordingly. For example, if it returns { teachers: [...] }:
-        // setTeachers(response.data.teachers);
-
-        if (response.data.success) {
-          setStudents(response.data.data);
-        } else {
-          console.log("Fetch failed:", response);
-          return null;
-        }
-      } catch (err) {
-        if (err instanceof AxiosError) {
-          setError(err.response?.data?.message || "An error occurred");
-        } else if (err instanceof Error) {
-          setError(err.message || "An error occurred");
-        } else {
-          setError("An error occurred");
-        }
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    async function fetchCourses() {
-      try {
-        // Use the custom axios instance to get the teachers.
-        const response = await api.get("/courses");
-        // If your API returns the data directly or in a nested property,
-        // adjust accordingly. For example, if it returns { teachers: [...] }:
-        // setTeachers(response.data.teachers);
-
-        if (response.data.success) {
-          setCourses(response.data.data);
-        } else {
-          console.log("Fetch failed:", response);
-          return null;
-        }
-      } catch (err) {
-        if (err instanceof AxiosError) {
-          setError(err.response?.data?.message || "An error occurred");
-        } else if (err instanceof Error) {
-          setError(err.message || "An error occurred");
-        } else {
-          setError("An error occurred");
-        }
-      }
-    }
-
-    fetchCourses();
-
-    fetchStudents();
-  }, []);
-
-  if (loading) {
-    return <StudentGridSkeleton />;
-    // return (
-    //   <div className="w-full h-full flex justify-center items-center">
-    //     <Loader2 size={80} />
-    //   </div>
-    // );
-  }
-
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
-  console.log("bjd", students);
+  if (isLoading1) return <TypingLoader />;
+  if (error1 || error2)
+    return <div>Error: {error1?.message || error2?.message}</div>;
 
   return (
-    <div className="container mx-auto py-10 px-4">
-      {/* <h1 className="text-4xl font-bold mb-6 text-gray-800">Our Students</h1> */}
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="container mx-auto py-10 px-4"
+    >
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">{t("Students")}</h1>
-        {/* <div className="flex items-center space-x-2">
-          <Button
-            variant={viewMode === "card" ? "default" : "outline"}
-            size="icon"
-            onClick={() => setViewMode("card")}
-          >
-            <LayoutGrid className="h-4 w-4" />
-          </Button>
-          <Button
-            variant={viewMode === "list" ? "default" : "outline"}
-            size="icon"
-            onClick={() => setViewMode("list")}
-          >
-            <List className="h-4 w-4" />
-          </Button>
-        </div> */}
+        {/* NEW: Refresh button */}
+        <Button
+          variant="outline"
+          onClick={() => refetch()}
+          disabled={isRefetching}
+          className="flex items-center gap-2"
+        >
+          <RefreshCw
+            className={`h-4 w-4 ${isRefetching ? "animate-spin" : ""}`}
+          />
+        </Button>
       </div>
       <StudentActionButtons />
-      <StudentTable students={students} courses={courses} />
-    </div>
+      <StudentTable
+        students={students || []}
+        courses={courses || []}
+        isRefreshing={isRefetching}
+      />
+    </motion.div>
+  );
+}
+
+export default function ClassesPage() {
+  // NEW: Wrap with QueryClientProvider
+  return (
+    <QueryClientProvider client={queryClient}>
+      <StudentDataFetcher />
+    </QueryClientProvider>
   );
 }

@@ -64,6 +64,14 @@
     }
   },
   "StudentTable": {
+    "Title": "Classes",
+    "Search": "Rechercher des classes...",
+    "Refresh": "Actualiser",
+    "NoResults": "Aucun résultat trouvé",
+    "Of": "sur",
+    "RowsSelected": "ligne(s) sélectionnée(s)",
+    "NewClass": "Nouvelle Classe",
+    "AncientClasses": "Archives",
     "Students": "Etudiants",
     "Name": "Nom",
     "Payment Status": "Statut de paiement",

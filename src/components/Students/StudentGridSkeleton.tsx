@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { Download, Feather, History, Trash2 } from "lucide-react";
+import { Download, Feather, History } from "lucide-react";
 import { Button } from "../ui/button";
 import { useTranslations } from "next-intl";
 
@@ -26,13 +26,6 @@ export function StudentGridSkeleton() {
         <Button className="flex items-center gap-2 bg-gray-500 hover:bg-green-600">
           <History className="h-4 w-4 font-extrabold" />
           {t("Ancient Students")}
-        </Button>
-        <Button
-          variant="destructive"
-          className="flex items-center gap-2 opacity-45"
-        >
-          <Trash2 className="h-4 w-4" />
-          {t("Delete Student")}
         </Button>
       </div>
       <div className="space-y-6">
