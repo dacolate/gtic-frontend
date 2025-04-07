@@ -12,9 +12,8 @@ export type UserInfo = {
   created_at: string;
 };
 
-const baseURL = 
-// "https://gtic-backend.onrender.com/";
-"http://127.0.0.1:3333/";
+const baseURL = "https://gtic-backend.onrender.com/";
+// "http://127.0.0.1:3333/";
 
 export function useAuth() {
   const [token, setToken] = useState<string | null>(null);
