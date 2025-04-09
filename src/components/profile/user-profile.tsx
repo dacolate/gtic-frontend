@@ -16,6 +16,7 @@ import InitialsAvatar from "../InitialsAvatar";
 import { useFormatter, useTranslations } from "next-intl";
 import { NewUserDialog } from "./NewUserDialog";
 import { AdminOnly } from "../adminOnly";
+import { UpdateUserDialog } from "./UpdateUserDialog";
 
 interface UserProfileProps {
   user: UserInfo;
@@ -83,12 +84,22 @@ export function UserProfile({ user }: UserProfileProps) {
           </div>
         </div>
       </CardContent>
-      <CardFooter>
+      <CardFooter className="flex space-y-3 flex-col justify-center items-center w-full">
         {/* <Button variant="outline" className="w-full">
           {t("createUser")}
         </Button> */}
         <AdminOnly>
           <NewUserDialog />
+        </AdminOnly>
+        <AdminOnly>
+          <UpdateUserDialog
+            userId={user.id.toString()}
+            defaultValues={{ name: user.name, email: user.email }}
+          >
+            <Button className="flex items-center gap-2 bg-green-500 hover:bg-green-600 w-full">
+              {t("updateCredentials")}
+            </Button>
+          </UpdateUserDialog>
         </AdminOnly>
       </CardFooter>
     </Card>

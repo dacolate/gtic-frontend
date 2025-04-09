@@ -109,7 +109,7 @@ export function NewUserDialog() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="flex items-center gap-2 bg-green-500 hover:bg-green-600">
+        <Button className="flex items-center gap-2 bg-green-500 hover:bg-green-600 w-full">
           {t("triggerButton")}
         </Button>
       </DialogTrigger>

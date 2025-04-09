@@ -81,7 +81,7 @@ export function ActivityHistory({ userId, title }: ActivityHistoryProps) {
     if (tableName === "User") {
       return t(`actions.${action}`) + (description ? `: ${description}` : "");
     }
-    return `${t(`actions.${action}`)} ${tableName}`;
+    return `${t(`actions.${action}`)} ${t(`actions.${tableName}`)}`;
   };
 
   const getActivityBadge = (tableName: string, action: string) => {
@@ -109,7 +109,7 @@ export function ActivityHistory({ userId, title }: ActivityHistoryProps) {
       }
     }
 
-    return <Badge className={color}>{tableName}</Badge>;
+    return <Badge className={color}>{t(`actions.${tableName}`)}</Badge>;
   };
 
   const format = useFormatter();
@@ -123,28 +123,117 @@ export function ActivityHistory({ userId, title }: ActivityHistoryProps) {
     });
   };
 
-  function getActivityLinks(tableName: string, recordId: number | undefined) {
+  function getActivityLinks(
+    tableName: string,
+    recordId: number | undefined
+  ): string | undefined {
     if (!recordId) {
       return;
     }
     switch (tableName) {
-      case "User":
-        return `/user/${recordId}`;
+      case "Teacher":
+        return `/teachers/${recordId}`;
       case "Student":
-        return `/student/${recordId}`;
+        return `/students/${recordId}`;
       case "Class":
-        return `/class/${recordId}`;
-      case "Course":
-        return `/course/${recordId}`;
-      case "Grade":
-        return `/grade/${recordId}`;
+        return `/classes/${recordId}`;
       case "Payment":
-        return `/payment/${recordId}`;
+        return `/payments/${recordId}`;
+      case "Course":
+        return `/courses/${recordId}`;
       default:
-        return "#";
+        return;
     }
   }
+  const renderActivityItem = (activity: Activity) => {
+    if (getActivityLinks(activity.tableName, activity.recordId) === undefined) {
+      return (
+        <div className="flex">
+          <div className="flex flex-col items-center mr-4">
+            <div className="flex items-center justify-center w-10 h-10 rounded-full bg-primary/10">
+              <span className="text-xs font-bold">
+                {new Date(activity.createdAt).getDate()}
+              </span>
+            </div>
+            <div className="w-px h-full bg-border"></div>
+          </div>
+          <div className="pb-8">
+            <div className="flex items-center gap-2">
+              <time className="text-sm text-muted-foreground">
+                {formatDate(activity.createdAt)} •{" "}
+                {new Date(activity.createdAt).toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
+              </time>
+              {getActivityBadge(activity.tableName, activity.action)}
+            </div>
+            {activity.tableName !== "User" && (
+              <h3 className="font-medium mt-1">
+                {getActionLabel(
+                  activity.action,
+                  activity.tableName,
+                  activity.description
+                )}
+              </h3>
+            )}
+            {activity.description && (
+              <p className="text-sm text-muted-foreground mt-1">
+                {activity.description}
+              </p>
+            )}
+          </div>
+        </div>
+      );
+    }
 
+    return (
+      <Link
+        key={activity.id}
+        href={`${getActivityLinks(activity.tableName, activity.recordId)}`}
+        className="flex items-center justify-between hover:bg-gray-100  transition-colors "
+      >
+        <div className="flex">
+          <div className="flex flex-col items-center mr-4">
+            <div className="flex items-center justify-center w-10 h-10 rounded-full bg-primary/10">
+              <span className="text-xs font-bold">
+                {new Date(activity.createdAt).getDate()}
+              </span>
+            </div>
+            <div className="w-px h-full bg-border"></div>
+          </div>
+          <div className="pb-8">
+            <div className="flex items-center gap-2">
+              <time className="text-sm text-muted-foreground">
+                {formatDate(activity.createdAt)} •{" "}
+                {new Date(activity.createdAt).toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
+              </time>
+              {getActivityBadge(activity.tableName, activity.action)}
+            </div>
+            {activity.tableName !== "User" && (
+              <h3 className="font-medium mt-1">
+                {getActionLabel(
+                  activity.action,
+                  activity.tableName,
+                  activity.description
+                )}
+              </h3>
+            )}
+            {activity.description && (
+              <p className="text-sm text-muted-foreground mt-1">
+                {activity.description}
+              </p>
+            )}
+          </div>
+        </div>
+
+        <ChevronRight size={40} className="opacity-50" />
+      </Link>
+    );
+  };
   return (
     <Card>
       <CardHeader className="pb-3">
@@ -175,55 +264,9 @@ export function ActivityHistory({ userId, title }: ActivityHistoryProps) {
         ) : error ? (
           <div className="text-center py-8 text-red-500">{error}</div>
         ) : (
-          <div className="space-y-8">
+          <div className="space-y-0 ">
             {currentActivities.length > 0 ? (
-              currentActivities.map((activity) => (
-                <Link
-                  key={activity.id}
-                  href={`${getActivityLinks(
-                    activity.tableName,
-                    activity.recordId
-                  )}`}
-                  className="flex items-center justify-between hover:bg-gray-100  transition-colors"
-                >
-                  <div className="flex">
-                    <div className="flex flex-col items-center mr-4">
-                      <div className="flex items-center justify-center w-10 h-10 rounded-full bg-primary/10">
-                        <span className="text-xs font-bold">
-                          {new Date(activity.createdAt).getDate()}
-                        </span>
-                      </div>
-                      <div className="w-px h-full bg-border"></div>
-                    </div>
-                    <div className="pb-8">
-                      <div className="flex items-center gap-2">
-                        <time className="text-sm text-muted-foreground">
-                          {formatDate(activity.createdAt)} •{" "}
-                          {new Date(activity.createdAt).toLocaleTimeString([], {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })}
-                        </time>
-                        {getActivityBadge(activity.tableName, activity.action)}
-                      </div>
-                      <h3 className="font-medium mt-1">
-                        {getActionLabel(
-                          activity.action,
-                          activity.tableName,
-                          activity.description
-                        )}
-                      </h3>
-                      {activity.description && (
-                        <p className="text-sm text-muted-foreground mt-1">
-                          {activity.description}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-
-                  <ChevronRight size={40} className="opacity-50" />
-                </Link>
-              ))
+              currentActivities.map(renderActivityItem)
             ) : (
               <div className="text-center py-8">
                 <p className="text-muted-foreground">

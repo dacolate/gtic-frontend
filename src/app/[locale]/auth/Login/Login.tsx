@@ -91,7 +91,7 @@ export default function Login() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password">Mot de passe</Label>
                 <Input
                   id="password"
                   type="password"
@@ -107,13 +107,13 @@ export default function Login() {
               type="submit"
               loading={isLoading}
             >
-              {isLoading ? "Logging in..." : "Log in"}
+              {isLoading ? "Connexion..." : "Se connecter"}
             </LoadingButton>
           </form>
         </CardContent>
         <CardFooter className="flex justify-center">
           <a href="#" className="text-sm text-green-500/80 hover:underline">
-            Forgot your password?
+            Mot de passe oublié?
           </a>
         </CardFooter>
       </Card>

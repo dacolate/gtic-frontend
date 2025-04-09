@@ -1,5 +1,35 @@
 {
   "userDialog": {
+    "update": {
+      "title": "Mettre à jour l'utilisateur",
+      "description": "Modifiez les informations de l'utilisateur",
+      "success": {
+        "title": "Utilisateur mis à jour",
+        "description": "Les informations de l'utilisateur ont été mises à jour avec succès"
+      },
+      "error": {
+        "title": "Erreur de mise à jour",
+        "description": "Une erreur est survenue lors de la mise à jour",
+        "unexpected": "Une erreur inattendue est survenue"
+      },
+      "form": {
+        "name": {
+          "label": "Nom",
+          "placeholder": "Entrez le nom complet"
+        },
+        "email": {
+          "label": "Email",
+          "placeholder": "Entrez l'email"
+        },
+        "password": {
+          "label": "Mot de passe",
+          "placeholder": "Laissez vide pour ne pas changer",
+          "hint": "Laissez vide pour conserver le mot de passe actuel"
+        },
+        "cancel": "Annuler",
+        "submit": "Mettre à jour"
+      }
+    },
     "triggerButton": "Nouvel Utilisateur",
     "title": "Créer un Nouvel Utilisateur",
     "description": "Remplissez les détails pour créer un nouveau compte utilisateur",
@@ -596,45 +626,120 @@
   },
 
   "profile": {
-    "title": "Votre Profil",
-    "description": "Gérez votre compte et consultez votre activité",
+    "title": "Profil",
+    "description": "Gérez vos informations personnelles et consultez votre activité",
     "userInformation": {
-      "title": "Informations Utilisateur",
-      "description": "Vos informations personnelles",
-      "edit": "Modifier le Profil",
-      "joined": "A rejoint le",
-      "createUser": "Créer un Utilisateur"
+      "updateCredentials": "Changer mes identifiants",
+      "title": "Informations personnelles",
+      "description": "Vos informations de compte",
+      "edit": "Modifier",
+      "joined": "Inscrit le",
+      "createUser": "Créer un utilisateur",
+      "table": {
+        "name": "Nom",
+        "email": "Email",
+        "role": "Rôle",
+        "actions": "Actions"
+      }
     },
     "activity": {
-      "allUsers": {
-        "title": "Activité de Tous les Utilisateurs",
-        "description": "Voir l'historique d'activité de tous les utilisateurs"
-      },
       "history": {
-        "title": "Votre Historique d'Activité",
-        "description": "Actions et changements récents",
+        "title": "Historique d'activité",
+        "description": "Vos activités récentes sur la plateforme",
+        "loading": "Chargement...",
+        "noActivities": "Aucune activité {filter} trouvée",
         "filter": {
           "placeholder": "Filtrer par type",
-          "all": "Toutes les Activités",
-          "user": "Activités Utilisateur",
-          "student": "Activités Étudiant",
-          "class": "Activités Classe",
-          "course": "Activités Cours",
-          "grade": "Activités Note",
-          "payment": "Activités Paiement"
+          "all": "Tout",
+          "user": "Utilisateur",
+          "student": "Étudiant",
+          "class": "Classe",
+          "course": "Cours",
+          "grade": "Note",
+          "payment": "Paiement"
         },
-        "loading": "Chargement des activités...",
-        "noActivities": "Aucune activité {filter} trouvée",
         "actions": {
-          "create": "Créé",
-          "update": "Mis à jour",
-          "delete": "Supprimé",
-          "register": "Inscrit",
-          "login": "Connecté",
-          "logout": "Déconnecté"
+          "create": "Création",
+          "update": "Mise à jour",
+          "delete": "Suppression",
+          "register": "Inscription",
+          "login": "Connexion",
+          "logout": "Déconnexion",
+          "User": "utilisateur",
+          "Student": "étudiant",
+          "Class": "classe",
+          "Course": "cours",
+          "Grade": "niveau",
+          "Payment": "paiement",
+          "Teacher": "enseignant"
         },
         "pagination": {
           "page": "Page {current} sur {total}"
+        },
+        "myActivity": "Mon activité"
+      },
+      "allUsers": {
+        "title": "Activités des utilisateurs",
+        "description": "Activités de tous les utilisateurs"
+      }
+    },
+    "admin": {
+      "title": "Administration",
+      "tabs": {
+        "myActivity": "Mon activité",
+        "userManagement": "Gestion des utilisateurs",
+        "allActivities": "Toutes les activités"
+      },
+      "userManagement": {
+        "title": "Gestion des utilisateurs",
+        "description": "Gérer les comptes utilisateurs et leurs permissions",
+        "searchPlaceholder": "Rechercher des utilisateurs...",
+        "table": {
+          "name": "Nom",
+          "email": "Email",
+          "role": "Rôle",
+          "actions": "Actions"
+        },
+        "editUser": "Modifier l'utilisateur",
+        "deleteUser": "Supprimer l'utilisateur",
+        "confirmDelete": "Êtes-vous sûr de vouloir supprimer cet utilisateur ? Cette action est irréversible.",
+        "errors": {
+          "fetchFailed": "Échec du chargement des utilisateurs",
+          "updateFailed": "Échec de la mise à jour de l'utilisateur",
+          "deleteFailed": "Échec de la suppression de l'utilisateur"
+        },
+        "success": {
+          "updated": "Utilisateur mis à jour avec succès",
+          "deleted": "Utilisateur supprimé avec succès"
+        },
+        "roles": {
+          "admin": "Administrateur",
+          "teacher": "Enseignant",
+          "student": "Étudiant",
+          "staff": "Personnel"
+        },
+        "pagination": {
+          "page": "Page {current} sur {total}",
+          "items": "{count} utilisateurs"
+        },
+        "createUser": {
+          "title": "Créer un nouvel utilisateur",
+          "button": "Nouvel utilisateur"
+        }
+      },
+      "allActivities": {
+        "title": "Activités des utilisateurs",
+        "description": "Visualisez les activités de tous les utilisateurs",
+        "searchPlaceholder": "Rechercher un utilisateur...",
+        "activityHistory": "Historique d'activité",
+        "loading": "Chargement en cours...",
+        "errors": {
+          "fetchFailed": "Échec du chargement des utilisateurs"
+        },
+        "pagination": {
+          "page": "Page {current} sur {total}",
+          "previous": "Précédent",
+          "next": "Suivant"
         }
       }
     }
