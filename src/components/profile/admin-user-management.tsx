@@ -29,6 +29,7 @@ import { useEffect, useState } from "react";
 import { UserInfo } from "@/hooks/useAuth";
 import api from "@/lib/axios";
 import { UpdateUserDialog } from "./UpdateUserDialog";
+import { DeleteDialog } from "../classes/DeleteDialog";
 
 export function AdminUserManagement() {
   const t = useTranslations("profile.admin.userManagement");
@@ -71,20 +72,6 @@ export function AdminUserManagement() {
   const indexOfFirstUser = indexOfLastUser - usersPerPage;
   const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
   const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
-
-  const handleDelete = async (userId: string) => {
-    if (!confirm(t("confirmDelete"))) return;
-
-    try {
-      const response = await api.delete(`/users/${userId}`);
-      if (response.data.success) {
-        setUsers(users.filter((user) => user.id.toString() !== userId));
-      }
-    } catch (err) {
-      setError(t("errors.deleteFailed"));
-      console.error("Error deleting user:", err);
-    }
-  };
 
   return (
     <Card>
@@ -137,13 +124,11 @@ export function AdminUserManagement() {
                       </Button>
                     </UpdateUserDialog>
 
-                    <Button
-                      variant="destructive"
-                      size="icon"
-                      onClick={() => handleDelete(user.id.toString())}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
+                    <DeleteDialog id={user.id} objectName="users">
+                      <Button variant="destructive" size="icon">
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </DeleteDialog>
                   </TableCell>
                 </TableRow>
               ))}
